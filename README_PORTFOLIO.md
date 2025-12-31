@@ -3,7 +3,7 @@
 **A comprehensive Django-based Point-of-Sale system showcasing full-stack development expertise**
 
 [![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
-[![Django 4.2](https://img.shields.io/badge/django-4.2-green.svg)](https://djangoproject.com/)
+[![Django 5.2](https://img.shields.io/badge/django-5.2-green.svg)](https://djangoproject.com/)
 [![PostgreSQL](https://img.shields.io/badge/postgresql-15+-blue.svg)](https://postgresql.org/)
 [![Docker](https://img.shields.io/badge/docker-ready-blue.svg)](https://docker.com/)
 
@@ -104,7 +104,7 @@ python demo_server.py  # Includes sample data
 ```
 
 ### Key Technologies
-- **Backend**: Django 4.2, Django Channels, PostgreSQL
+- **Backend**: Django 5.2, Django Channels, PostgreSQL
 - **Frontend**: HTML5, CSS3, JavaScript ES6+
 - **Real-time**: WebSockets, Redis
 - **Authentication**: Django Allauth, OAuth 2.0
