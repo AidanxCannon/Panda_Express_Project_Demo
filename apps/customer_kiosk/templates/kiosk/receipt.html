@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="{{ lang|default:'en' }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Receipt - Order #{{ order_id }}</title>
+    <style>
+        @media print {
+            body {
+                margin: 0;
+                padding: 20px;
+            }
+            .no-print {
+                display: none;
+            }
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Courier New', Courier, monospace;
+            max-width: 400px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+
+        .receipt {
+            background-color: white;
+            padding: 30px;
+            border: 1px solid #ddd;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .receipt-header {
+            text-align: center;
+            margin-bottom: 25px;
+            border-bottom: 2px dashed #333;
+            padding-bottom: 20px;
+        }
+
+        .receipt-header h1 {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .receipt-header .tagline {
+            font-size: 12px;
+            font-style: italic;
+            margin-bottom: 15px;
+        }
+
+        .receipt-info {
+            margin-bottom: 20px;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .receipt-info div {
+            margin-bottom: 5px;
+        }
+
+        .receipt-info strong {
+            display: inline-block;
+            min-width: 100px;
+        }
+
+        .items-section {
+            margin: 20px 0;
+            border-top: 1px solid #333;
+            border-bottom: 1px solid #333;
+            padding: 15px 0;
+        }
+
+        .items-header {
+            display: flex;
+            justify-content: space-between;
+            font-weight: bold;
+            margin-bottom: 10px;
+            font-size: 13px;
+        }
+
+        .item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 13px;
+        }
+
+        .item-name {
+            flex: 1;
+            padding-right: 10px;
+        }
+
+        .item-price {
+            white-space: nowrap;
+            text-align: right;
+            min-width: 70px;
+        }
+
+        .totals {
+            margin-top: 15px;
+            font-size: 13px;
+        }
+
+        .total-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
+        .total-row.grand-total {
+            font-weight: bold;
+            font-size: 15px;
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 2px solid #333;
+        }
+
+        .receipt-footer {
+            text-align: center;
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 2px dashed #333;
+            font-size: 12px;
+        }
+
+        .receipt-footer p {
+            margin-bottom: 8px;
+        }
+
+        .fortune-box {
+            display: flex;
+            align-items: center;
+            background-color: #fff8e1;
+            border: 1px dashed #d3a625;
+            padding: 10px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            font-family: 'Courier New', Courier, monospace;
+        }
+
+        .fortune-icon {
+            width: 40px;
+            height: 40px;
+            object-fit: contain;
+            margin-right: 10px;
+        }
+
+        .fortune-text {
+            font-size: 12px;
+            font-style: italic;
+        }
+
+        .thank-you {
+            font-size: 16px;
+            font-weight: bold;
+            margin-top: 15px;
+        }
+
+        .actions {
+            text-align: center;
+            margin-top: 30px;
+            padding: 20px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 30px;
+            margin: 0 10px;
+            background-color: #d62828;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .btn:hover {
+            background-color: #b91e1e;
+        }
+
+        .btn-secondary {
+            background-color: #666;
+        }
+
+        .btn-secondary:hover {
+            background-color: #444;
+        }
+    </style>
+</head>
+<body>
+    <div class="receipt">
+        {# Fortune cookie message at top of receipt #}
+        {% if fortune %}
+        <div class="fortune-box">
+            <img src="{% static 'img/fortune_cookie.png' %}" alt="Fortune cookie" class="fortune-icon">
+            <div class="fortune-text">{{ fortune }}</div>
+        </div>
+        {% endif %}
+
+        <div class="receipt-header">
+            <h1>PANDA EXPRESS</h1>
+            <div class="tagline">Fresh Wok'd™</div>
+        </div>
+
+        <div class="receipt-info">
+            <div><strong>Order #:</strong> {{ order_id }}</div>
+            <div><strong>Date:</strong> {{ order_time|date:"M d, Y" }}</div>
+            <div><strong>Time:</strong> {{ order_time|time:"h:i A" }}</div>
+        </div>
+
+        <div class="items-section">
+            <div class="items-header">
+                <div>Item</div>
+                <div>Price</div>
+            </div>
+            {% for item in items %}
+            <div class="item">
+                <div class="item-name">{{ item.translated_name|default:item.name }}</div>
+                <div class="item-price">${{ item.price|floatformat:2 }}</div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="totals">
+            <div class="total-row">
+                <div>Subtotal:</div>
+                <div>${{ subtotal|floatformat:2 }}</div>
+            </div>
+            <div class="total-row">
+                <div>Tax (8.25%):</div>
+                <div>${{ tax|floatformat:2 }}</div>
+            </div>
+            <div class="total-row grand-total">
+                <div>TOTAL:</div>
+                <div>${{ total|floatformat:2 }}</div>
+            </div>
+        </div>
+
+        <div class="receipt-footer">
+            {% if kiosk_ui and kiosk_ui.order and kiosk_ui.order.thank_you %}
+            <p>{{ kiosk_ui.order.thank_you }}</p>
+            {% else %}
+            <p>Thank you for choosing Panda Express!</p>
+            {% endif %}
+            {% if kiosk_ui and kiosk_ui.order and kiosk_ui.order.description %}
+            <p>{{ kiosk_ui.order.description }}</p>
+            {% else %}
+            <p>We appreciate your business.</p>
+            {% endif %}
+            <p class="thank-you">谢谢 (Thank You)</p>
+        </div>
+    </div>
+
+    {% if not is_email %}
+    <div class="actions no-print">
+        <button class="btn" onclick="window.print()">🖨️ {% if kiosk_ui and kiosk_ui.order and kiosk_ui.order.print_receipt %}{{ kiosk_ui.order.print_receipt }}{% else %}Print Receipt{% endif %}</button>
+        <a href="{% url 'customer_kiosk:home' %}" class="btn btn-secondary">{% if kiosk_ui and kiosk_ui.order and kiosk_ui.order.return_to_menu %}{{ kiosk_ui.order.return_to_menu }}{% else %}Return to Menu{% endif %}</a>
+    </div>
+    {% endif %}
+
+    <script>
+        // Auto-print option (commented out by default)
+        // window.onload = function() { window.print(); }
+    </script>
+</body>
+</html>

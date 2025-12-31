@@ -1,0 +1,10 @@
+/* Dark theme bundle split into focused modules. Import order preserves original cascade. */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap');
+
+@import url('./theme_dark/base.css');
+@import url('./theme_dark/manager.css');
+@import url('./theme_dark/cashier.css');
+@import url('./theme_dark/kiosk.css');
+@import url('./theme_dark/kitchen.css');
+@import url('./theme_dark/menu.css');
+@import url('./theme_dark/responsive.css');

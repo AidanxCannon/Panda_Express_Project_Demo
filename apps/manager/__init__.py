@@ -1,0 +1,3 @@
+"""
+Manager console namespace.
+"""

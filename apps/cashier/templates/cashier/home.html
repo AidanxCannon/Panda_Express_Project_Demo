@@ -1,0 +1,587 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cashier Terminal</title>
+    <link rel="stylesheet" href="{% static 'css/theme_dark.css' %}">
+    <link rel="icon" type="image/png" href="{% static 'img/panda-favicon.png' %}">
+    <style>
+        /* Shared floating language toggle */
+        .floating-lang-btn {
+            position: fixed;
+            bottom: 18px;
+            right: 18px;
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.42);
+            border: 1px solid rgba(0,0,0,0.04);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.18);
+            display: grid;
+            place-items: center;
+            z-index: 100;
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
+        }
+        .floating-lang-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 14px 34px rgba(0,0,0,0.32);
+        }
+        .floating-lang-btn img {
+            width: 70%;
+            height: 70%;
+            object-fit: contain;
+            border-radius: 50%;
+        }
+        /* Keep entree cards compact (kiosk-like) */
+        .cashier-panel--content .cashier-selection-grid--entrees {
+            grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+            align-items: start;
+            justify-items: stretch;
+        }
+        .cashier-panel--content .cashier-selection-grid--entrees .selection-btn {
+            min-height: 150px;
+            height: auto;
+            padding-bottom: 2.4rem;
+        }
+        .cashier-lang-modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.55);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 5000;
+            padding: 1.5rem;
+        }
+        .cashier-lang-modal.is-open {
+            display: flex;
+        }
+        .cashier-lang-dialog {
+            background: #0f0f0f;
+            border-radius: 16px;
+            border: 1px solid rgba(255,255,255,0.12);
+            box-shadow: 0 16px 48px rgba(0,0,0,0.4);
+            width: min(420px, 90vw);
+            padding: 1.5rem;
+            color: #fff;
+        }
+        .cashier-lang-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        .cashier-lang-header h3 {
+            margin: 0;
+            font-size: 1.25rem;
+            letter-spacing: 0.02em;
+        }
+        .cashier-lang-close {
+            background: transparent;
+            color: #fff;
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            font-size: 1.1rem;
+            cursor: pointer;
+        }
+        .cashier-lang-options {
+            display: grid;
+            gap: 0.65rem;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            max-height: 60vh;
+            overflow-y: auto;
+        }
+        .cashier-lang-option {
+            background: linear-gradient(180deg, #1c1c1c, #202020);
+            color: #fff;
+            border: 1px solid rgba(255,255,255,0.18);
+            border-radius: 12px;
+            padding: 0.75rem 1rem;
+            cursor: pointer;
+            font-weight: 700;
+            transition: transform 120ms ease, box-shadow 120ms ease;
+        }
+        .cashier-lang-option:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 22px rgba(0,0,0,0.25);
+        }
+    </style>
+</head>
+<body class="page-shell cashier-page-shell">
+    <main class="cashier-shell">
+        <div class="cashier-shell-core">
+            <div class="cashier-dashboard">
+            <section class="menu-categories cashier-panel cashier-panel--sidebar">
+                <div class="pe-section-header">
+                    <h2 class="pe-title pe-title--small">Select a category</h2>
+                </div>
+                <div class="category-buttons pe-nav-sidebar">
+                    <button class="cashier-nav-btn nav-button active-category" data-category="bowl">Bowl</button>
+                    <button class="cashier-nav-btn nav-button" data-category="plate">Plate</button>
+                    <button class="cashier-nav-btn nav-button" data-category="bigger-plate">Bigger Plate</button>
+                    <button class="cashier-nav-btn nav-button" data-category="a-la-carte">A La Carte</button>
+                    <button class="cashier-nav-btn nav-button" data-category="appetizers">Appetizers</button>
+                    <button class="cashier-nav-btn nav-button" data-category="drinks">Drinks</button>
+                    <a class="cashier-nav-btn nav-button nav-button--return" href="{% url 'home' %}?force_select=1">Return to Interface</a>
+                </div>
+            </section>
+
+            <section class="item-selection cashier-panel cashier-panel--content">
+                <div class="pe-section-header">
+                    <h2 class="pe-title">Choose items</h2>
+                </div>
+                <div id="cashier-warning" class="cashier-warning-banner" aria-live="polite"></div>
+                <div class="category-views">
+                    <div id="bowl-view" class="category-view active">
+                        <div class="selection-section">
+                            <div class="section-inline-header section-inline-header--spread">
+                                <span>Sides</span>
+                                <span class="inline-meta inline-meta--tight">Choose 1 side or 2 halves</span>
+                                <span class="inline-meta inline-meta--tight">Selected: <span class="side-count" data-count-source="bowl-sides">0</span></span>
+                            </div>
+                            <div class="selection-grid cashier-selection-grid cashier-selection-grid--sides" id="bowl-sides">
+                                {% for side in sides %}
+                                <div class="meal-qty-card side-card" data-recipe-id="{{ side.id }}" data-recipe-name="{{ side.name }}" data-recipe-type="Side" data-recipe-price="{{ side.price }}">
+                                    <div class="meal-qty-card__top">
+                                        <button type="button" class="qty-bubble qty-minus" aria-label="Decrease {{ side.name }}" data-action="decrement">−</button>
+                                        {% if side.image %}<img src="{% static side.image %}" alt="{{ side.name }}" class="meal-qty-card__image" loading="lazy">{% endif %}
+                                        <button type="button" class="qty-bubble qty-plus" aria-label="Increase {{ side.name }}" data-action="increment">+</button>
+                                    </div>
+                                    <span class="meal-qty-card__name">{{ side.name }}</span>
+                                    <span class="selection-badge meal-qty-card__count" hidden>0</span>
+                                </div>
+                                {% empty %}
+                                <p class="empty-message">No sides available</p>
+                                {% endfor %}
+                            </div>
+                            <div class="selection-controls" data-pagination="bowl-sides"></div>
+                        </div>
+
+                        <div class="selection-divider"></div>
+
+                        <div class="selection-section">
+                                <div class="section-inline-header section-inline-header--spread">
+                                    <span>Entrees</span>
+                                    <span class="inline-meta inline-meta--tight">Choose 1 entrée. Use +/− to adjust quantity.</span>
+                                    <span class="inline-meta inline-meta--tight">Selected: <span class="entree-count" data-count-source="bowl-entrees">0</span></span>
+                                </div>
+                                <div class="selection-grid cashier-selection-grid cashier-selection-grid--entrees" id="bowl-entrees">
+                                    {% for entree in entrees %}
+                                    <div class="meal-qty-card entree-card" data-recipe-id="{{ entree.id }}" data-recipe-name="{{ entree.name }}" data-recipe-type="Entree" data-recipe-price="{{ entree.price }}">
+                                        <div class="meal-qty-card__top">
+                                            <button type="button" class="qty-bubble qty-minus" aria-label="Decrease {{ entree.name }}" data-action="decrement">−</button>
+                                            {% if entree.image %}<img src="{% static entree.image %}" alt="{{ entree.name }}" class="meal-qty-card__image" loading="lazy">{% endif %}
+                                            <button type="button" class="qty-bubble qty-plus" aria-label="Increase {{ entree.name }}" data-action="increment">+</button>
+                                        </div>
+                                        <span class="meal-qty-card__name">{{ entree.name }}</span>
+                                        <span class="selection-badge meal-qty-card__count" hidden>0</span>
+                                    </div>
+                                    {% empty %}
+                                    <p class="empty-message">No entrees available</p>
+                                    {% endfor %}
+                                </div>
+                            <div class="selection-controls" data-pagination="bowl-entrees"></div>
+                        </div>
+
+                        <div class="selection-divider"></div>
+
+                        <div class="selection-actions selection-actions--dual">
+                            <button type="button" id="clear-bowl-btn" class="pe-btn pe-btn-secondary add-to-order-btn clear-btn">Clear</button>
+                            <button type="button" id="add-bowl-btn" class="pe-btn pe-btn-outline add-to-order-btn">Add Bowl to Order - $8.30</button>
+                        </div>
+                    </div>
+
+                    <!-- other category views remain but only bowl is shown -->
+                    <div id="plate-view" class="category-view">
+                        <div class="selection-section">
+                            <div class="section-inline-header section-inline-header--spread">
+                                <span>Sides</span>
+                                <span class="inline-meta inline-meta--tight">Choose 1 side or 2 halves</span>
+                                <span class="inline-meta inline-meta--tight">Selected: <span class="side-count" data-count-source="plate-sides">0</span></span>
+                            </div>
+                            <div class="selection-grid cashier-selection-grid cashier-selection-grid--sides" id="plate-sides">
+                                {% for side in sides %}
+                                <div class="meal-qty-card side-card" data-recipe-id="{{ side.id }}" data-recipe-name="{{ side.name }}" data-recipe-type="Side" data-recipe-price="{{ side.price }}">
+                                    <div class="meal-qty-card__top">
+                                        <button type="button" class="qty-bubble qty-minus" aria-label="Decrease {{ side.name }}" data-action="decrement">−</button>
+                                        {% if side.image %}<img src="{% static side.image %}" alt="{{ side.name }}" class="meal-qty-card__image" loading="lazy">{% endif %}
+                                        <button type="button" class="qty-bubble qty-plus" aria-label="Increase {{ side.name }}" data-action="increment">+</button>
+                                    </div>
+                                    <span class="meal-qty-card__name">{{ side.name }}</span>
+                                    <span class="selection-badge meal-qty-card__count" hidden>0</span>
+                                </div>
+                                {% empty %}
+                                <p class="empty-message">No sides available</p>
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                        <div class="selection-divider"></div>
+
+                        <div class="selection-section">
+                            <div class="section-inline-header section-inline-header--spread">
+                                <span>Entrees</span>
+                                <span class="inline-meta inline-meta--tight">Choose 2 entrées. Use +/− to adjust quantity.</span>
+                                <span class="inline-meta inline-meta--tight">Selected: <span class="entree-count" data-count-source="plate-entrees">0</span></span>
+                            </div>
+                            <div class="selection-grid cashier-selection-grid cashier-selection-grid--entrees" id="plate-entrees">
+                                {% for entree in entrees %}
+                                <div class="meal-qty-card entree-card" data-recipe-id="{{ entree.id }}" data-recipe-name="{{ entree.name }}" data-recipe-type="Entree" data-recipe-price="{{ entree.price }}">
+                                    <div class="meal-qty-card__top">
+                                        <button type="button" class="qty-bubble qty-minus" aria-label="Decrease {{ entree.name }}" data-action="decrement">−</button>
+                                            {% if entree.image %}<img src="{% static entree.image %}" alt="{{ entree.name }}" class="meal-qty-card__image" loading="lazy">{% endif %}
+                                            <button type="button" class="qty-bubble qty-plus" aria-label="Increase {{ entree.name }}" data-action="increment">+</button>
+                                        </div>
+                                        <span class="meal-qty-card__name">{{ entree.name }}</span>
+                                        <span class="selection-badge meal-qty-card__count" hidden>0</span>
+                                    </div>
+                                    {% empty %}
+                                    <p class="empty-message">No entrees available</p>
+                                    {% endfor %}
+                                </div>
+                            <div class="selection-controls" data-pagination="plate-entrees"></div>
+                        </div>
+
+                        <div class="selection-divider"></div>
+
+                        <div class="selection-actions selection-actions--dual">
+                            <button type="button" id="clear-plate-btn" class="pe-btn pe-btn-secondary add-to-order-btn clear-btn">Clear</button>
+                            <button type="button" id="add-plate-btn" class="pe-btn pe-btn-outline add-to-order-btn">Add Plate to Order - $12.15</button>
+                        </div>
+                    </div>
+
+                    <div id="bigger-plate-view" class="category-view">
+                        <div class="selection-section">
+                            <div class="section-inline-header section-inline-header--spread">
+                                <span>Sides</span>
+                                <span class="inline-meta inline-meta--tight">Choose 1 side or 2 halves</span>
+                                <span class="inline-meta inline-meta--tight">Selected: <span class="side-count" data-count-source="bigger-plate-sides">0</span></span>
+                            </div>
+                            <div class="selection-grid cashier-selection-grid cashier-selection-grid--sides" id="bigger-plate-sides">
+                                {% for side in sides %}
+                                <div class="meal-qty-card side-card" data-recipe-id="{{ side.id }}" data-recipe-name="{{ side.name }}" data-recipe-type="Side" data-recipe-price="{{ side.price }}">
+                                    <div class="meal-qty-card__top">
+                                        <button type="button" class="qty-bubble qty-minus" aria-label="Decrease {{ side.name }}" data-action="decrement">−</button>
+                                        {% if side.image %}<img src="{% static side.image %}" alt="{{ side.name }}" class="meal-qty-card__image" loading="lazy">{% endif %}
+                                        <button type="button" class="qty-bubble qty-plus" aria-label="Increase {{ side.name }}" data-action="increment">+</button>
+                                    </div>
+                                    <span class="meal-qty-card__name">{{ side.name }}</span>
+                                    <span class="selection-badge meal-qty-card__count" hidden>0</span>
+                                </div>
+                                {% empty %}
+                                <p class="empty-message">No sides available</p>
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                        <div class="selection-divider"></div>
+
+                        <div class="selection-section">
+                                <div class="section-inline-header section-inline-header--spread">
+                                    <span>Entrees</span>
+                                    <span class="inline-meta inline-meta--tight">Choose 3 entrées. Use +/− to adjust quantity.</span>
+                                    <span class="inline-meta inline-meta--tight">Selected: <span class="entree-count" data-count-source="bigger-plate-entrees">0</span></span>
+                                </div>
+                                <div class="selection-grid cashier-selection-grid cashier-selection-grid--entrees" id="bigger-plate-entrees">
+                                    {% for entree in entrees %}
+                                    <div class="meal-qty-card entree-card" data-recipe-id="{{ entree.id }}" data-recipe-name="{{ entree.name }}" data-recipe-type="Entree" data-recipe-price="{{ entree.price }}">
+                                        <div class="meal-qty-card__top">
+                                            <button type="button" class="qty-bubble qty-minus" aria-label="Decrease {{ entree.name }}" data-action="decrement">−</button>
+                                            {% if entree.image %}<img src="{% static entree.image %}" alt="{{ entree.name }}" class="meal-qty-card__image" loading="lazy">{% endif %}
+                                            <button type="button" class="qty-bubble qty-plus" aria-label="Increase {{ entree.name }}" data-action="increment">+</button>
+                                        </div>
+                                        <span class="meal-qty-card__name">{{ entree.name }}</span>
+                                        <span class="selection-badge meal-qty-card__count" hidden>0</span>
+                                    </div>
+                                    {% empty %}
+                                    <p class="empty-message">No entrees available</p>
+                                    {% endfor %}
+                                </div>
+                            <div class="selection-controls" data-pagination="bigger-plate-entrees"></div>
+                        </div>
+
+                        <div class="selection-divider"></div>
+
+                        <div class="selection-actions selection-actions--dual">
+                            <button type="button" id="clear-bigger-plate-btn" class="pe-btn pe-btn-secondary add-to-order-btn clear-btn">Clear</button>
+                            <button type="button" id="add-bigger-plate-btn" class="pe-btn pe-btn-outline add-to-order-btn">Add Bigger Plate to Order - $14.05</button>
+                        </div>
+                    </div>
+
+                    <div id="a-la-carte-view" class="category-view">
+                        <div class="selection-section">
+                            <h2>Sides</h2>
+                            <div class="selection-grid cashier-selection-grid" id="alacarte-sides">
+                                {% for side in sides %}
+                                <button class="selection-btn alacarte-btn cashier-tile" data-recipe-id="{{ side.id }}" data-recipe-name="{{ side.name }}" data-recipe-type="Side" data-recipe-price="{{ side.price }}">
+                                    {% if side.image %}<img src="{% static side.image %}" alt="{{ side.name }}" class="option-tile__image" loading="lazy">{% endif %}
+                                    <span class="option-tile__text">{{ side.name }}</span>
+                                </button>
+                                {% empty %}
+                                <p class="empty-message">No sides available</p>
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                        <div class="selection-divider"></div>
+
+                        <div class="selection-section">
+                            <h2>Entrees</h2>
+                            <div class="selection-grid cashier-selection-grid cashier-selection-grid--entrees" id="alacarte-entrees">
+                                {% for entree in entrees %}
+                                <button class="selection-btn alacarte-btn cashier-tile" data-recipe-id="{{ entree.id }}" data-recipe-name="{{ entree.name }}" data-recipe-type="Entree" data-recipe-price="{{ entree.price }}">
+                                    {% if entree.image %}<img src="{% static entree.image %}" alt="{{ entree.name }}" class="option-tile__image" loading="lazy">{% endif %}
+                                    <span class="option-tile__text">{{ entree.name }}</span>
+                                </button>
+                                {% empty %}
+                                <p class="empty-message">No entrees available</p>
+                                {% endfor %}
+                            </div>
+                            <div class="selection-controls" data-pagination="alacarte-entrees"></div>
+                        </div>
+
+                        <div class="selection-divider"></div>
+
+                        <div class="selection-section">
+                            <h2>Select a Size</h2>
+                            <div class="kiosk-size-toggle">
+                                <label class="kiosk-size-pill">
+                                    <input type="radio" name="alacarte-size" value="S">
+                                    <span>Small</span>
+                                </label>
+                                <label class="kiosk-size-pill">
+                                    <input type="radio" name="alacarte-size" value="M" checked>
+                                    <span>Medium</span>
+                                </label>
+                                <label class="kiosk-size-pill">
+                                    <input type="radio" name="alacarte-size" value="L">
+                                    <span>Large</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="selection-actions selection-actions--dual">
+                            <button type="button" id="clear-alacarte-btn" class="pe-btn pe-btn-secondary add-to-order-btn clear-btn">Clear</button>
+                            <button type="button" id="add-alacarte-btn" class="pe-btn pe-btn-outline add-to-order-btn">Add A La Carte to Order</button>
+                        </div>
+                    </div>
+
+                    <div id="appetizers-view" class="category-view">
+                        <div class="selection-section">
+                            <h2>Appetizers</h2>
+                            <div class="selection-grid cashier-selection-grid cashier-selection-grid--entrees" id="appetizers-grid">
+                                {% for appetizer in appetizers %}
+                                <button class="selection-btn appetizer-btn cashier-tile" data-recipe-id="{{ appetizer.id }}" data-recipe-name="{{ appetizer.name }}" data-recipe-type="Appetizer" data-recipe-price="{{ appetizer.price }}">
+                                    <span class="option-tile__text">{{ appetizer.name }}</span>
+                                </button>
+                                {% empty %}
+                                <p class="empty-message">No appetizers available</p>
+                                {% endfor %}
+                            </div>
+                            <div class="selection-controls" data-pagination="appetizers-grid"></div>
+                        </div>
+
+                        <div class="selection-divider"></div>
+
+                        <div class="selection-section">
+                            <h2>Select a Size</h2>
+                            <div class="kiosk-size-toggle">
+                                <label class="kiosk-size-pill">
+                                    <input type="radio" name="appetizer-size" value="S">
+                                    <span>Small</span>
+                                </label>
+                                <label class="kiosk-size-pill">
+                                    <input type="radio" name="appetizer-size" value="M" checked>
+                                    <span>Medium</span>
+                                </label>
+                                <label class="kiosk-size-pill">
+                                    <input type="radio" name="appetizer-size" value="L">
+                                    <span>Large</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="selection-actions selection-actions--dual">
+                            <button type="button" id="clear-appetizer-btn" class="pe-btn pe-btn-secondary add-to-order-btn clear-btn">Clear</button>
+                            <button type="button" id="add-appetizer-btn" class="pe-btn pe-btn-outline add-to-order-btn">Add Appetizer to Order</button>
+                        </div>
+                    </div>
+
+                    <div id="drinks-view" class="category-view">
+                        <div class="selection-section">
+                            <h2>Drinks</h2>
+                            <div class="selection-grid cashier-selection-grid cashier-selection-grid--entrees" id="drinks-grid">
+                                {% for drink in drinks %}
+                                <button class="selection-btn drink-btn cashier-tile" data-recipe-id="{{ drink.id }}" data-recipe-name="{{ drink.name }}" data-recipe-type="Drink" data-recipe-price="{{ drink.price }}">
+                                    <span class="option-tile__text">{{ drink.name }}</span>
+                                </button>
+                                {% empty %}
+                                <p class="empty-message">No drinks available</p>
+                                {% endfor %}
+                            </div>
+                            <div class="selection-controls" data-pagination="drinks-grid"></div>
+                        </div>
+
+                        <div class="selection-divider"></div>
+
+                        <div class="selection-section">
+                            <h2>Select a Size</h2>
+                            <div class="kiosk-size-toggle">
+                                <label class="kiosk-size-pill">
+                                    <input type="radio" name="drink-size" value="S">
+                                    <span>Small</span>
+                                </label>
+                                <label class="kiosk-size-pill">
+                                    <input type="radio" name="drink-size" value="M" checked>
+                                    <span>Medium</span>
+                                </label>
+                                <label class="kiosk-size-pill">
+                                    <input type="radio" name="drink-size" value="L">
+                                    <span>Large</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="selection-actions selection-actions--dual">
+                            <button type="button" id="clear-drink-btn" class="pe-btn pe-btn-secondary add-to-order-btn clear-btn">Clear</button>
+                            <button type="button" id="add-drink-btn" class="pe-btn pe-btn-outline add-to-order-btn">Add Drink to Order</button>
+                        </div>
+                    </div>
+
+                    <div id="protein-plate-view" class="category-view">
+                        <div class="selection-section">
+                            <h2>Protein Plate</h2>
+                            <p class="empty-message">This section will be populated later for custom protein-focused meals.</p>
+                        </div>
+
+                        <div class="selection-divider"></div>
+
+                        <div class="selection-actions">
+                            <button type="button" id="add-protein-plate-btn" class="pe-btn pe-btn-outline add-to-order-btn">Add Protein Plate to Order - $0.00</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="order-summary cashier-panel cashier-panel--summary">
+                <div class="pe-section-header">
+                    <h2 class="pe-title">Order summary</h2>
+                </div>
+                <div class="order-items" id="order-items">
+                    <p class="empty-message">No items in order</p>
+                </div>
+
+                <div class="order-totals">
+                    <div class="totals-row">
+                        <span>Subtotal</span>
+                        <span id="subtotal">$0.00</span>
+                    </div>
+                    <div class="totals-row">
+                        <span>Tax (8.25%)</span>
+                        <span id="tax">$0.00</span>
+                    </div>
+                    <div class="totals-row total-row">
+                        <strong>Total</strong>
+                        <strong id="total">$0.00</strong>
+                    </div>
+                </div>
+
+                <div class="order-actions">
+                    <button type="button" id="checkout-btn" class="pe-btn pe-btn-primary pe-elevated">Complete Order</button>
+                    <button type="button" id="clear-btn" class="pe-btn pe-btn-outline">Clear Order</button>
+                </div>
+            </section>
+        </div>
+        </div>
+    </main>
+
+    <div id="purchaseModal" class="pe-modal" aria-hidden="true">
+        <div class="pe-modal__content">
+            <p class="pe-subtitle">Order Completed — Thank You!</p>
+            <h3 class="pe-title">Order #<span id="purchaseModalNumber">0000</span></h3>
+            <p class="text-muted">Total: <strong id="purchaseModalTotal">$0.00</strong></p>
+            <div class="pe-modal__actions">
+                <button class="pe-modal__button confirm" id="purchaseModalOk">OK</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="clearConfirmModal" class="pe-modal" aria-hidden="true">
+        <div class="pe-modal__content">
+            <p class="pe-subtitle">Confirm</p>
+            <h3 class="pe-title">Clear current order?</h3>
+            <div class="pe-modal__actions">
+                <button class="pe-modal__button confirm" id="confirmClearOrder">Yes, clear</button>
+                <button class="pe-modal__button cancel" id="cancelClearOrder">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    {{ drink_price_map|json_script:"cashier-drink-prices" }}
+    {{ drink_has_sizes_map|json_script:"cashier-drink-has-sizes" }}
+    {{ drink_single_price_map|json_script:"cashier-drink-single-prices" }}
+    {{ appetizer_price_map|json_script:"cashier-appetizer-prices" }}
+    {{ alacarte_price_map|json_script:"cashier-alacarte-prices" }}
+    {{ alacarte_size_prices|json_script:"cashier-alacarte-size-prices" }}
+    {{ alacarte_premium_prices|json_script:"cashier-alacarte-premium-prices" }}
+    {{ alacarte_premium_items|json_script:"cashier-alacarte-premium-items" }}
+    <script src="{% static 'js/cashier.js' %}"></script>
+
+    <!-- Floating Panda logo for language toggle -->
+    <button class="floating-lang-btn" id="cashier-lang-trigger" type="button" title="Change language">
+        <img src="{% static 'img/panda-favicon.png' %}" alt="Panda Express language toggle">
+    </button>
+
+    <div class="cashier-lang-modal" id="cashier-lang-modal" aria-hidden="true">
+        <div class="cashier-lang-dialog" role="dialog" aria-modal="true" aria-labelledby="cashier-lang-title">
+            <div class="cashier-lang-header">
+                <h3 id="cashier-lang-title">Choose Language</h3>
+                <button type="button" class="cashier-lang-close" id="cashier-lang-close" aria-label="Close">×</button>
+            </div>
+            <div class="cashier-lang-options">
+                <!-- Limit to supported kiosk set -->
+                <button type="button" class="cashier-lang-option" data-lang="en">English</button>
+                <button type="button" class="cashier-lang-option" data-lang="es">Español</button>
+                <button type="button" class="cashier-lang-option" data-lang="fr">Français</button>
+                <button type="button" class="cashier-lang-option" data-lang="zh-Hans">中文 (简体)</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Cashier language modal toggle
+        document.addEventListener('DOMContentLoaded', () => {
+            const trigger = document.getElementById('cashier-lang-trigger');
+            const modal = document.getElementById('cashier-lang-modal');
+            const closeBtn = document.getElementById('cashier-lang-close');
+            const options = document.querySelectorAll('.cashier-lang-option');
+            const setLangUrl = "{% url 'menu:set_lang' %}";
+            // Preserve the full URL so selecting a language keeps us on the same cashier view
+            const nextPath = encodeURIComponent(window.location.pathname + window.location.search);
+
+            const openModal = () => modal?.classList.add('is-open');
+            const closeModal = () => modal?.classList.remove('is-open');
+
+            trigger?.addEventListener('click', (e) => {
+                e.preventDefault();
+                openModal();
+            });
+            closeBtn?.addEventListener('click', closeModal);
+            modal?.addEventListener('click', (e) => {
+                if (e.target === modal) closeModal();
+            });
+            options.forEach(opt => {
+                opt.addEventListener('click', () => {
+                    const lang = opt.dataset.lang;
+                    if (!lang) return;
+                    window.location.href = `${setLangUrl}?lang=${lang}&next=${nextPath}`;
+                });
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,2904 @@
+{
+  "translations": [
+    [
+      "Minute Maid Apple Juice",
+      "es",
+      "Zumo de manzana Minute Maid"
+    ],
+    [
+      "Pomegranate Pineapple Flavored Lemonade",
+      "es",
+      "Limonada con sabor a granada y piña"
+    ],
+    [
+      "Veggie Spring Roll",
+      "es",
+      "Rollito de primavera vegetariano"
+    ],
+    [
+      "Fanta Orange",
+      "es",
+      "Fanta Orange"
+    ],
+    [
+      "String Bean Chicken Breast",
+      "es",
+      "Pechuga de pollo con judía verde"
+    ],
+    [
+      "Mango Guava Flavored Tea",
+      "es",
+      "Té con sabor a mango y guayaba"
+    ],
+    [
+      "Peach Lychee Flavored Refresher",
+      "es",
+      "Refrescador con sabor a melocotón y litchi"
+    ],
+    [
+      "Super Greens",
+      "es",
+      "Super Verdes"
+    ],
+    [
+      "Fried Rice",
+      "es",
+      "Arroz frito"
+    ],
+    [
+      "Kung Pao Chicken",
+      "es",
+      "Pollo Kung Pao"
+    ],
+    [
+      "Smartwater",
+      "es",
+      "Smartwater"
+    ],
+    [
+      "Beijing Beef",
+      "es",
+      "Carne de vacuno de Pekín"
+    ],
+    [
+      "Cream Cheese Rangoon",
+      "es",
+      "Rangún de queso crema"
+    ],
+    [
+      "Dasani",
+      "es",
+      "Dasani"
+    ],
+    [
+      "Fuze Raspberry Iced Tea",
+      "es",
+      "Té helado de frambuesa Fuze"
+    ],
+    [
+      "Black Pepper Chicken",
+      "es",
+      "Pollo con pimienta negra"
+    ],
+    [
+      "Chow Mein",
+      "es",
+      "Chow mein"
+    ],
+    [
+      "Diet Coke",
+      "es",
+      "Coca-Cola Light"
+    ],
+    [
+      "Broccoli Beef",
+      "es",
+      "Brócoli de ternera"
+    ],
+    [
+      "Mushroom Chicken",
+      "es",
+      "Pollo con Setas"
+    ],
+    [
+      "SweetFire Chicken Breast",
+      "es",
+      "Pechuga de pollo SweetFire"
+    ],
+    [
+      "Coca Cola",
+      "es",
+      "Coca Cola"
+    ],
+    [
+      "Dr Pepper",
+      "es",
+      "Dr Pepper"
+    ],
+    [
+      "Watermelon Mango Flavored Refresher",
+      "es",
+      "Refrescador con sabor a sandía y mango"
+    ],
+    [
+      "Hot Orange Chicken",
+      "es",
+      "Pollo a la naranja picante"
+    ],
+    [
+      "Minute Maid Lemonade",
+      "es",
+      "Limonada de Minute Maid"
+    ],
+    [
+      "Barqs Root Beer",
+      "es",
+      "Barqs Root Beer"
+    ],
+    [
+      "White Steamed Rice",
+      "es",
+      "Arroz blanco al vapor"
+    ],
+    [
+      "Eggplant Tofu",
+      "es",
+      "Tofu de berenjena"
+    ],
+    [
+      "Original Orange Chicken",
+      "es",
+      "Pollo naranja original"
+    ],
+    [
+      "Grilled Teriyaki Chicken",
+      "es",
+      "Pollo teriyaki a la parrilla"
+    ],
+    [
+      "Black Pepper Sirloin Steak",
+      "es",
+      "Filete de solomillo de pimienta negra"
+    ],
+    [
+      "Sprite",
+      "es",
+      "Duende"
+    ],
+    [
+      "Coke Zero",
+      "es",
+      "Coke Zero"
+    ],
+    [
+      "Honey Walnut Shrimp",
+      "es",
+      "Gambas de nuez con miel"
+    ],
+    [
+      "Honey Sesame Chicken Breast",
+      "es",
+      "Pechuga de pollo con miel y sésamo"
+    ],
+    [
+      "Chicken Egg Roll",
+      "es",
+      "Rollito de huevo de gallina"
+    ],
+    [
+      "Entrees",
+      "es",
+      "Entradas"
+    ],
+    [
+      "Sides",
+      "es",
+      "Lados"
+    ],
+    [
+      "Appetizers",
+      "es",
+      "Aperitivos"
+    ],
+    [
+      "Drinks",
+      "es",
+      "Bebidas"
+    ],
+    [
+      "clear sky",
+      "es",
+      "cielo despejado"
+    ],
+    [
+      "Meal Options",
+      "es",
+      "Opciones de comidas"
+    ],
+    [
+      "Bowl - $8.50",
+      "es",
+      "Bowl - 8,50 $"
+    ],
+    [
+      "1 entrée & 1 side",
+      "es",
+      "1 Entrada y 1 Lateral"
+    ],
+    [
+      "Plate - $10.10",
+      "es",
+      "Plato - 10,10 $"
+    ],
+    [
+      "2 entrées & 1 side",
+      "es",
+      "2 entradas y 1 lado"
+    ],
+    [
+      "Bigger Plate - $11.70",
+      "es",
+      "Plato más grande - 11,70 $"
+    ],
+    [
+      "3 entrées & 1 side",
+      "es",
+      "3 entradas y 1 lado"
+    ],
+    [
+      "Panda Cub Meal - $6.80",
+      "es",
+      "Harina de cachorro de panda - 6,80 $"
+    ],
+    [
+      "1 Jr entrée, 1 Jr side, fruit cup & bottle",
+      "es",
+      "1 plato principal Jr, 1 acompañamiento Jr, copa de fruta y botella"
+    ],
+    [
+      "Family Meal - $40.00",
+      "es",
+      "Comida familiar - 40,00 $"
+    ],
+    [
+      "2 large sides & 3 large entrées",
+      "es",
+      "2 lados anchos y 3 entradas de aire anchas"
+    ],
+    [
+      "A la Carte",
+      "es",
+      "A la carta"
+    ],
+    [
+      "Entrée",
+      "es",
+      "Entrada"
+    ],
+    [
+      "Side",
+      "es",
+      "Lado"
+    ],
+    [
+      "Small",
+      "es",
+      "Pequeño"
+    ],
+    [
+      "Medium",
+      "es",
+      "Medio"
+    ],
+    [
+      "Large",
+      "es",
+      "Grande"
+    ],
+    [
+      "+ $1.90 for premium entrées",
+      "es",
+      "+ 1,90 $ para entradas premium"
+    ],
+    [
+      "No entrees available.",
+      "es",
+      "No hay platos principales disponibles."
+    ],
+    [
+      "No sides available.",
+      "es",
+      "No hay lados disponibles."
+    ],
+    [
+      "No appetizers available.",
+      "es",
+      "No hay entrantes disponibles."
+    ],
+    [
+      "No drinks available.",
+      "es",
+      "No hay bebidas disponibles."
+    ],
+    [
+      "Minute Maid Apple Juice",
+      "fr",
+      "Jus de pomme Minute Maid"
+    ],
+    [
+      "Pomegranate Pineapple Flavored Lemonade",
+      "fr",
+      "Limonade parfum grenade ananas"
+    ],
+    [
+      "Veggie Spring Roll",
+      "fr",
+      "Rouleau de printemps végétarien"
+    ],
+    [
+      "Fanta Orange",
+      "fr",
+      "Fanta Orange"
+    ],
+    [
+      "String Bean Chicken Breast",
+      "fr",
+      "Blanc de poulet aux haricots verts"
+    ],
+    [
+      "Mango Guava Flavored Tea",
+      "fr",
+      "Thé aromatisé à la goyave à la mangue"
+    ],
+    [
+      "Peach Lychee Flavored Refresher",
+      "fr",
+      "Rafraîchisseur parfum pêche et litchi"
+    ],
+    [
+      "Super Greens",
+      "fr",
+      "Super Verts"
+    ],
+    [
+      "Fried Rice",
+      "fr",
+      "Riz frit"
+    ],
+    [
+      "Kung Pao Chicken",
+      "fr",
+      "Poulet Kung Pao"
+    ],
+    [
+      "Smartwater",
+      "fr",
+      "Smartwater"
+    ],
+    [
+      "Beijing Beef",
+      "fr",
+      "Bœuf de Pékin"
+    ],
+    [
+      "Cream Cheese Rangoon",
+      "fr",
+      "Rangoon au fromage frais"
+    ],
+    [
+      "Dasani",
+      "fr",
+      "Dasani"
+    ],
+    [
+      "Fuze Raspberry Iced Tea",
+      "fr",
+      "Thé glacé à la framboise Fuze"
+    ],
+    [
+      "Black Pepper Chicken",
+      "fr",
+      "Poulet au poivre noir"
+    ],
+    [
+      "Chow Mein",
+      "fr",
+      "Chow Mein"
+    ],
+    [
+      "Diet Coke",
+      "fr",
+      "Coca diète"
+    ],
+    [
+      "Broccoli Beef",
+      "fr",
+      "Bœuf de brocoli"
+    ],
+    [
+      "Mushroom Chicken",
+      "fr",
+      "Poulet aux champignons"
+    ],
+    [
+      "SweetFire Chicken Breast",
+      "fr",
+      "Blanc de poulet SweetFire"
+    ],
+    [
+      "Coca Cola",
+      "fr",
+      "Coke"
+    ],
+    [
+      "Dr Pepper",
+      "fr",
+      "Dr Pepper"
+    ],
+    [
+      "Watermelon Mango Flavored Refresher",
+      "fr",
+      "Rafraîchisseur parfum pastèque et mangue"
+    ],
+    [
+      "Hot Orange Chicken",
+      "fr",
+      "Poulet à l’orange piquante"
+    ],
+    [
+      "Minute Maid Lemonade",
+      "fr",
+      "Limonade de la Minute Maid"
+    ],
+    [
+      "Barqs Root Beer",
+      "fr",
+      "Barqs Root Beer"
+    ],
+    [
+      "White Steamed Rice",
+      "fr",
+      "Riz blanc vapeur"
+    ],
+    [
+      "Eggplant Tofu",
+      "fr",
+      "Tofu d’aubergine"
+    ],
+    [
+      "Original Orange Chicken",
+      "fr",
+      "Original Orange Chicken"
+    ],
+    [
+      "Grilled Teriyaki Chicken",
+      "fr",
+      "Poulet teriyaki grillé"
+    ],
+    [
+      "Black Pepper Sirloin Steak",
+      "fr",
+      "Steak de filet au poivre noir"
+    ],
+    [
+      "Sprite",
+      "fr",
+      "Lutin"
+    ],
+    [
+      "Coke Zero",
+      "fr",
+      "Coke Zero"
+    ],
+    [
+      "Honey Walnut Shrimp",
+      "fr",
+      "Crevettes aux noix au miel"
+    ],
+    [
+      "Honey Sesame Chicken Breast",
+      "fr",
+      "Poitrine de poulet au sésame au miel"
+    ],
+    [
+      "Chicken Egg Roll",
+      "fr",
+      "Rouleau aux œufs poule"
+    ],
+    [
+      "Entrees",
+      "fr",
+      "Plats"
+    ],
+    [
+      "Sides",
+      "fr",
+      "Côtés"
+    ],
+    [
+      "Appetizers",
+      "fr",
+      "Apéritifs"
+    ],
+    [
+      "Drinks",
+      "fr",
+      "Boissons"
+    ],
+    [
+      "clear sky",
+      "fr",
+      "ciel dégagé"
+    ],
+    [
+      "Meal Options",
+      "fr",
+      "Options de repas"
+    ],
+    [
+      "Bowl - $8.50",
+      "fr",
+      "Bowl - 8,50 $"
+    ],
+    [
+      "1 entrée & 1 side",
+      "fr",
+      "1 entrée & 1 side"
+    ],
+    [
+      "Plate - $10.10",
+      "fr",
+      "Assiette - 10,10 $"
+    ],
+    [
+      "2 entrées & 1 side",
+      "fr",
+      "2 entrées & 1 side"
+    ],
+    [
+      "Bigger Plate - $11.70",
+      "fr",
+      "Plaque plus grande - 11,70 $"
+    ],
+    [
+      "3 entrées & 1 side",
+      "fr",
+      "3 entrées & 1 side"
+    ],
+    [
+      "Panda Cub Meal - $6.80",
+      "fr",
+      "Repas de panda Cub - 6,80 $"
+    ],
+    [
+      "1 Jr entrée, 1 Jr side, fruit cup & bottle",
+      "fr",
+      "1 plat principal Jr, 1 côté Jr, coupe de fruits et bouteille"
+    ],
+    [
+      "Family Meal - $40.00",
+      "fr",
+      "Repas en famille - 40,00 $"
+    ],
+    [
+      "2 large sides & 3 large entrées",
+      "fr",
+      "2 large sides & 3 large entrées"
+    ],
+    [
+      "A la Carte",
+      "fr",
+      "A la Carte"
+    ],
+    [
+      "Entrée",
+      "fr",
+      "Entrée"
+    ],
+    [
+      "Side",
+      "fr",
+      "Côté"
+    ],
+    [
+      "Small",
+      "fr",
+      "Petit"
+    ],
+    [
+      "Medium",
+      "fr",
+      "Douleur moyenne"
+    ],
+    [
+      "Large",
+      "fr",
+      "Grand"
+    ],
+    [
+      "+ $1.90 for premium entrées",
+      "fr",
+      "+ $1.90 for premium entrées"
+    ],
+    [
+      "No entrees available.",
+      "fr",
+      "Aucun plat principal disponible."
+    ],
+    [
+      "No sides available.",
+      "fr",
+      "Aucun côté disponible."
+    ],
+    [
+      "No appetizers available.",
+      "fr",
+      "Aucun amuse-bouche disponible."
+    ],
+    [
+      "No drinks available.",
+      "fr",
+      "Pas de boissons disponibles."
+    ],
+    [
+      "Minute Maid Apple Juice",
+      "de",
+      "Minute Maid Apfelsaft"
+    ],
+    [
+      "Pomegranate Pineapple Flavored Lemonade",
+      "de",
+      "Granatapfel-Ananas-Limonade"
+    ],
+    [
+      "Veggie Spring Roll",
+      "de",
+      "Gemüse-Frühlingsrolle"
+    ],
+    [
+      "Fanta Orange",
+      "de",
+      "Fanta Orange"
+    ],
+    [
+      "String Bean Chicken Breast",
+      "de",
+      "Hähnchenbrust mit Strähnenbohnen"
+    ],
+    [
+      "Mango Guava Flavored Tea",
+      "de",
+      "Mango-Guava-aromatisierter Tee"
+    ],
+    [
+      "Peach Lychee Flavored Refresher",
+      "de",
+      "Pfirsich-Litschi-Geschmack Refresher"
+    ],
+    [
+      "Super Greens",
+      "de",
+      "Super Greens"
+    ],
+    [
+      "Fried Rice",
+      "de",
+      "Gebratener Reis"
+    ],
+    [
+      "Kung Pao Chicken",
+      "de",
+      "Kung Pao Chicken"
+    ],
+    [
+      "Smartwater",
+      "de",
+      "Smartwater"
+    ],
+    [
+      "Beijing Beef",
+      "de",
+      "Pekinger Rindfleisch"
+    ],
+    [
+      "Cream Cheese Rangoon",
+      "de",
+      "Frischkäse Rangoon"
+    ],
+    [
+      "Dasani",
+      "de",
+      "Dasani"
+    ],
+    [
+      "Fuze Raspberry Iced Tea",
+      "de",
+      "Fuze Himbeer-Eistee"
+    ],
+    [
+      "Black Pepper Chicken",
+      "de",
+      "Black Pepper Chicken"
+    ],
+    [
+      "Chow Mein",
+      "de",
+      "Chow Mein"
+    ],
+    [
+      "Diet Coke",
+      "de",
+      "Diät-Cola"
+    ],
+    [
+      "Broccoli Beef",
+      "de",
+      "Broccoli Beef"
+    ],
+    [
+      "Mushroom Chicken",
+      "de",
+      "Pilzhähnchen"
+    ],
+    [
+      "SweetFire Chicken Breast",
+      "de",
+      "SweetFire Hähnchenbrust"
+    ],
+    [
+      "Coca Cola",
+      "de",
+      "Koks"
+    ],
+    [
+      "Dr Pepper",
+      "de",
+      "Dr. Pepper"
+    ],
+    [
+      "Watermelon Mango Flavored Refresher",
+      "de",
+      "Wassermelone Mango-Geschmack Refresher"
+    ],
+    [
+      "Hot Orange Chicken",
+      "de",
+      "Heißes Orangenhähnchen"
+    ],
+    [
+      "Minute Maid Lemonade",
+      "de",
+      "Minute Maid Limonade"
+    ],
+    [
+      "Barqs Root Beer",
+      "de",
+      "Barqs Root Beer"
+    ],
+    [
+      "White Steamed Rice",
+      "de",
+      "Weißer gedämpfter Reis"
+    ],
+    [
+      "Eggplant Tofu",
+      "de",
+      "Auberginen-Tofu"
+    ],
+    [
+      "Original Orange Chicken",
+      "de",
+      "Ursprüngliches Orange Chicken"
+    ],
+    [
+      "Grilled Teriyaki Chicken",
+      "de",
+      "Gegrilltes Teriyaki-Hähnchen"
+    ],
+    [
+      "Black Pepper Sirloin Steak",
+      "de",
+      "Schwarzer Pfeffer-Sirloin-Steak"
+    ],
+    [
+      "Sprite",
+      "de",
+      "Elfe"
+    ],
+    [
+      "Coke Zero",
+      "de",
+      "Coke Zero"
+    ],
+    [
+      "Honey Walnut Shrimp",
+      "de",
+      "Honig-Walnuss-Garnelen"
+    ],
+    [
+      "Honey Sesame Chicken Breast",
+      "de",
+      "Honig-Sesam-Hähnchenbrust"
+    ],
+    [
+      "Chicken Egg Roll",
+      "de",
+      "Hühner-Eierrolle"
+    ],
+    [
+      "Entrees",
+      "de",
+      "Vorspeisen"
+    ],
+    [
+      "Sides",
+      "de",
+      "Seiten"
+    ],
+    [
+      "Appetizers",
+      "de",
+      "Appetitanreger"
+    ],
+    [
+      "Drinks",
+      "de",
+      "Getränke"
+    ],
+    [
+      "clear sky",
+      "de",
+      "Klarer Himmel"
+    ],
+    [
+      "Meal Options",
+      "de",
+      "Essensoptionen"
+    ],
+    [
+      "Bowl - $8.50",
+      "de",
+      "Bowl – 8,50 $"
+    ],
+    [
+      "1 entrée & 1 side",
+      "de",
+      "1 Eingang & 1 Seite"
+    ],
+    [
+      "Plate - $10.10",
+      "de",
+      "Kennzeichen – 10,10 $"
+    ],
+    [
+      "2 entrées & 1 side",
+      "de",
+      "2 Eingänge & 1 Seite"
+    ],
+    [
+      "Bigger Plate - $11.70",
+      "de",
+      "Größerer Teller – 11,70 $"
+    ],
+    [
+      "3 entrées & 1 side",
+      "de",
+      "3 Eingänge & 1 Seite"
+    ],
+    [
+      "Panda Cub Meal - $6.80",
+      "de",
+      "Panda Cub Meal – 6,80 $"
+    ],
+    [
+      "1 Jr entrée, 1 Jr side, fruit cup & bottle",
+      "de",
+      "1 Junior-Hauptteil, 1 Junior-Beilage, Fruchtbecher und Flasche"
+    ],
+    [
+      "Family Meal - $40.00",
+      "de",
+      "Familienessen – 40,00 $"
+    ],
+    [
+      "2 large sides & 3 large entrées",
+      "de",
+      "2 breite Seiten und 3 breite Einlässe"
+    ],
+    [
+      "A la Carte",
+      "de",
+      "A la Carte"
+    ],
+    [
+      "Entrée",
+      "de",
+      "Eingang"
+    ],
+    [
+      "Side",
+      "de",
+      "Seite"
+    ],
+    [
+      "Small",
+      "de",
+      "Klein"
+    ],
+    [
+      "Medium",
+      "de",
+      "Mittel"
+    ],
+    [
+      "Large",
+      "de",
+      "Groß"
+    ],
+    [
+      "+ $1.90 for premium entrées",
+      "de",
+      "+ 1,90 $ für Premium-Eintritte"
+    ],
+    [
+      "No entrees available.",
+      "de",
+      "Keine Hauptgerichte verfügbar."
+    ],
+    [
+      "No sides available.",
+      "de",
+      "Keine Seiten verfügbar."
+    ],
+    [
+      "No appetizers available.",
+      "de",
+      "Keine Vorspeisen verfügbar."
+    ],
+    [
+      "No drinks available.",
+      "de",
+      "Keine Getränke verfügbar."
+    ],
+    [
+      "Minute Maid Apple Juice",
+      "ja",
+      "ミニットメイド アップルジュース"
+    ],
+    [
+      "Pomegranate Pineapple Flavored Lemonade",
+      "ja",
+      "ザクロパイナップル味レモネード"
+    ],
+    [
+      "Veggie Spring Roll",
+      "ja",
+      "ベジースプリングロール"
+    ],
+    [
+      "Fanta Orange",
+      "ja",
+      "ファンタ・オレンジ"
+    ],
+    [
+      "String Bean Chicken Breast",
+      "ja",
+      "ストリングビーンチキンブレスト"
+    ],
+    [
+      "Mango Guava Flavored Tea",
+      "ja",
+      "マンゴーグアバ風味ティー"
+    ],
+    [
+      "Peach Lychee Flavored Refresher",
+      "ja",
+      "ピーチライチ味リフレッシャー"
+    ],
+    [
+      "Super Greens",
+      "ja",
+      "スーパー・グリーンズ"
+    ],
+    [
+      "Fried Rice",
+      "ja",
+      "焼き飯"
+    ],
+    [
+      "Kung Pao Chicken",
+      "ja",
+      "クンパオチキン"
+    ],
+    [
+      "Smartwater",
+      "ja",
+      "スマートウォーター"
+    ],
+    [
+      "Beijing Beef",
+      "ja",
+      "北京牛肉"
+    ],
+    [
+      "Cream Cheese Rangoon",
+      "ja",
+      "クリームチーズ・ラングーン"
+    ],
+    [
+      "Dasani",
+      "ja",
+      "ダサニ"
+    ],
+    [
+      "Fuze Raspberry Iced Tea",
+      "ja",
+      "フューズラズベリーアイスティー"
+    ],
+    [
+      "Black Pepper Chicken",
+      "ja",
+      "ブラックペッパーチキン"
+    ],
+    [
+      "Chow Mein",
+      "ja",
+      "炒麺"
+    ],
+    [
+      "Diet Coke",
+      "ja",
+      "ダイエットコーク"
+    ],
+    [
+      "Broccoli Beef",
+      "ja",
+      "ブロッコリービーフ"
+    ],
+    [
+      "Mushroom Chicken",
+      "ja",
+      "マッシュルームチキン"
+    ],
+    [
+      "SweetFire Chicken Breast",
+      "ja",
+      "スイートファイア・チキンブレスト"
+    ],
+    [
+      "Coca Cola",
+      "ja",
+      "コークス"
+    ],
+    [
+      "Dr Pepper",
+      "ja",
+      "ドクターペッパー"
+    ],
+    [
+      "Watermelon Mango Flavored Refresher",
+      "ja",
+      "スイカマンゴー味リフレッシャー"
+    ],
+    [
+      "Hot Orange Chicken",
+      "ja",
+      "ホットオレンジチキン"
+    ],
+    [
+      "Minute Maid Lemonade",
+      "ja",
+      "ミニットメイド・レモネード"
+    ],
+    [
+      "Barqs Root Beer",
+      "ja",
+      "バークス・ルートビア"
+    ],
+    [
+      "White Steamed Rice",
+      "ja",
+      "白蒸しご飯"
+    ],
+    [
+      "Eggplant Tofu",
+      "ja",
+      "ナス豆腐"
+    ],
+    [
+      "Original Orange Chicken",
+      "ja",
+      "オリジナルオレンジチキン"
+    ],
+    [
+      "Grilled Teriyaki Chicken",
+      "ja",
+      "グリルド照焼チキン"
+    ],
+    [
+      "Black Pepper Sirloin Steak",
+      "ja",
+      "ブラックペッパーサーロインステーキ"
+    ],
+    [
+      "Sprite",
+      "ja",
+      "スプライト"
+    ],
+    [
+      "Coke Zero",
+      "ja",
+      "コークゼロ"
+    ],
+    [
+      "Honey Walnut Shrimp",
+      "ja",
+      "ハニーウォールナットシュリンプ"
+    ],
+    [
+      "Honey Sesame Chicken Breast",
+      "ja",
+      "ハニーゴマチキンブレスト"
+    ],
+    [
+      "Chicken Egg Roll",
+      "ja",
+      "チキンエッグロール"
+    ],
+    [
+      "Entrees",
+      "ja",
+      "メインディッシュ"
+    ],
+    [
+      "Sides",
+      "ja",
+      "側面"
+    ],
+    [
+      "Appetizers",
+      "ja",
+      "前菜"
+    ],
+    [
+      "Drinks",
+      "ja",
+      "ドリンク"
+    ],
+    [
+      "clear sky",
+      "ja",
+      "澄んだ空"
+    ],
+    [
+      "Meal Options",
+      "ja",
+      "食事の選択肢"
+    ],
+    [
+      "Bowl - $8.50",
+      "ja",
+      "ボウル - $8.50"
+    ],
+    [
+      "1 entrée & 1 side",
+      "ja",
+      "1 入口と1側面"
+    ],
+    [
+      "Plate - $10.10",
+      "ja",
+      "プレート - $10.10"
+    ],
+    [
+      "2 entrées & 1 side",
+      "ja",
+      "2入力と1サイド"
+    ],
+    [
+      "Bigger Plate - $11.70",
+      "ja",
+      "ビガープレート - $11.70"
+    ],
+    [
+      "3 entrées & 1 side",
+      "ja",
+      "3入力と片側"
+    ],
+    [
+      "Panda Cub Meal - $6.80",
+      "ja",
+      "パンダカブミール - $6.80"
+    ],
+    [
+      "1 Jr entrée, 1 Jr side, fruit cup & bottle",
+      "ja",
+      "ジュニアメインディッシュ1つ、サイド1つ、フルーツカップ&ボトル"
+    ],
+    [
+      "Family Meal - $40.00",
+      "ja",
+      "ファミリーミール - $40.00"
+    ],
+    [
+      "2 large sides & 3 large entrées",
+      "ja",
+      "幅の広い側面2つと幅のインレット3つ"
+    ],
+    [
+      "A la Carte",
+      "ja",
+      "ア・ラ・カルト"
+    ],
+    [
+      "Entrée",
+      "ja",
+      "入り口"
+    ],
+    [
+      "Side",
+      "ja",
+      "横"
+    ],
+    [
+      "Small",
+      "ja",
+      "小さい"
+    ],
+    [
+      "Medium",
+      "ja",
+      "中程度"
+    ],
+    [
+      "Large",
+      "ja",
+      "大きい"
+    ],
+    [
+      "+ $1.90 for premium entrées",
+      "ja",
+      "+ プレミアムエントリーは$1.90"
+    ],
+    [
+      "No entrees available.",
+      "ja",
+      "メイン料理はない。"
+    ],
+    [
+      "No sides available.",
+      "ja",
+      "サイドメニューはない。"
+    ],
+    [
+      "No appetizers available.",
+      "ja",
+      "前菜はご用意していません。"
+    ],
+    [
+      "No drinks available.",
+      "ja",
+      "飲み物はお供していません。"
+    ],
+    [
+      "Minute Maid Apple Juice",
+      "ko",
+      "미닛 메이드 애플 주스"
+    ],
+    [
+      "Pomegranate Pineapple Flavored Lemonade",
+      "ko",
+      "석류 파인애플 맛 레모네이드"
+    ],
+    [
+      "Veggie Spring Roll",
+      "ko",
+      "채소 스프링롤"
+    ],
+    [
+      "Fanta Orange",
+      "ko",
+      "판타 오렌지"
+    ],
+    [
+      "String Bean Chicken Breast",
+      "ko",
+      "스트링빈 치킨 브레스트"
+    ],
+    [
+      "Mango Guava Flavored Tea",
+      "ko",
+      "망고 구아바 맛 차"
+    ],
+    [
+      "Peach Lychee Flavored Refresher",
+      "ko",
+      "복숭아 리치 맛 리프레셔"
+    ],
+    [
+      "Super Greens",
+      "ko",
+      "슈퍼 그린"
+    ],
+    [
+      "Fried Rice",
+      "ko",
+      "볶음밥"
+    ],
+    [
+      "Kung Pao Chicken",
+      "ko",
+      "쿵파오 치킨"
+    ],
+    [
+      "Smartwater",
+      "ko",
+      "스마트워터"
+    ],
+    [
+      "Beijing Beef",
+      "ko",
+      "베이징 비프"
+    ],
+    [
+      "Cream Cheese Rangoon",
+      "ko",
+      "크림치즈 랑군"
+    ],
+    [
+      "Dasani",
+      "ko",
+      "다사니"
+    ],
+    [
+      "Fuze Raspberry Iced Tea",
+      "ko",
+      "퓨즈 라즈베리 아이스티"
+    ],
+    [
+      "Black Pepper Chicken",
+      "ko",
+      "블랙 페퍼 치킨"
+    ],
+    [
+      "Chow Mein",
+      "ko",
+      "차우멘"
+    ],
+    [
+      "Diet Coke",
+      "ko",
+      "다이어트 콜라"
+    ],
+    [
+      "Broccoli Beef",
+      "ko",
+      "브로콜리 비프"
+    ],
+    [
+      "Mushroom Chicken",
+      "ko",
+      "버섯 치킨"
+    ],
+    [
+      "SweetFire Chicken Breast",
+      "ko",
+      "스위트파이어 치킨 브레스트"
+    ],
+    [
+      "Coca Cola",
+      "ko",
+      "코크스"
+    ],
+    [
+      "Dr Pepper",
+      "ko",
+      "닥터 페퍼"
+    ],
+    [
+      "Watermelon Mango Flavored Refresher",
+      "ko",
+      "수박 망고 맛 리프레셔"
+    ],
+    [
+      "Hot Orange Chicken",
+      "ko",
+      "핫 오렌지 치킨"
+    ],
+    [
+      "Minute Maid Lemonade",
+      "ko",
+      "미닛 메이드 레모네이드"
+    ],
+    [
+      "Barqs Root Beer",
+      "ko",
+      "바크스 루트 비어"
+    ],
+    [
+      "White Steamed Rice",
+      "ko",
+      "흰 찐밥"
+    ],
+    [
+      "Eggplant Tofu",
+      "ko",
+      "가지 두부"
+    ],
+    [
+      "Original Orange Chicken",
+      "ko",
+      "오리지널 오렌지 치킨"
+    ],
+    [
+      "Grilled Teriyaki Chicken",
+      "ko",
+      "구운 데리야끼 치킨"
+    ],
+    [
+      "Black Pepper Sirloin Steak",
+      "ko",
+      "블랙 페퍼 등심 스테이크"
+    ],
+    [
+      "Sprite",
+      "ko",
+      "도깨비"
+    ],
+    [
+      "Coke Zero",
+      "ko",
+      "코크 제로"
+    ],
+    [
+      "Honey Walnut Shrimp",
+      "ko",
+      "허니 호두 새우"
+    ],
+    [
+      "Honey Sesame Chicken Breast",
+      "ko",
+      "꿀참깨 닭가슴살"
+    ],
+    [
+      "Chicken Egg Roll",
+      "ko",
+      "치킨 에그 롤"
+    ],
+    [
+      "Entrees",
+      "ko",
+      "앙트레"
+    ],
+    [
+      "Sides",
+      "ko",
+      "측면"
+    ],
+    [
+      "Appetizers",
+      "ko",
+      "전채"
+    ],
+    [
+      "Drinks",
+      "ko",
+      "음료"
+    ],
+    [
+      "clear sky",
+      "ko",
+      "맑은 하늘"
+    ],
+    [
+      "Meal Options",
+      "ko",
+      "식사 옵션"
+    ],
+    [
+      "Bowl - $8.50",
+      "ko",
+      "볼 - $8.50"
+    ],
+    [
+      "1 entrée & 1 side",
+      "ko",
+      "1 입구 및 1면"
+    ],
+    [
+      "Plate - $10.10",
+      "ko",
+      "번호판 - $10.10"
+    ],
+    [
+      "2 entrées & 1 side",
+      "ko",
+      "2입력 및 1면"
+    ],
+    [
+      "Bigger Plate - $11.70",
+      "ko",
+      "더 큰 플레이트 - $11.70"
+    ],
+    [
+      "3 entrées & 1 side",
+      "ko",
+      "3입력 및 1면"
+    ],
+    [
+      "Panda Cub Meal - $6.80",
+      "ko",
+      "판다 새끼 식사 - $6.80"
+    ],
+    [
+      "1 Jr entrée, 1 Jr side, fruit cup & bottle",
+      "ko",
+      "1개의 주니어 메인 요리, 1개의 주니어 사이드, 과일 컵과 병"
+    ],
+    [
+      "Family Meal - $40.00",
+      "ko",
+      "가족 식사 - $40.00"
+    ],
+    [
+      "2 large sides & 3 large entrées",
+      "ko",
+      "2개의 넓은 측면과 3개의 넓은 흡입구"
+    ],
+    [
+      "A la Carte",
+      "ko",
+      "A la Carte"
+    ],
+    [
+      "Entrée",
+      "ko",
+      "입구"
+    ],
+    [
+      "Side",
+      "ko",
+      "쪽"
+    ],
+    [
+      "Small",
+      "ko",
+      "작다"
+    ],
+    [
+      "Medium",
+      "ko",
+      "보통"
+    ],
+    [
+      "Large",
+      "ko",
+      "큰"
+    ],
+    [
+      "+ $1.90 for premium entrées",
+      "ko",
+      "+ 프리미엄 참가는 $1.90"
+    ],
+    [
+      "No entrees available.",
+      "ko",
+      "메인 요리는 없습니다."
+    ],
+    [
+      "No sides available.",
+      "ko",
+      "사이드 메뉴는 없습니다."
+    ],
+    [
+      "No appetizers available.",
+      "ko",
+      "애피타이저 없어."
+    ],
+    [
+      "No drinks available.",
+      "ko",
+      "음료는 제공되지 않습니다."
+    ],
+    [
+      "Minute Maid Apple Juice",
+      "zh-Hans",
+      "Minute Maid 苹果汁"
+    ],
+    [
+      "Pomegranate Pineapple Flavored Lemonade",
+      "zh-Hans",
+      "石榴菠萝味柠檬水"
+    ],
+    [
+      "Veggie Spring Roll",
+      "zh-Hans",
+      "蔬菜春卷"
+    ],
+    [
+      "Fanta Orange",
+      "zh-Hans",
+      "芬达橙"
+    ],
+    [
+      "String Bean Chicken Breast",
+      "zh-Hans",
+      "四季豆鸡胸肉"
+    ],
+    [
+      "Mango Guava Flavored Tea",
+      "zh-Hans",
+      "芒果番石榴茶"
+    ],
+    [
+      "Peach Lychee Flavored Refresher",
+      "zh-Hans",
+      "桃子荔枝口味清爽"
+    ],
+    [
+      "Super Greens",
+      "zh-Hans",
+      "超级绿队"
+    ],
+    [
+      "Fried Rice",
+      "zh-Hans",
+      "炒饭"
+    ],
+    [
+      "Kung Pao Chicken",
+      "zh-Hans",
+      "宫保鸡丁"
+    ],
+    [
+      "Smartwater",
+      "zh-Hans",
+      "智慧水"
+    ],
+    [
+      "Beijing Beef",
+      "zh-Hans",
+      "北京牛肉"
+    ],
+    [
+      "Cream Cheese Rangoon",
+      "zh-Hans",
+      "奶油奶酪仰光"
+    ],
+    [
+      "Dasani",
+      "zh-Hans",
+      "达萨尼"
+    ],
+    [
+      "Fuze Raspberry Iced Tea",
+      "zh-Hans",
+      "Fuze覆盆子冰茶"
+    ],
+    [
+      "Black Pepper Chicken",
+      "zh-Hans",
+      "黑胡椒鸡"
+    ],
+    [
+      "Chow Mein",
+      "zh-Hans",
+      "炒面"
+    ],
+    [
+      "Diet Coke",
+      "zh-Hans",
+      "健怡可乐"
+    ],
+    [
+      "Broccoli Beef",
+      "zh-Hans",
+      "西兰花牛肉"
+    ],
+    [
+      "Mushroom Chicken",
+      "zh-Hans",
+      "蘑菇鸡"
+    ],
+    [
+      "SweetFire Chicken Breast",
+      "zh-Hans",
+      "SweetFire鸡胸肉"
+    ],
+    [
+      "Coca Cola",
+      "zh-Hans",
+      "焦炭"
+    ],
+    [
+      "Dr Pepper",
+      "zh-Hans",
+      "胡椒博士"
+    ],
+    [
+      "Watermelon Mango Flavored Refresher",
+      "zh-Hans",
+      "西瓜芒果口味清爽"
+    ],
+    [
+      "Hot Orange Chicken",
+      "zh-Hans",
+      "辣橙鸡"
+    ],
+    [
+      "Minute Maid Lemonade",
+      "zh-Hans",
+      "分钟女王柠檬水"
+    ],
+    [
+      "Barqs Root Beer",
+      "zh-Hans",
+      "Barqs根啤"
+    ],
+    [
+      "White Steamed Rice",
+      "zh-Hans",
+      "白蒸饭"
+    ],
+    [
+      "Eggplant Tofu",
+      "zh-Hans",
+      "茄子豆腐"
+    ],
+    [
+      "Original Orange Chicken",
+      "zh-Hans",
+      "原味橙鸡"
+    ],
+    [
+      "Grilled Teriyaki Chicken",
+      "zh-Hans",
+      "烤照烧鸡"
+    ],
+    [
+      "Black Pepper Sirloin Steak",
+      "zh-Hans",
+      "黑胡椒西冷牛排"
+    ],
+    [
+      "Sprite",
+      "zh-Hans",
+      "精灵"
+    ],
+    [
+      "Coke Zero",
+      "zh-Hans",
+      "零度可口可乐"
+    ],
+    [
+      "Honey Walnut Shrimp",
+      "zh-Hans",
+      "蜂蜜核桃虾"
+    ],
+    [
+      "Honey Sesame Chicken Breast",
+      "zh-Hans",
+      "蜂蜜芝麻鸡胸肉"
+    ],
+    [
+      "Chicken Egg Roll",
+      "zh-Hans",
+      "鸡蛋卷"
+    ],
+    [
+      "Entrees",
+      "zh-Hans",
+      "主菜"
+    ],
+    [
+      "Sides",
+      "zh-Hans",
+      "双方"
+    ],
+    [
+      "Appetizers",
+      "zh-Hans",
+      "开胃 菜"
+    ],
+    [
+      "Drinks",
+      "zh-Hans",
+      "饮料"
+    ],
+    [
+      "clear sky",
+      "zh-Hans",
+      "㬫"
+    ],
+    [
+      "Meal Options",
+      "zh-Hans",
+      "餐饮选择"
+    ],
+    [
+      "Bowl - $8.50",
+      "zh-Hans",
+      "碗赛 - 8.50美元"
+    ],
+    [
+      "1 entrée & 1 side",
+      "zh-Hans",
+      "1 入口与1 侧"
+    ],
+    [
+      "Plate - $10.10",
+      "zh-Hans",
+      "车牌 - 10.10美元"
+    ],
+    [
+      "2 entrées & 1 side",
+      "zh-Hans",
+      "2输入1面"
+    ],
+    [
+      "Bigger Plate - $11.70",
+      "zh-Hans",
+      "大盘子 - 11.70美元"
+    ],
+    [
+      "3 entrées & 1 side",
+      "zh-Hans",
+      "3输入和1面"
+    ],
+    [
+      "Panda Cub Meal - $6.80",
+      "zh-Hans",
+      "熊猫幼崽餐 - 6.80美元"
+    ],
+    [
+      "1 Jr entrée, 1 Jr side, fruit cup & bottle",
+      "zh-Hans",
+      "1份小主菜，1份小配菜，水果杯和瓶装"
+    ],
+    [
+      "Family Meal - $40.00",
+      "zh-Hans",
+      "家庭餐 - 40美元"
+    ],
+    [
+      "2 large sides & 3 large entrées",
+      "zh-Hans",
+      "2个宽边和3个宽进气口"
+    ],
+    [
+      "A la Carte",
+      "zh-Hans",
+      "单点"
+    ],
+    [
+      "Entrée",
+      "zh-Hans",
+      "入口"
+    ],
+    [
+      "Side",
+      "zh-Hans",
+      "边"
+    ],
+    [
+      "Small",
+      "zh-Hans",
+      "小"
+    ],
+    [
+      "Medium",
+      "zh-Hans",
+      "中等"
+    ],
+    [
+      "Large",
+      "zh-Hans",
+      "大"
+    ],
+    [
+      "+ $1.90 for premium entrées",
+      "zh-Hans",
+      "+ 高级参赛费1.90美元"
+    ],
+    [
+      "No entrees available.",
+      "zh-Hans",
+      "没有主菜供应。"
+    ],
+    [
+      "No sides available.",
+      "zh-Hans",
+      "没有配菜。"
+    ],
+    [
+      "No appetizers available.",
+      "zh-Hans",
+      "没有开胃菜。"
+    ],
+    [
+      "No drinks available.",
+      "zh-Hans",
+      "没有饮料供应。"
+    ],
+    [
+      "Minute Maid Apple Juice",
+      "ar",
+      "عصير التفاح مينيت ميد"
+    ],
+    [
+      "Pomegranate Pineapple Flavored Lemonade",
+      "ar",
+      "عصير الليمون بنكهة الرمان والأناناس"
+    ],
+    [
+      "Veggie Spring Roll",
+      "ar",
+      "لفافة الربيع النباتية"
+    ],
+    [
+      "Fanta Orange",
+      "ar",
+      "فانتا أورانج"
+    ],
+    [
+      "String Bean Chicken Breast",
+      "ar",
+      "صدر دجاج بالفاصوليا السترينجية"
+    ],
+    [
+      "Mango Guava Flavored Tea",
+      "ar",
+      "شاي المانجو بنكهة الجوافة"
+    ],
+    [
+      "Peach Lychee Flavored Refresher",
+      "ar",
+      "منعش بنكهة الخوخ الليتشي"
+    ],
+    [
+      "Super Greens",
+      "ar",
+      "سوبر جرينز"
+    ],
+    [
+      "Fried Rice",
+      "ar",
+      "الأرز المقلي"
+    ],
+    [
+      "Kung Pao Chicken",
+      "ar",
+      "دجاج كونغ باو"
+    ],
+    [
+      "Smartwater",
+      "ar",
+      "سمارت ووتر"
+    ],
+    [
+      "Beijing Beef",
+      "ar",
+      "لحم بكين"
+    ],
+    [
+      "Cream Cheese Rangoon",
+      "ar",
+      "رانغون بالجبن الكريمي"
+    ],
+    [
+      "Dasani",
+      "ar",
+      "داساني"
+    ],
+    [
+      "Fuze Raspberry Iced Tea",
+      "ar",
+      "شاي التوت المثلج بفيوز"
+    ],
+    [
+      "Black Pepper Chicken",
+      "ar",
+      "دجاج الفلفل الأسود"
+    ],
+    [
+      "Chow Mein",
+      "ar",
+      "تشاو مين"
+    ],
+    [
+      "Diet Coke",
+      "ar",
+      "دايت كوك"
+    ],
+    [
+      "Broccoli Beef",
+      "ar",
+      "لحم البقر البروكلي"
+    ],
+    [
+      "Mushroom Chicken",
+      "ar",
+      "دجاج الفطر"
+    ],
+    [
+      "SweetFire Chicken Breast",
+      "ar",
+      "صدر دجاج سويت فاير"
+    ],
+    [
+      "Coca Cola",
+      "ar",
+      "الكوك"
+    ],
+    [
+      "Dr Pepper",
+      "ar",
+      "دكتور بيبر"
+    ],
+    [
+      "Watermelon Mango Flavored Refresher",
+      "ar",
+      "منعش بنكهة البطيخ المانجو"
+    ],
+    [
+      "Hot Orange Chicken",
+      "ar",
+      "دجاج هوت أورانج"
+    ],
+    [
+      "Minute Maid Lemonade",
+      "ar",
+      "ميتون ميد مينت ميد"
+    ],
+    [
+      "Barqs Root Beer",
+      "ar",
+      "باركس روت بير"
+    ],
+    [
+      "White Steamed Rice",
+      "ar",
+      "الأرز الأبيض المطهو على البخار"
+    ],
+    [
+      "Eggplant Tofu",
+      "ar",
+      "توفو الباذنجان"
+    ],
+    [
+      "Original Orange Chicken",
+      "ar",
+      "دجاج أورانج الأصلي"
+    ],
+    [
+      "Grilled Teriyaki Chicken",
+      "ar",
+      "دجاج ترياكي مشوي"
+    ],
+    [
+      "Black Pepper Sirloin Steak",
+      "ar",
+      "شريحة لحم السيرلوين بالفلفل الأسود"
+    ],
+    [
+      "Sprite",
+      "ar",
+      "العفريت"
+    ],
+    [
+      "Coke Zero",
+      "ar",
+      "كوكاكولا زيرو"
+    ],
+    [
+      "Honey Walnut Shrimp",
+      "ar",
+      "روبيان الجوز بالعسل"
+    ],
+    [
+      "Honey Sesame Chicken Breast",
+      "ar",
+      "صدر دجاج بالعسل والسمسم"
+    ],
+    [
+      "Chicken Egg Roll",
+      "ar",
+      "لفائف الدجاج بالبيض"
+    ],
+    [
+      "Entrees",
+      "ar",
+      "مقبلات"
+    ],
+    [
+      "Sides",
+      "ar",
+      "الجانبين"
+    ],
+    [
+      "Appetizers",
+      "ar",
+      "المقبلات"
+    ],
+    [
+      "Drinks",
+      "ar",
+      "المشروبات"
+    ],
+    [
+      "clear sky",
+      "ar",
+      "سماء صافية"
+    ],
+    [
+      "Meal Options",
+      "ar",
+      "خيارات الوجبات"
+    ],
+    [
+      "Bowl - $8.50",
+      "ar",
+      "البول - 8.50 دولار"
+    ],
+    [
+      "1 entrée & 1 side",
+      "ar",
+      "مدخل واحد وجانب واحد"
+    ],
+    [
+      "Plate - $10.10",
+      "ar",
+      "الطبق - 10.10 دولار"
+    ],
+    [
+      "2 entrées & 1 side",
+      "ar",
+      "مدخلان وجانب واحد"
+    ],
+    [
+      "Bigger Plate - $11.70",
+      "ar",
+      "الطبق الأكبر - 11.70 دولار"
+    ],
+    [
+      "3 entrées & 1 side",
+      "ar",
+      "3 مدخلات وجانب واحد"
+    ],
+    [
+      "Panda Cub Meal - $6.80",
+      "ar",
+      "وجبة شبل الباندا - 6.80 دولار"
+    ],
+    [
+      "1 Jr entrée, 1 Jr side, fruit cup & bottle",
+      "ar",
+      "طبق جوني، طبق جوني، كوب فواكه وزجاجة"
+    ],
+    [
+      "Family Meal - $40.00",
+      "ar",
+      "وجبة عائلية - 40.00 دولار"
+    ],
+    [
+      "2 large sides & 3 large entrées",
+      "ar",
+      "جانبان عريضان وثلاثة مداخل عريضة"
+    ],
+    [
+      "A la Carte",
+      "ar",
+      "على حق الطلبات"
+    ],
+    [
+      "Entrée",
+      "ar",
+      "مدخل"
+    ],
+    [
+      "Side",
+      "ar",
+      "جنب"
+    ],
+    [
+      "Small",
+      "ar",
+      "صغير"
+    ],
+    [
+      "Medium",
+      "ar",
+      "متوسط"
+    ],
+    [
+      "Large",
+      "ar",
+      "كبير"
+    ],
+    [
+      "+ $1.90 for premium entrées",
+      "ar",
+      "+ 1.90 دولار للمشاركات المميزة"
+    ],
+    [
+      "No entrees available.",
+      "ar",
+      "لا توجد وجبات رئيسية متوفرة."
+    ],
+    [
+      "No sides available.",
+      "ar",
+      "لا توجد أطراف متاحة."
+    ],
+    [
+      "No appetizers available.",
+      "ar",
+      "لا مقبلات متوفرة."
+    ],
+    [
+      "No drinks available.",
+      "ar",
+      "لا مشروبات متاحة."
+    ],
+    [
+      "Minute Maid Apple Juice",
+      "it",
+      "Succo di mela Minute Maid"
+    ],
+    [
+      "Pomegranate Pineapple Flavored Lemonade",
+      "it",
+      "Limonata al gusto di melograno e ananas"
+    ],
+    [
+      "Veggie Spring Roll",
+      "it",
+      "Rotolo Primavera Vegetale"
+    ],
+    [
+      "Fanta Orange",
+      "it",
+      "Fanta Orange"
+    ],
+    [
+      "String Bean Chicken Breast",
+      "it",
+      "Petto di pollo ai fagiolini"
+    ],
+    [
+      "Mango Guava Flavored Tea",
+      "it",
+      "Tè aromatizzato alla mango e guava"
+    ],
+    [
+      "Peach Lychee Flavored Refresher",
+      "it",
+      "Rinfrescamento al gusto di pesca e litchi"
+    ],
+    [
+      "Super Greens",
+      "it",
+      "Super Verdi"
+    ],
+    [
+      "Fried Rice",
+      "it",
+      "Riso fritto"
+    ],
+    [
+      "Kung Pao Chicken",
+      "it",
+      "Pollo Kung Pao"
+    ],
+    [
+      "Smartwater",
+      "it",
+      "Smartwater"
+    ],
+    [
+      "Beijing Beef",
+      "it",
+      "Manzo di Pechino"
+    ],
+    [
+      "Cream Cheese Rangoon",
+      "it",
+      "Rangoon al formaggio cremoso"
+    ],
+    [
+      "Dasani",
+      "it",
+      "Dasani"
+    ],
+    [
+      "Fuze Raspberry Iced Tea",
+      "it",
+      "Tè freddo al lampone Fuze"
+    ],
+    [
+      "Black Pepper Chicken",
+      "it",
+      "Pollo al Pepe Nero"
+    ],
+    [
+      "Chow Mein",
+      "it",
+      "Chow Mein"
+    ],
+    [
+      "Diet Coke",
+      "it",
+      "Coca Diet"
+    ],
+    [
+      "Broccoli Beef",
+      "it",
+      "Manzo di broccoli"
+    ],
+    [
+      "Mushroom Chicken",
+      "it",
+      "Pollo ai funghi"
+    ],
+    [
+      "SweetFire Chicken Breast",
+      "it",
+      "Petto di pollo SweetFire"
+    ],
+    [
+      "Coca Cola",
+      "it",
+      "Coke"
+    ],
+    [
+      "Dr Pepper",
+      "it",
+      "Dr Pepper"
+    ],
+    [
+      "Watermelon Mango Flavored Refresher",
+      "it",
+      "Refresher al gusto di anguria e mango"
+    ],
+    [
+      "Hot Orange Chicken",
+      "it",
+      "Pollo all'arancia piccante"
+    ],
+    [
+      "Minute Maid Lemonade",
+      "it",
+      "Limonata Minute Maid"
+    ],
+    [
+      "Barqs Root Beer",
+      "it",
+      "Barqs Root Beer"
+    ],
+    [
+      "White Steamed Rice",
+      "it",
+      "Riso bianco al vapore"
+    ],
+    [
+      "Eggplant Tofu",
+      "it",
+      "Tofu di melanzane"
+    ],
+    [
+      "Original Orange Chicken",
+      "it",
+      "Pollo all'arancia originale"
+    ],
+    [
+      "Grilled Teriyaki Chicken",
+      "it",
+      "Pollo teriyaki alla griglia"
+    ],
+    [
+      "Black Pepper Sirloin Steak",
+      "it",
+      "Bistecca di filetto al pepe nero"
+    ],
+    [
+      "Sprite",
+      "it",
+      "Folletto"
+    ],
+    [
+      "Coke Zero",
+      "it",
+      "Coke Zero"
+    ],
+    [
+      "Honey Walnut Shrimp",
+      "it",
+      "Gamberetti al miele e noce"
+    ],
+    [
+      "Honey Sesame Chicken Breast",
+      "it",
+      "Petto di pollo al miele e sesamo"
+    ],
+    [
+      "Chicken Egg Roll",
+      "it",
+      "Rotolo Uovo di Pollo"
+    ],
+    [
+      "Entrees",
+      "it",
+      "Antipasti"
+    ],
+    [
+      "Sides",
+      "it",
+      "Lati"
+    ],
+    [
+      "Appetizers",
+      "it",
+      "Antipasti"
+    ],
+    [
+      "Drinks",
+      "it",
+      "Bevande"
+    ],
+    [
+      "clear sky",
+      "it",
+      "Cielo limpido"
+    ],
+    [
+      "Meal Options",
+      "it",
+      "Opzioni di pasti"
+    ],
+    [
+      "Bowl - $8.50",
+      "it",
+      "Bowl - $8.50"
+    ],
+    [
+      "1 entrée & 1 side",
+      "it",
+      "1 Ingresso e 1 Lato"
+    ],
+    [
+      "Plate - $10.10",
+      "it",
+      "Piatto - $10,10"
+    ],
+    [
+      "2 entrées & 1 side",
+      "it",
+      "2 ingressi e 1 lato"
+    ],
+    [
+      "Bigger Plate - $11.70",
+      "it",
+      "Piatto più grande - 11,70 $"
+    ],
+    [
+      "3 entrées & 1 side",
+      "it",
+      "3 ingressi e 1 lato"
+    ],
+    [
+      "Panda Cub Meal - $6.80",
+      "it",
+      "Farina di cucciolo di panda - $6.80"
+    ],
+    [
+      "1 Jr entrée, 1 Jr side, fruit cup & bottle",
+      "it",
+      "1 piatto principale Jr, 1 Jr side, coppa di frutta e bottiglia"
+    ],
+    [
+      "Family Meal - $40.00",
+      "it",
+      "Pasto in famiglia - $40.00"
+    ],
+    [
+      "2 large sides & 3 large entrées",
+      "it",
+      "2 lati larghi e 3 prese d'aria larghe"
+    ],
+    [
+      "A la Carte",
+      "it",
+      "A la Carte"
+    ],
+    [
+      "Entrée",
+      "it",
+      "Entrata"
+    ],
+    [
+      "Side",
+      "it",
+      "Lato"
+    ],
+    [
+      "Small",
+      "it",
+      "Piccolo"
+    ],
+    [
+      "Medium",
+      "it",
+      "Medio"
+    ],
+    [
+      "Large",
+      "it",
+      "Grande"
+    ],
+    [
+      "+ $1.90 for premium entrées",
+      "it",
+      "+ $1,90 per iscrizioni premium"
+    ],
+    [
+      "No entrees available.",
+      "it",
+      "Nessun piatto principale disponibile."
+    ],
+    [
+      "No sides available.",
+      "it",
+      "Nessun lato disponibile."
+    ],
+    [
+      "No appetizers available.",
+      "it",
+      "Nessun antipasto disponibile."
+    ],
+    [
+      "No drinks available.",
+      "it",
+      "Niente bevande disponibili."
+    ],
+    [
+      "Bowl",
+      "es",
+      "Tazón"
+    ],
+    [
+      "Plate",
+      "es",
+      "Plato"
+    ],
+    [
+      "Bigger Plate",
+      "es",
+      "Placa más grande"
+    ],
+    [
+      "A La Carte",
+      "es",
+      "A la carta"
+    ],
+    [
+      "Cart",
+      "es",
+      "Carro"
+    ],
+    [
+      "View Cart",
+      "es",
+      "Ver carrito"
+    ],
+    [
+      "Choose Language",
+      "es",
+      "Elige el idioma"
+    ],
+    [
+      "Close",
+      "es",
+      "Cerrar"
+    ],
+    [
+      "Choose a meal type",
+      "es",
+      "Elige un tipo de comida"
+    ],
+    [
+      "Tap to customize your meal",
+      "es",
+      "Toca para personalizar tu comida"
+    ],
+    [
+      "Please select an item and size.",
+      "es",
+      "Por favor, selecciona un artículo y talla."
+    ],
+    [
+      "Please select exactly {n} entrée{p}.",
+      "es",
+      "Por favor, selecciona exactamente {n} entrée{p}."
+    ],
+    [
+      "Selected:",
+      "es",
+      "Seleccionado:"
+    ],
+    [
+      "Use +/− to adjust quantity",
+      "es",
+      "Usar +/− para ajustar la cantidad"
+    ],
+    [
+      "Clear",
+      "es",
+      "Claro"
+    ],
+    [
+      "Add to Cart",
+      "es",
+      "Añadir al carrito"
+    ],
+    [
+      "Save Changes",
+      "es",
+      "Guardar cambios"
+    ],
+    [
+      "Cart Total:",
+      "es",
+      "Total del carrito:"
+    ],
+    [
+      "Review Order",
+      "es",
+      "Orden de revisión"
+    ],
+    [
+      "Items",
+      "es",
+      "Artículos"
+    ],
+    [
+      "Select one",
+      "es",
+      "Selecciona uno"
+    ],
+    [
+      "Order Confirmation",
+      "es",
+      "Confirmación del pedido"
+    ],
+    [
+      "Thank you!",
+      "es",
+      "¡Gracias!"
+    ],
+    [
+      "Your order has been received and is being processed. Please remember your order number for pickup.",
+      "es",
+      "Tu pedido ha sido recibido y está en proceso. Por favor, recuerda tu número de pedido para la recogida."
+    ],
+    [
+      "Return to Menu",
+      "es",
+      "Volver al menú"
+    ],
+    [
+      "Print Receipt",
+      "es",
+      "Recibo impreso"
+    ],
+    [
+      "Email Receipt",
+      "es",
+      "Recibo por correo electrónico"
+    ],
+    [
+      "Choose 1 whole side or 2 halves",
+      "es",
+      "Elige 1 lado entero o dos mitades"
+    ],
+    [
+      "Bowl",
+      "zh-Hans",
+      "碗"
+    ],
+    [
+      "Plate",
+      "zh-Hans",
+      "盘子"
+    ],
+    [
+      "Bigger Plate",
+      "zh-Hans",
+      "更大的盘子"
+    ],
+    [
+      "A La Carte",
+      "zh-Hans",
+      "点卡"
+    ],
+    [
+      "Cart",
+      "zh-Hans",
+      "车"
+    ],
+    [
+      "View Cart",
+      "zh-Hans",
+      "查看购物车"
+    ],
+    [
+      "Choose Language",
+      "zh-Hans",
+      "选择语言"
+    ],
+    [
+      "Close",
+      "zh-Hans",
+      "关闭"
+    ],
+    [
+      "Choose a meal type",
+      "zh-Hans",
+      "选择餐食类型"
+    ],
+    [
+      "Tap to customize your meal",
+      "zh-Hans",
+      "点击即可自定义餐食"
+    ],
+    [
+      "Please select an item and size.",
+      "zh-Hans",
+      "请选择商品和尺寸。"
+    ],
+    [
+      "Please select exactly {n} entrée{p}.",
+      "zh-Hans",
+      "请准确选择{n} entrée{p}。"
+    ],
+    [
+      "Selected:",
+      "zh-Hans",
+      "选择："
+    ],
+    [
+      "Use +/− to adjust quantity",
+      "zh-Hans",
+      "使用 +/− 来调整数量"
+    ],
+    [
+      "Clear",
+      "zh-Hans",
+      "清楚"
+    ],
+    [
+      "Add to Cart",
+      "zh-Hans",
+      "加入购物车"
+    ],
+    [
+      "Save Changes",
+      "zh-Hans",
+      "存档更改"
+    ],
+    [
+      "Cart Total:",
+      "zh-Hans",
+      "购物车总计："
+    ],
+    [
+      "Review Order",
+      "zh-Hans",
+      "复审顺序"
+    ],
+    [
+      "Items",
+      "zh-Hans",
+      "项目"
+    ],
+    [
+      "Select one",
+      "zh-Hans",
+      "选择一个"
+    ],
+    [
+      "Order Confirmation",
+      "zh-Hans",
+      "订单确认"
+    ],
+    [
+      "Thank you!",
+      "zh-Hans",
+      "谢谢！"
+    ],
+    [
+      "Your order has been received and is being processed. Please remember your order number for pickup.",
+      "zh-Hans",
+      "您的订单已收到并正在处理中。请记得取货时的订单号。"
+    ],
+    [
+      "Return to Menu",
+      "zh-Hans",
+      "返回菜单"
+    ],
+    [
+      "Print Receipt",
+      "zh-Hans",
+      "打印收据"
+    ],
+    [
+      "Email Receipt",
+      "zh-Hans",
+      "电子邮件收据"
+    ],
+    [
+      "Choose 1 whole side or 2 halves",
+      "zh-Hans",
+      "选择一整面或两半"
+    ],
+    [
+      " with ",
+      "es",
+      " con "
+    ],
+    [
+      "Your cart is empty. Browse the menu to start an order.",
+      "es",
+      "Tu carrito está vacío. Navega por el menú para empezar un pedido."
+    ],
+    [
+      "Browse Menu",
+      "es",
+      "Navegar por el menú"
+    ],
+    [
+      "Grab a Drink",
+      "es",
+      "Toma algo"
+    ],
+    [
+      "Bigger Plate - Fried Rice with String Bean Chicken Breast, SweetFire Chicken Breast, Honey Walnut Shrimp",
+      "es",
+      "Plato más grande - arroz frito con pechuga de pollo a judías verdes, pechuga de pollo SweetFire, gambas con miel y nuez"
+    ],
+    [
+      "Size",
+      "es",
+      "Tamaño"
+    ],
+    [
+      "Pick one",
+      "es",
+      "Elige uno"
+    ],
+    [
+      "Price:",
+      "es",
+      "Precio:"
+    ],
+    [
+      "one size",
+      "es",
+      "Talla única"
+    ],
+    [
+      "Bowl - Super Greens with Original Orange Chicken",
+      "es",
+      "Bowl - Super Greens con pollo naranja original"
+    ],
+    [
+      "Continue Shopping",
+      "es",
+      "Sigue comprando"
+    ],
+    [
+      "Purchase",
+      "es",
+      "Compra"
+    ]
+  ]
+}

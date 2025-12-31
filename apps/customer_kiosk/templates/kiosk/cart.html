@@ -1,0 +1,207 @@
+{% extends 'kiosk/base.html' %}
+{% load static %}
+
+{% block title %}{% if kiosk_ui and kiosk_ui.nav.cart %}{{ kiosk_ui.nav.cart }}{% else %}Your Cart{% endif %}{% endblock %}
+
+{% block content %}
+<style>
+    .kiosk-cart-panel {
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+        min-height: 0;
+        min-height: calc(100vh - 200px);
+    }
+
+    .kiosk-cart-table-wrapper {
+        display: flex;
+        flex-direction: column;
+        min-height: 0;
+        max-height: calc(100vh - 20vh);
+    }
+
+    .kiosk-cart-table-wrapper .kiosk-cart-table {
+        flex: 1;
+        min-height: 0;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+    }
+
+    .kiosk-cart-panel .kiosk-cart-scroll {
+        flex: 1;
+        min-height: 0;
+    }
+
+    .kiosk-cart-panel .kiosk-actions.kiosk-actions--cart {
+        margin-top: auto;
+        padding-top: 0.5rem;
+        padding-bottom: 0.5rem;
+    }
+    .kiosk-total-bar th,
+    .kiosk-total-bar td {
+        background: var(--panda-red);
+        color: #fff;
+        border: none;
+        letter-spacing: 0.14em;
+    }
+    .kiosk-total-bar td {
+        text-align: right;
+        font-weight: 800;
+        font-size: 1rem;
+    }
+</style>
+{% if cart %}
+<div class="kiosk-cart-panel">
+    <div class="kiosk-cart-table-wrapper">
+        <div class="kiosk-cart-header">
+            {% if kiosk_ui and kiosk_ui.nav.cart %}
+            <h2>{{ kiosk_ui.nav.cart }}</h2>
+            {% else %}
+            <h2>Your Cart</h2>
+            {% endif %}
+            <div class="kiosk-cart-logo" aria-hidden="true">
+                <img src="{% static 'img/panda-favicon.png' %}" alt="">
+            </div>
+        </div>
+        <div class="kiosk-cart-table">
+            <table class="summary-table summary-table--fixed">
+                <thead>
+                    <tr>
+                        <th>Type</th>
+                        <th>Selection</th>
+                        <th>Price</th>
+                        <th></th>
+                    </tr>
+                </thead>
+            </table>
+            <div class="kiosk-cart-scroll">
+                <table class="summary-table">
+                    <tbody>
+                    {% for item in cart %}
+                    <tr>
+                        <td>
+                            {% if item.category == 'meal' %}
+                                {{ item.meal_name }}
+                            {% elif item.category == 'a_la_carte' %}
+                                {% if kiosk_ui and kiosk_ui.nav.a_la_carte %}{{ kiosk_ui.nav.a_la_carte }}{% else %}A&nbsp;La&nbsp;Carte{% endif %}
+                            {% elif item.category == 'appetizer' %}
+                                {% if kiosk_ui and kiosk_ui.nav.appetizers %}{{ kiosk_ui.nav.appetizers }}{% else %}Appetizer{% endif %}
+                            {% elif item.category == 'drink' %}
+                                {% if kiosk_ui and kiosk_ui.nav.drinks %}{{ kiosk_ui.nav.drinks }}{% else %}Drink{% endif %}
+                            {% else %}
+                                {{ item.category }}
+                            {% endif %}
+                        </td>
+                <td>{{ item.selection_text }}</td>
+                        <td>${{ item.price|floatformat:2 }}</td>
+                        <td class="cart-actions-cell">
+                            {% if item.category == 'meal' %}
+                            <a class="btn btn-secondary btn-compact" href="{% url 'customer_kiosk:choose_side' item.meal_type %}?edit={{ forloop.counter0 }}">Edit</a>
+                            {% elif item.category == 'a_la_carte' %}
+                            <a class="btn btn-secondary btn-compact" href="{% url 'customer_kiosk:a_la_carte' %}?edit={{ forloop.counter0 }}">Edit</a>
+                            {% elif item.category == 'appetizer' %}
+                            <a class="btn btn-secondary btn-compact" href="{% url 'customer_kiosk:appetizers' %}?edit={{ forloop.counter0 }}">Edit</a>
+                            {% elif item.category == 'drink' %}
+                            <a class="btn btn-secondary btn-compact" href="{% url 'customer_kiosk:drinks' %}?edit={{ forloop.counter0 }}">Edit</a>
+                            {% endif %}
+                            <form method="post" action="{% url 'customer_kiosk:remove_from_cart' forloop.counter0 %}">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-secondary btn-compact">Remove</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <table class="summary-table summary-table--fixed kiosk-total-bar">
+            <tr>
+                <th colspan="6">Total</th>
+                <td><strong>${{ total|floatformat:2 }}</strong></td>
+            </tr>
+        </table>
+    </div>
+    <div class="kiosk-actions kiosk-actions--cart">
+        <a href="{% url 'customer_kiosk:home' %}" class="btn btn-secondary">{% if kiosk_ui and kiosk_ui.labels and kiosk_ui.labels.continue_shopping %}{{ kiosk_ui.labels.continue_shopping }}{% else %}Continue Shopping{% endif %}</a>
+        <a href="{% url 'customer_kiosk:order_confirmation' %}" class="btn btn-accent">{% if kiosk_ui and kiosk_ui.labels and kiosk_ui.labels.purchase %}{{ kiosk_ui.labels.purchase }}{% else %}Purchase{% endif %}</a>
+    </div>
+</div>
+{% else %}
+<div class="kiosk-empty-state">
+    <div class="kiosk-empty-card">
+        <div class="kiosk-empty-orb" aria-hidden="true">
+            <span>🛒</span>
+        </div>
+            {% if kiosk_ui and kiosk_ui.nav and kiosk_ui.nav.cart %}
+            <h2>{{ kiosk_ui.nav.cart }}</h2>
+            {% else %}
+            <h2>Your Cart</h2>
+            {% endif %}
+            {% if kiosk_ui and kiosk_ui.empty and kiosk_ui.empty.empty_copy %}
+            <p class="kiosk-empty-copy">{{ kiosk_ui.empty.empty_copy }}</p>
+            {% else %}
+            <p class="kiosk-empty-copy">Your cart is empty. Browse the menu to start an order.</p>
+            {% endif %}
+        <div class="kiosk-empty-actions">
+                <a href="{% url 'customer_kiosk:home' %}" class="btn btn-accent">{% if kiosk_ui and kiosk_ui.labels and kiosk_ui.labels.browse_menu %}{{ kiosk_ui.labels.browse_menu }}{% else %}Browse Menu{% endif %}</a>
+                <a href="{% url 'customer_kiosk:drinks' %}" class="btn btn-secondary">{% if kiosk_ui and kiosk_ui.nav and kiosk_ui.nav.drinks %}{{ kiosk_ui.nav.drinks }}{% else %}Grab a Drink{% endif %}</a>
+        </div>
+    </div>
+</div>
+<style>
+.kiosk-empty-state {
+    min-height: 520px;
+    display: grid;
+    place-items: center;
+    background: radial-gradient(circle at 20% 20%, rgba(229,36,36,0.18), transparent 35%),
+                radial-gradient(circle at 80% 80%, rgba(255,255,255,0.05), transparent 45%);
+}
+.kiosk-empty-card {
+    background: linear-gradient(180deg, #111, #161616);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 18px;
+    padding: 2.5rem 2.75rem;
+    width: min(520px, 90vw);
+    box-shadow: 0 18px 48px rgba(0,0,0,0.35), 0 0 0 1px rgba(255,255,255,0.04);
+    text-align: center;
+    display: grid;
+    gap: 1rem;
+}
+.kiosk-empty-orb {
+    width: 82px;
+    height: 82px;
+    margin: 0 auto 0.5rem;
+    border-radius: 50%;
+    background: radial-gradient(circle, #e52424 0%, #b31212 75%);
+    display: grid;
+    place-items: center;
+    color: #fff;
+    font-size: 2rem;
+    box-shadow: 0 12px 30px rgba(229,36,36,0.35);
+}
+.kiosk-empty-card h2 {
+    margin: 0;
+    font-size: 1.85rem;
+    letter-spacing: 0.02em;
+}
+.kiosk-empty-copy {
+    margin: 0;
+    color: #d7d7d7;
+    font-size: 1rem;
+}
+.kiosk-empty-actions {
+    display: flex;
+    justify-content: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    margin-top: 0.5rem;
+}
+.kiosk-empty-actions .btn {
+    min-width: 170px;
+    text-align: center;
+}
+</style>
+{% endif %}
+{% endblock %}

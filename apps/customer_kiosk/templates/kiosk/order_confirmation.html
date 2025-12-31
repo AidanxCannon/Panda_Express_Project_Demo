@@ -1,0 +1,68 @@
+{% extends 'kiosk/base.html' %}
+{% load static %}
+
+{% block title %}Order Summary{% endblock %}
+
+{% block content %}
+<div class="kiosk-card kiosk-order-confirmation">
+    <div class="kiosk-cart-header kiosk-order-header">
+        <div>
+            {% if kiosk_ui and kiosk_ui.order and kiosk_ui.order.title %}
+            <p class="kiosk-page-subtitle">{{ kiosk_ui.order.title }}</p>
+            {% else %}
+            <p class="kiosk-page-subtitle">Order Confirmation</p>
+            {% endif %}
+                {% if kiosk_ui and kiosk_ui.order and kiosk_ui.order.thank_you %}
+                <h1 class="kiosk-title">{{ kiosk_ui.order.thank_you }}</h1>
+                {% else %}
+                <h1 class="kiosk-title">Thank you!</h1>
+                {% endif %}
+        </div>
+        <div class="kiosk-cart-logo" aria-hidden="true">
+            <img src="{% static 'img/panda-favicon.png' %}" alt="">
+        </div>
+    </div>
+    <div class="kiosk-order-number">Order #{{ order_id }}</div>
+    <p class="kiosk-page-description">
+        {% if kiosk_ui and kiosk_ui.order and kiosk_ui.order.description %}
+            {{ kiosk_ui.order.description }}
+        {% else %}
+            Your order has been received and is being processed. Please remember your order number for pickup.
+        {% endif %}
+    </p>
+    <div class="kiosk-order-actions">
+        <a id="kiosk-return-menu" href="{% url 'customer_kiosk:home' %}" class="kiosk-order-return-btn">{% if kiosk_ui and kiosk_ui.order and kiosk_ui.order.return_to_menu %}{{ kiosk_ui.order.return_to_menu }}{% else %}Return to Menu{% endif %}</a>
+        <div class="kiosk-order-actions__row">
+            <a class="kiosk-order-return-btn kiosk-order-btn-secondary" href="{% url 'customer_kiosk:print_receipt' order_id %}" target="_blank">{% if kiosk_ui and kiosk_ui.order and kiosk_ui.order.print_receipt %}{{ kiosk_ui.order.print_receipt }}{% else %}Print Receipt{% endif %}</a>
+            <a class="kiosk-order-return-btn kiosk-order-btn-secondary" href="#" id="email-receipt-btn">{% if kiosk_ui and kiosk_ui.order and kiosk_ui.order.email_receipt %}{{ kiosk_ui.order.email_receipt }}{% else %}Email Receipt{% endif %}</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+document.getElementById('email-receipt-btn').addEventListener('click', function(e) {
+    e.preventDefault();
+    const nextUrl = '{% url "customer_kiosk:order_confirmation" %}?order_id={{ order_id }}';
+    const loginUrl = '{% url "account_login" %}?process=login&force_clear=1&next=' + encodeURIComponent(nextUrl);
+    
+    // Set a flag in session to indicate user wants email receipt
+    fetch('/kiosk/set-email-flag/', {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': '{{ csrf_token }}',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ next: nextUrl })
+    }).then(response => {
+        // After setting the flag, redirect to login/OAuth
+        window.location.href = loginUrl;
+    }).catch(error => {
+        console.error('Error setting email flag:', error);
+        // Still redirect even if fetch fails
+        window.location.href = loginUrl;
+    });
+});
+</script>
+{% endblock %}

@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="{{ lang|default:'en' }}">
+<head>
+    {% load static i18n %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Panda Express Order{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/theme_dark.css' %}">
+    <link rel="icon" type="image/png" href="{% static 'img/panda-favicon.png' %}">
+</head>
+<body class="kiosk-shell kiosk-layout-shell">
+    <div class="kiosk-shell-core">
+        <div class="kiosk-layout-shell">
+            <div class="kiosk-layout-grid">
+                <aside class="kiosk-sidebar">
+                    <div class="kiosk-sidebar__brand">
+                        <div class="kiosk-sidebar__brand-text">
+                            <h2><a class="kiosk-secret-link" href="{% url 'home' %}?force_select=1" aria-label="Return to interface">Panda</a> Express</h2>
+                            {% if kiosk_ui %}
+                            <p>{{ kiosk_ui.home.title }}</p>
+                            {% else %}
+                            <p>Menu Categories</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% block kiosk_sidebar %}
+                    <nav class="kiosk-nav">
+                        <a href="{% url 'customer_kiosk:choose_side' 'bowl' %}">{% if kiosk_ui %}{{ kiosk_ui.nav.bowl }}{% else %}Bowl{% endif %}</a>
+                        <a href="{% url 'customer_kiosk:choose_side' 'plate' %}">{% if kiosk_ui %}{{ kiosk_ui.nav.plate }}{% else %}Plate{% endif %}</a>
+                        <a href="{% url 'customer_kiosk:choose_side' 'bigger-plate' %}">{% if kiosk_ui %}{{ kiosk_ui.nav.bigger_plate }}{% else %}Bigger Plate{% endif %}</a>
+                        <a href="{% url 'customer_kiosk:a_la_carte' %}">{% if kiosk_ui %}{{ kiosk_ui.nav.a_la_carte }}{% else %}A La Carte{% endif %}</a>
+                        <a href="{% url 'customer_kiosk:appetizers' %}">{% if kiosk_ui %}{{ kiosk_ui.nav.appetizers }}{% else %}Appetizers{% endif %}</a>
+                        <a href="{% url 'customer_kiosk:drinks' %}">{% if kiosk_ui %}{{ kiosk_ui.nav.drinks }}{% else %}Drinks{% endif %}</a>
+                        <a href="{% url 'customer_kiosk:cart' %}">{% if kiosk_ui %}{{ kiosk_ui.nav.cart }}{% else %}Cart{% endif %}</a>
+                    </nav>
+                    {% endblock %}
+                </aside>
+                <section class="kiosk-content">
+                    <div class="kiosk-content-inner {% block content_class %}{% endblock %}{% if content_class %} {{ content_class }}{% endif %}">
+                        {% block content %}{% endblock %}
+                        {% if not hide_cart_button %}
+                        <div class="kiosk-content-actions">
+                            <a href="{% url 'customer_kiosk:cart' %}" class="kiosk-topbar__btn">{% if kiosk_ui %}{{ kiosk_ui.view_cart }}{% else %}View Cart{% endif %}</a>
+                        </div>
+                        {% endif %}
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+<script>
+    // Auto-hide toast notifications only if they are already shown
+    document.addEventListener('DOMContentLoaded', () => {
+        const toast = document.querySelector('.kiosk-toast');
+        if (toast && toast.classList.contains('kiosk-toast--show')) {
+            setTimeout(() => {
+                toast.classList.remove('kiosk-toast--show');
+                setTimeout(() => toast.remove(), 600);
+            }, 2200);
+        }
+    });
+</script>
+{% block extra_scripts %}{% endblock %}
+<script>
+    // Highlight the active kiosk nav link based on current path
+    document.addEventListener('DOMContentLoaded', () => {
+        const currentPath = window.location.pathname;
+        const links = document.querySelectorAll('.kiosk-nav a');
+        links.forEach(link => {
+            const href = link.getAttribute('href') || '';
+            const url = new URL(href, window.location.origin);
+            const linkPath = url.pathname.replace(/\/$/, '');
+            const current = currentPath.replace(/\/$/, '');
+            if (current.startsWith(linkPath)) {
+                link.classList.add('kiosk-nav__active');
+            } else {
+                link.classList.remove('kiosk-nav__active');
+            }
+            link.addEventListener('click', () => {
+                links.forEach(l => l.classList.remove('kiosk-nav__active'));
+                link.classList.add('kiosk-nav__active');
+            });
+        });
+    });
+</script>
+<script>
+    // Language modal toggle and selection
+    document.addEventListener('DOMContentLoaded', () => {
+        const trigger = document.getElementById('kiosk-lang-trigger');
+        const modal = document.getElementById('kiosk-lang-modal');
+        const closeBtn = document.getElementById('kiosk-lang-close');
+        const options = document.querySelectorAll('.kiosk-lang-option');
+        const setLangUrl = "{% url 'menu:set_lang' %}";
+        // Include current query params so we return to the exact kiosk view
+        const nextPath = encodeURIComponent(window.location.pathname + window.location.search);
+
+        const openModal = () => modal?.classList.add('is-open');
+        const closeModal = () => modal?.classList.remove('is-open');
+
+        trigger?.addEventListener('click', (e) => {
+            e.preventDefault();
+            openModal();
+        });
+        closeBtn?.addEventListener('click', closeModal);
+        modal?.addEventListener('click', (e) => {
+            if (e.target === modal) closeModal();
+        });
+        options.forEach(opt => {
+            opt.addEventListener('click', () => {
+                const lang = opt.dataset.lang;
+                if (!lang) return;
+                window.location.href = `${setLangUrl}?lang=${lang}&next=${nextPath}`;
+            });
+        });
+    });
+</script>
+<!-- Floating Panda logo for language toggle -->
+<button class="floating-lang-btn" id="kiosk-lang-trigger" type="button" title="Change language">
+    <img src="{% static 'img/panda-favicon.png' %}" alt="Panda Express language toggle">
+</button>
+
+<div class="kiosk-lang-modal" id="kiosk-lang-modal" aria-hidden="true">
+    <div class="kiosk-lang-dialog" role="dialog" aria-modal="true" aria-labelledby="kiosk-lang-title">
+        <div class="kiosk-lang-header">
+            {% if kiosk_ui %}
+            <h3 id="kiosk-lang-title">{{ kiosk_ui.lang_modal.title }}</h3>
+            {% else %}
+            <h3 id="kiosk-lang-title">Choose Language</h3>
+            {% endif %}
+            <button type="button" class="kiosk-lang-close" id="kiosk-lang-close" aria-label="Close">×</button>
+        </div>
+        <div class="kiosk-lang-options">
+            <!-- Show only supported kiosk languages (align with Azure-supported set) -->
+            <button type="button" class="kiosk-lang-option" data-lang="en">English</button>
+            <button type="button" class="kiosk-lang-option" data-lang="es">Español</button>
+            <button type="button" class="kiosk-lang-option" data-lang="fr">Français</button>
+            <button type="button" class="kiosk-lang-option" data-lang="zh-Hans">中文 (简体)</button>
+        </div>
+    </div>
+</div>
+<style>
+.kiosk-lang-modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.55);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 3000;
+    padding: 1.5rem;
+}
+.kiosk-lang-modal.is-open {
+    display: flex;
+}
+.kiosk-lang-dialog {
+    background: #0f0f0f;
+    border-radius: 16px;
+    border: 1px solid rgba(255,255,255,0.12);
+    box-shadow: 0 16px 48px rgba(0,0,0,0.4);
+    width: min(420px, 90vw);
+    padding: 1.5rem;
+    color: #fff;
+}
+.kiosk-lang-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+.kiosk-lang-header h3 {
+    margin: 0;
+    font-size: 1.25rem;
+    letter-spacing: 0.02em;
+}
+.kiosk-lang-close {
+    background: transparent;
+    color: #fff;
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    font-size: 1.1rem;
+    cursor: pointer;
+}
+.kiosk-lang-options {
+    display: grid;
+    gap: 0.65rem;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    max-height: 60vh;
+    overflow-y: auto;
+}
+.kiosk-lang-option {
+    background: linear-gradient(180deg, #1c1c1c, #202020);
+    color: #fff;
+    border: 1px solid rgba(255,255,255,0.18);
+    border-radius: 12px;
+    padding: 0.75rem 1rem;
+    cursor: pointer;
+    font-weight: 700;
+    transition: transform 120ms ease, box-shadow 120ms ease;
+}
+.kiosk-lang-option:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 22px rgba(0,0,0,0.25);
+}
+.floating-lang-btn {
+    border: none;
+    background: transparent;
+}
+</style>
+</body>
+</html>

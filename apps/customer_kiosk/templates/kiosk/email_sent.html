@@ -1,0 +1,42 @@
+{% extends 'kiosk/base.html' %}
+{% load static %}
+
+{% block title %}Receipt Sent{% endblock %}
+
+{% block content %}
+<div class="kiosk-card kiosk-order-confirmation kiosk-order-confirmation--no-cart">
+    <div class="kiosk-cart-header kiosk-order-header">
+        <div>
+            {% if kiosk_ui and kiosk_ui.order and kiosk_ui.order.title %}
+            <p class="kiosk-page-subtitle">{{ kiosk_ui.order.title }}</p>
+            {% else %}
+            <p class="kiosk-page-subtitle">Email Sent</p>
+            {% endif %}
+            {% if kiosk_ui and kiosk_ui.order and kiosk_ui.order.email_receipt %}
+            <h1 class="kiosk-title">{{ kiosk_ui.order.email_receipt }}</h1>
+            {% else %}
+            <h1 class="kiosk-title">Receipt delivered</h1>
+            {% endif %}
+        </div>
+        <div class="kiosk-cart-logo" aria-hidden="true">
+            <img src="{% static 'img/panda-favicon.png' %}" alt="">
+        </div>
+    </div>
+    <p class="kiosk-page-description">
+        {% if status == 'ok' and email %}
+            We sent your receipt to <strong>{{ email }}</strong>. You can return to your order confirmation below.
+        {% elif status == 'missing' %}
+            We could not find an email on your account. Please try again or contact support.
+        {% else %}
+            We could not send the receipt email. Please try again.
+        {% endif %}
+    </p>
+    <div class="kiosk-order-number">Order #{{ order_id }}</div>
+    <div class="kiosk-order-actions">
+        <a class="kiosk-order-return-btn" href="{{ order_url }}">{% if kiosk_ui and kiosk_ui.order and kiosk_ui.order.return_to_menu %}{{ kiosk_ui.order.return_to_menu }}{% else %}Done{% endif %}</a>
+    </div>
+</div>
+{% endblock %}
+{% block content_class %}kiosk-content-inner--no-scroll{% endblock %}
+{% block hide_cart_button %}True{% endblock %}
+aft

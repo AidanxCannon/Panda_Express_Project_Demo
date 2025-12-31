@@ -1,0 +1,470 @@
+:root {
+    --panda-red: #c20000 !important;
+    --panda-dark: #0a0a0a !important;
+    --panda-ink: #1a1a1a !important;
+    --panda-soft: #1f1f1f !important;
+    --panda-white: #ffffff !important;
+    --panda-shadow: 0 15px 35px rgba(0, 0, 0, 0.5) !important;
+    font-family: "Poppins", "Open Sans", sans-serif;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html {
+    background: #000000 !important;
+}
+
+body {
+    margin: 0 !important;
+    min-height: 100vh !important;
+    background: linear-gradient(135deg, #0a0a0a 0%, #1a0000 50%, #000000 100%) !important;
+    font-family: inherit !important;
+    color: #ffffff !important;
+}
+
+.manager-page {
+    min-height: 100vh !important;
+    padding: 2rem 2.5rem 4rem !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 2rem !important;
+    background: transparent !important;
+}
+
+.manager-header {
+    background: linear-gradient(135deg, #1a1a1a 0%, #2a0000 100%) !important;
+    border-radius: 8px !important;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.25rem 2.25rem;
+    box-shadow: 0 8px 25px rgba(194, 0, 0, 0.3) !important;
+    border: 1px solid #3a0000 !important;
+    flex-wrap: wrap;
+    gap: 1.25rem;
+}
+
+.header-left {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    min-width: 280px;
+}
+
+.header-left h1 {
+    margin: 0;
+    font-size: 1.65rem;
+    letter-spacing: 0.2rem;
+    text-transform: uppercase;
+    color: #ffffff !important;
+    text-shadow: 0 0 10px rgba(194, 0, 0, 0.5);
+}
+
+.header-tabs {
+    display: flex;
+    gap: 1.75rem;
+    flex-wrap: wrap;
+}
+
+.tab-link {
+    font-size: 0.85rem;
+    letter-spacing: 0.3rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    text-decoration: none;
+    padding-bottom: 0.4rem;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s ease;
+}
+
+.tab-link.active {
+    border-color: #c20000 !important;
+}
+
+.tab-link:hover {
+    color: #ff0000 !important;
+}
+
+.header-right {
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+    min-width: 220px;
+}
+
+.search-bar {
+    width: 280px;
+    max-width: 100%;
+    border-radius: 4px !important;
+    border: 1px solid #3a0000 !important;
+    background: #1a1a1a !important;
+    color: #ffffff !important;
+    padding: 0.55rem 1.5rem;
+    font-size: 0.95rem;
+    box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.5) !important;
+    transition: border-color 0.2s ease;
+}
+
+.search-bar:focus {
+    outline: none;
+    border-color: #c20000 !important;
+}
+
+.search-bar::placeholder {
+    color: #666666 !important;
+}
+
+.manager-panel {
+    max-width: 960px;
+    margin: 0 auto;
+    background: none !important;
+    border-radius: 8px !important;
+    display: flex;
+    flex-direction: column;
+    gap: 1.75rem;
+    align-items: center;
+}
+
+.action-pill-group {
+    display: flex;
+    gap: 1.25rem;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.action-pill {
+    border-radius: 6px !important;
+    padding: 0.9rem 2.7rem;
+    letter-spacing: 0.3rem;
+    text-transform: uppercase;
+    font-weight: 600;
+    border: 2px solid #3a0000 !important;
+    background: linear-gradient(135deg, #1a1a1a 0%, #0a0a0a 100%) !important;
+    color: #ffffff !important;
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4) !important;
+}
+
+.action-pill.active {
+    border-color: #c20000 !important;
+    color: #ffffff !important;
+    background: linear-gradient(135deg, #c20000 0%, #8a0000 100%) !important;
+    box-shadow: 0 6px 20px rgba(194, 0, 0, 0.5) !important;
+}
+
+.action-pill:hover {
+    transform: translateY(-2px);
+    border-color: #ff0000 !important;
+    background: linear-gradient(135deg, #c20000 0%, #8a0000 100%) !important;
+    box-shadow: 0 8px 25px rgba(194, 0, 0, 0.6) !important;
+}
+
+.action-pill.neutral {
+    color: #ffffff !important;
+    border-color: #3a0000 !important;
+}
+
+.summary-card {
+    width: 100%;
+    background: linear-gradient(135deg, #1a1a1a 0%, #2a0000 100%) !important;
+    border-radius: 8px !important;
+    padding: 2.5rem 3rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6) !important;
+    border: 1px solid #3a0000 !important;
+    text-align: center;
+}
+
+.summary-card h2 {
+    margin: 0;
+    font-size: 1.75rem;
+    letter-spacing: 0.2rem;
+    text-transform: uppercase;
+    color: #ffffff !important;
+    text-shadow: 0 0 10px rgba(194, 0, 0, 0.5);
+}
+
+.summary-card p {
+    margin-top: 1rem;
+    font-size: 1rem;
+    color: #cccccc !important;
+    line-height: 1.7;
+}
+
+@media (max-width: 900px) {
+    .manager-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .header-right {
+        justify-content: flex-start;
+    }
+
+    .action-pill-group {
+        flex-direction: column;
+    }
+}
+
+.form-group {
+    margin-bottom: 1.2rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.large-input {
+    padding: 0.7rem;
+    font-size: 1rem;
+    border-radius: 4px !important;
+    border: 1px solid #3a0000 !important;
+    background: #1a1a1a !important;
+    color: #ffffff !important;
+}
+
+.large-input:focus {
+    outline: none;
+    border-color: #c20000 !important;
+}
+
+label {
+    color: #ffffff !important;
+}
+
+/* =========================
+   EMPLOYEE / INVENTORY TABLE STYLES
+   ========================= */
+
+/* Main Layout */
+.employee-main-container {
+    max-width: 1600px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.2rem;
+    align-items: start;
+}
+
+.employee-table-container {
+    width: 100%;
+    min-width: 950px;
+    border: 2px solid #c20000 !important;
+    border-radius: 6px !important;
+    background: #0a0a0a !important;
+    overflow: hidden;
+    box-shadow: 0 8px 25px rgba(194, 0, 0, 0.3) !important;
+}
+
+/* Scrollable table wrapper – limit to 12 rows */
+.employee-table-scroll {
+    max-height: calc(12 * 2rem + 2rem);
+    overflow-y: auto;
+}
+
+.employee-table-scroll::-webkit-scrollbar {
+    width: 8px;
+}
+
+.employee-table-scroll::-webkit-scrollbar-track {
+    background: #0a0a0a;
+}
+
+.employee-table-scroll::-webkit-scrollbar-thumb {
+    background: #c20000;
+    border-radius: 4px;
+}
+
+/* Table */
+.employee-table {
+    width: 100%;
+    min-width: 950px;
+    table-layout: fixed;
+    border-collapse: collapse;
+    background: #1a1a1a !important;
+    font-size: 0.85rem;
+    color: #ffffff !important;
+}
+
+/* Header */
+.employee-table thead tr {
+    background: linear-gradient(135deg, #c20000 0%, #8a0000 100%) !important;
+    color: white !important;
+}
+
+.employee-table th {
+    text-align: left;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    box-sizing: border-box;
+    padding: 0.35rem 0.75rem;
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
+    color: #ffffff !important;
+}
+
+.employee-table th:last-child {
+    border-right: none;
+}
+
+/* Data rows */
+.employee-table td {
+    border-bottom: 1px solid #2a2a2a !important;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    box-sizing: border-box;
+    padding: 0.35rem 0.75rem;
+    color: #ffffff !important;
+    border-right: 1px solid #2a2a2a;
+    background: transparent !important;
+}
+
+.employee-table td:last-child {
+    border-right: none;
+}
+
+/* Hover + Selected */
+.employee-row {
+    cursor: pointer;
+    transition: background 0.15s;
+    background: transparent !important;
+}
+
+.employee-row:hover {
+    background: #2a0000 !important;
+}
+
+.employee-row.selected {
+    background: #3a0000 !important;
+    box-shadow: inset 0 0 10px rgba(194, 0, 0, 0.3);
+}
+
+/* Blank row */
+.employee-blank-row {
+    cursor: pointer;
+    background: #151515 !important;
+}
+
+.employee-blank-row:hover {
+    background: #1f1f1f !important;
+}
+
+.employee-blank-row td {
+    text-align: center;
+    font-style: italic;
+    color: #666666 !important;
+}
+
+/* DETAILS CARD */
+.employee-details-card {
+    background: linear-gradient(180deg, #e4e4e4, #cfcfcf) !important;
+    color: #111 !important;
+    padding: 1rem;
+    border-radius: 10px !important;
+    border: 1px solid rgba(0, 0, 0, 0.15) !important;
+    margin-top: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    align-self: stretch;
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.35) !important;
+    width: 100%;
+    max-width: none;
+}
+
+.employee-fields-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 0.7rem;
+}
+
+/* Make labels inside the employee details card black for readability */
+.employee-details-card label {
+    color: #000 !important;
+}
+
+.employee-password-field {
+    display: block;
+}
+
+/* Buttons */
+.employee-buttons-row {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.6rem;
+    margin-top: 0.5rem;
+}
+
+.employee-buttons-row .action-pill {
+    padding: 0.7rem 1rem;
+    font-size: 0.75rem;
+    letter-spacing: 0.15rem;
+}
+
+/* Responsive */
+@media (max-width: 1100px) {
+    .employee-main-container {
+        grid-template-columns: 1fr;
+    }
+}
+
+#notifier-container {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 9999;
+}
+
+.notifier {
+    background-color: #c20000 !important;
+    color: white !important;
+    padding: 12px 20px;
+    margin-top: 10px;
+    border-radius: 4px !important;
+    border: 1px solid #8a0000 !important;
+    box-shadow: 0 4px 15px rgba(194, 0, 0, 0.5) !important;
+    font-family: 'Poppins', sans-serif;
+    min-width: 200px;
+    max-width: 300px;
+    opacity: 1;
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.notifier .message {
+    background-color: #c20000 !important;
+    color: white !important;
+    padding: 15px 25px;
+    margin-top: 10px;
+    border-radius: 4px !important;
+    border: 1px solid #8a0000 !important;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5) !important;
+    min-width: 200px;
+    max-width: 300px;
+    opacity: 1;
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.message.success { 
+    background-color: #1a5a1a !important; 
+    border-color: #0d3d0d !important;
+}
+
+.message.info { 
+    background-color: #0d3d5a !important; 
+    border-color: #072840 !important;
+}
+
+.message.warning { 
+    background-color: #8a4a00 !important; 
+    border-color: #5a3000 !important;
+}
+
+
+/* =========================
+   MODAL STYLES
+   ========================= */

@@ -1,0 +1,456 @@
+{% extends 'kiosk/base.html' %}
+{% load static %}
+
+{% block title %}{{ meal_name }}{% endblock %}
+
+{% block content %}
+<h2 class="kiosk-page-title">Customize your {{ meal_name }}</h2>
+{% if error %}
+<p class="error">{{ error }}</p>
+{% endif %}
+<div class="kiosk-toast kiosk-toast--success" style="display:none">Added to cart</div>
+<style>
+    .entree-options--qty .option-tile--entree-qty {
+        flex-direction: column;
+        align-items: center;
+        gap: 0.35rem;
+        min-height: 160px;
+        justify-content: flex-start;
+        padding: 0.5rem 0.55rem;
+    }
+    .entree-options--qty {
+        grid-auto-rows: 1fr;
+    }
+    .entree-visual {
+        width: 100%;
+        display: grid;
+        grid-template-columns: 44px 1fr 44px;
+        align-items: center;
+        gap: 0.25rem;
+    }
+    .entree-img-wrapper {
+        position: relative;
+        display: grid;
+        place-items: center;
+    }
+    .option-tile--entree-qty .option-tile__text {
+        min-height: 34px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        line-height: 1.15;
+        margin-top: 0.2rem;
+    }
+    .entree-qty-controls {
+        display: none;
+    }
+    .entree-qty {
+        position: absolute;
+        opacity: 0;
+        pointer-events: none;
+        width: 1px;
+        height: 1px;
+        border: 0;
+        padding: 0;
+        margin: 0;
+    }
+    .qty-btn {
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        border: 1px solid rgba(0,0,0,0.12);
+        background: #f7f7f7;
+        color: #111;
+        font-weight: 700;
+        line-height: 1;
+        box-shadow: 0 3px 10px rgba(0,0,0,0.25);
+        cursor: pointer;
+    }
+    .option-tile--entree-qty .option-tile__image {
+        width: 105px;
+        height: 82px;
+        object-fit: contain;
+    }
+    @media (max-height: 900px) {
+        .kiosk-combo-card {
+            padding: 0.6rem;
+        }
+        .option-tile--entree-qty {
+            min-height: 130px;
+            height: 140px;
+            padding: 0.45rem 0.4rem;
+        }
+        .option-tile--entree-qty .option-tile__image {
+            width: 90px;
+            height: 72px;
+        }
+        .option-tile--entree-qty .option-tile__text {
+            font-size: 0.95rem;
+        }
+        .kiosk-combo-card__header h3 {
+            font-size: 1rem;
+        }
+    }
+    @media (max-height: 800px) {
+        h2.kiosk-page-title {
+            font-size: 1.4rem;
+        }
+        .kiosk-combo-card {
+            padding: 0.55rem;
+        }
+        .option-tile--entree-qty {
+            min-height: 125px;
+        }
+        .option-tile--entree-qty .option-tile__image {
+            width: 82px;
+            height: 66px;
+        }
+        .option-tile--entree-qty .option-tile__text {
+            font-size: 0.9rem;
+        }
+        .qty-btn {
+            width: 26px;
+            height: 26px;
+        }
+    }
+    .option-tile--entree-qty {
+        position: relative;
+        border: 6px solid transparent;
+    }
+    .option-tile--entree-qty.is-selected {
+        border-color: var(--panda-red, #e52424);
+        box-shadow: 0 0 0 3px #e52424;
+        background: linear-gradient(180deg, #e8e8e8, #cfcfcf);
+    }
+    .option-tile--entree-qty.is-selected:hover {
+        transform: none;
+        border-color: #ff4b4b;
+        box-shadow: 0 0 0 3px rgba(255, 75, 75, 0.7), 0 10px 20px rgba(229, 36, 36, 0.25);
+    }
+    .entree-count-badge {
+        position: absolute;
+        top: 6px;
+        right: 6px;
+        background: var(--panda-red, #e52424);
+        color: #fff;
+        min-width: 26px;
+        height: 24px;
+        border-radius: 999px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.75rem;
+        font-weight: 700;
+        padding: 0 8px;
+        border: 2px solid #fff;
+        box-shadow: 0 3px 8px rgba(0,0,0,0.25);
+        opacity: 0;
+        transition: opacity 0.15s ease, transform 0.15s ease;
+        transform: translateY(-6px);
+    }
+    .option-tile--entree-qty.is-selected .entree-count-badge {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    .kiosk-cart-total-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        background: #111;
+        color: #fff;
+        border: 1px solid rgba(255,255,255,0.15);
+        padding: 0.45rem 0.85rem;
+        border-radius: 999px;
+        font-weight: 700;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+    }
+</style>
+
+<form method="post" class="kiosk-combo-form" data-required-sides="{{ side_required }}" data-required-entrees="{{ required }}" style="position: relative; overflow: visible;" data-ajax="true">
+    {% csrf_token %}
+    {% if editing_index is not None %}
+    <input type="hidden" name="editing_index" value="{{ editing_index }}">
+    {% endif %}
+    <div id="kiosk-warning" class="kiosk-warning-banner" aria-live="polite"></div>
+    <div class="kiosk-combo-stack">
+        <section class="kiosk-combo-card">
+            <div class="kiosk-combo-card__header">
+                {% if kiosk_ui and kiosk_ui.sections.sides %}
+                <h3 class="section-title">{{ kiosk_ui.sections.sides }}</h3>
+                {% else %}
+                <h3 class="section-title">Sides</h3>
+                {% endif %}
+                <p class="kiosk-subtitle">{{ side_hint }}</p>
+                {% if kiosk_ui and kiosk_ui.labels.selected %}
+                <p class="kiosk-subtitle__hint">{{ kiosk_ui.labels.selected }} <strong id="side-count">0</strong>/{{ side_required|add:side_required }}</p>
+                {% else %}
+                <p class="kiosk-subtitle__hint">Selected: <strong id="side-count">0</strong>/{{ side_required|add:side_required }}</p>
+                {% endif %}
+            </div>
+            <ul class="options-list options-list--grid options-list--compact">
+                {% for side in sides %}
+                <li>
+                    <label class="option-tile">
+                        <input type="checkbox" name="sides" value="{{ side.name|default:side }}" {% if side.name in preselected_sides %}checked{% endif %}>
+                        {% if side.image %}
+                        <img src="{% static side.image %}" alt="{{ side.translated_name|default:side.name|default:side }}" class="option-tile__image" loading="lazy">
+                        {% endif %}
+                        <span class="option-tile__text">{{ side.translated_name|default:side.name|default:side }}</span>
+                    </label>
+                </li>
+                {% endfor %}
+            </ul>
+        </section>
+        <section class="kiosk-combo-card">
+                <div class="kiosk-combo-card__header">
+                {% if kiosk_ui and kiosk_ui.sections.entrees %}
+                <h3 class="section-title">{{ kiosk_ui.sections.entrees }}</h3>
+                {% else %}
+                <h3 class="section-title">Entrees</h3>
+                {% endif %}
+                <p class="kiosk-subtitle">{{ "Choose "|add:required|stringformat:"s" }}
+                    {% if kiosk_ui and kiosk_ui.labels.qty_hint %}
+                    <span class="kiosk-subtitle__hint">{{ kiosk_ui.labels.qty_hint }}</span>
+                    {% else %}
+                    <span class="kiosk-subtitle__hint">Use +/− to adjust quantity</span>
+                    {% endif %}
+                </p>
+                {% if kiosk_ui and kiosk_ui.labels.selected %}
+                <p class="kiosk-subtitle__hint">{{ kiosk_ui.labels.selected }} <strong id="entree-count">0</strong>/{{ required }}</p>
+                {% else %}
+                <p class="kiosk-subtitle__hint">Selected: <strong id="entree-count">0</strong>/{{ required }}</p>
+                {% endif %}
+            </div>
+            <ul class="options-list options-list--grid options-list--compact options-list--entrees entree-options entree-options--qty">
+                {% for entree in entrees %}
+                <li>
+                    <label class="option-tile option-tile--entree-qty">
+                        <div class="entree-visual">
+                            <button type="button" class="qty-btn" data-action="decrement" aria-label="Decrease {{ entree.translated_name|default:entree.name|default:entree }}">−</button>
+                            <div class="entree-img-wrapper">
+                                {% if entree.image %}
+                                <img src="{% static entree.image %}" alt="{{ entree.translated_name|default:entree.name|default:entree }}" class="option-tile__image" loading="lazy">
+                                {% endif %}
+                            </div>
+                            <button type="button" class="qty-btn" data-action="increment" aria-label="Increase {{ entree.name }}">+</button>
+                        </div>
+                        <span class="entree-count-badge">0</span>
+                        <span class="option-tile__text">{{ entree.translated_name|default:entree.name|default:entree }}</span>
+                        <div class="entree-qty-controls">
+                            <input type="number" name="entree_qty_{{ forloop.counter0 }}" min="0" value="{{ entree.pref_qty|default:0 }}" class="entree-qty" />
+                        </div>
+                    </label>
+                </li>
+                {% endfor %}
+            </ul>
+        </section>
+    </div>
+
+    <div class="kiosk-actions">
+    <a href="{% url 'customer_kiosk:cart' %}" class="button button-secondary">{% if kiosk_ui and kiosk_ui.view_cart %}{{ kiosk_ui.view_cart }}{% else %}View Cart{% endif %}</a>
+    <button type="button" class="button button-secondary" id="kiosk-clear-combo">{% if kiosk_ui and kiosk_ui.labels.clear %}{{ kiosk_ui.labels.clear }}{% else %}Clear{% endif %}</button>
+        <div class="kiosk-actions__center">
+            <div class="entree-pager">
+                <button type="button" class="btn btn-secondary btn-compact" id="entree-prev">Prev</button>
+                <span id="entree-page-label">Page 1</span>
+                <button type="button" class="btn btn-secondary btn-compact" id="entree-next">Next</button>
+            </div>
+        </div>
+        <span class="kiosk-cart-total-pill" id="kiosk-cart-total-pill" data-total="{{ cart_total|default:0 }}">{% if kiosk_ui and kiosk_ui.labels.cart_total %}{{ kiosk_ui.labels.cart_total }}{% else %}Cart Total:{% endif %} ${{ cart_total|default:0|floatformat:2 }}</span>
+        <button type="submit" class="button">{% if is_editing %}{% if kiosk_ui and kiosk_ui.labels.save_changes %}{{ kiosk_ui.labels.save_changes }}{% else %}Save Changes{% endif %}{% else %}{% if kiosk_ui and kiosk_ui.labels.add_to_cart %}{{ kiosk_ui.labels.add_to_cart }}{% else %}Add to Cart{% endif %}{% endif %}</button>
+    </div>
+</form>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    const warningBanner = document.getElementById("kiosk-warning");
+    const form = document.querySelector(".kiosk-combo-form");
+    const qtyInputs = document.querySelectorAll(".entree-qty");
+    const qtyButtons = document.querySelectorAll(".qty-btn");
+    const badges = document.querySelectorAll(".entree-count-badge");
+    const sideBoxes = document.querySelectorAll('input[name="sides"]');
+    const sideCountEl = document.getElementById("side-count");
+    const entreeCountEl = document.getElementById("entree-count");
+
+    const updateSideCount = () => {
+        if (!sideCountEl) return;
+        sideCountEl.textContent = Array.from(sideBoxes).filter(cb => cb.checked).length;
+    };
+
+    const updateEntreeCount = () => {
+        let total = 0;
+        qtyInputs.forEach((input, idx) => {
+            const val = Number(input.value) || 0;
+            total += val;
+            const tile = input.closest(".option-tile--entree-qty");
+            const badge = badges[idx];
+            if (val > 0) {
+                tile.classList.add("is-selected");
+                if (badge) badge.textContent = val;
+            } else {
+                tile.classList.remove("is-selected");
+                if (badge) badge.textContent = "0";
+            }
+        });
+        if (entreeCountEl) {
+            entreeCountEl.textContent = total;
+        }
+        return total;
+    };
+
+    updateSideCount();
+    updateEntreeCount();
+    sideBoxes.forEach(cb => cb.addEventListener("change", updateSideCount));
+
+    qtyInputs.forEach(input => {
+        input.addEventListener("change", () => {
+            const requiredEntrees = Number(form?.dataset.requiredEntrees || 0);
+            const others = Array.from(qtyInputs).filter(i => i !== input).reduce((sum, i) => sum + Number(i.value || 0), 0);
+            const maxForThis = Math.max(0, requiredEntrees - others);
+            input.value = Math.min(maxForThis, Math.max(0, Number(input.value) || 0));
+            updateEntreeCount();
+        });
+    });
+
+    qtyButtons.forEach(btn => {
+        btn.addEventListener("click", () => {
+            const input = btn.closest(".option-tile--entree-qty").querySelector(".entree-qty");
+            const requiredEntrees = Number(form?.dataset.requiredEntrees || 0);
+            const currentVal = Number(input.value) || 0;
+            const others = Array.from(qtyInputs).filter(i => i !== input).reduce((sum, i) => sum + Number(i.value || 0), 0);
+            const step = btn.dataset.action === "increment" ? 1 : -1;
+            let value = currentVal + step;
+            if (value < 0) value = 0;
+            if (others + value > requiredEntrees) {
+                value = Math.max(0, requiredEntrees - others);
+            }
+            input.value = value;
+            updateEntreeCount();
+        });
+    });
+
+    const validateForm = () => {
+        const requiredSides = Number(form?.dataset.requiredSides || 0);
+        const requiredEntrees = Number(form?.dataset.requiredEntrees || 0);
+        const sidesCount = form ? form.querySelectorAll('input[name="sides"]:checked').length : 0;
+        const entreeTotal = updateEntreeCount();
+        let message = "";
+        if (requiredSides && ![requiredSides, requiredSides * 2].includes(sidesCount)) {
+            const optionText = sidesCount === requiredSides * 2 ? `${requiredSides * 2}` : `${requiredSides}`;
+            message = `Please select ${optionText} side${optionText > 1 ? "s" : ""}.`;
+        } else if (requiredEntrees && entreeTotal !== requiredEntrees) {
+            message = `Please select ${requiredEntrees} entree${requiredEntrees > 1 ? "s" : ""}.`;
+        }
+        if (message && warningBanner) {
+            warningBanner.textContent = message;
+            warningBanner.classList.add("show");
+            setTimeout(() => warningBanner.classList.remove("show"), 1800);
+        }
+        return message === "";
+    };
+    // expose for other listeners
+    window.mealValidateForm = validateForm;
+
+    const entreeList = Array.from(document.querySelectorAll(".entree-options li"));
+    const pageLabel = document.getElementById("entree-page-label");
+    const prevBtn = document.getElementById("entree-prev");
+    const nextBtn = document.getElementById("entree-next");
+    const pageSize = 8;
+
+    if (entreeList.length && pageLabel && prevBtn && nextBtn) {
+        let page = 0;
+        const totalPages = Math.max(1, Math.ceil(entreeList.length / pageSize));
+        const render = () => {
+            entreeList.forEach((el, idx) => {
+                const pageIndex = Math.floor(idx / pageSize);
+                el.style.display = pageIndex === page ? "" : "none";
+            });
+            pageLabel.textContent = `Page ${page + 1} of ${totalPages}`;
+            prevBtn.disabled = page === 0;
+            nextBtn.disabled = page >= totalPages - 1;
+        };
+        prevBtn.addEventListener("click", () => {
+            if (page > 0) { page -= 1; render(); }
+        });
+        nextBtn.addEventListener("click", () => {
+            if (page < totalPages - 1) { page += 1; render(); }
+        });
+        render();
+    }
+
+    const clearBtn = document.getElementById("kiosk-clear-combo");
+    if (clearBtn) {
+        clearBtn.addEventListener("click", () => {
+            sideBoxes.forEach(cb => { cb.checked = false; });
+            qtyInputs.forEach(input => { input.value = 0; });
+            updateSideCount();
+            updateEntreeCount();
+            if (warningBanner) {
+                warningBanner.textContent = "";
+                warningBanner.classList.remove("show");
+            }
+        });
+    }
+});
+</script>
+<script>
+// Async submit for meals to avoid full reload when adding to cart
+document.addEventListener("DOMContentLoaded", () => {
+    const form = document.querySelector(".kiosk-combo-form");
+    const toast = document.querySelector(".kiosk-toast");
+    const warningBanner = document.getElementById("kiosk-warning");
+    const totalPill = document.getElementById("kiosk-cart-total-pill");
+    const setTotal = (val) => {
+        if (!totalPill) return;
+        const num = Number(val);
+        const formatted = Number.isFinite(num) ? num.toFixed(2) : "--";
+        totalPill.textContent = `Cart Total: $${formatted}`;
+    };
+    if (totalPill?.dataset.total) {
+        setTotal(totalPill.dataset.total);
+    }
+    if (!form) return;
+
+    form.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const ok = typeof window.mealValidateForm === "function" ? window.mealValidateForm() : true;
+        if (!ok) {
+            return;
+        }
+        const data = new FormData(form);
+        const csrf = form.querySelector('input[name="csrfmiddlewaretoken"]')?.value;
+        fetch(window.location.href, {
+            method: "POST",
+            headers: {
+                "X-Requested-With": "XMLHttpRequest",
+                "X-CSRFToken": csrf || "",
+            },
+            body: data,
+        }).then(resp => resp.json()).then(payload => {
+            if (payload.status === "ok") {
+                if (payload.cart_total !== undefined) {
+                    setTotal(payload.cart_total);
+                }
+                if (toast) {
+                    toast.style.display = "block";
+                    toast.classList.add("kiosk-toast--show");
+                    setTimeout(() => {
+                        toast.classList.remove("kiosk-toast--show");
+                        toast.style.display = "none";
+                    }, 2200);
+                }
+            } else if (payload.message && warningBanner) {
+                warningBanner.textContent = payload.message;
+                warningBanner.classList.add("show");
+                setTimeout(() => warningBanner.classList.remove("show"), 1800);
+            } else {
+                form.submit();
+            }
+        }).catch(() => form.submit());
+    });
+});
+</script>
+{% endblock %}

@@ -1,0 +1,229 @@
+{% extends 'kiosk/base.html' %}
+{% load static %}
+
+{% block title %}{% if kiosk_ui and kiosk_ui.sections.entrees %}{{ kiosk_ui.sections.entrees }}{% else %}Select Entrees{% endif %}{% endblock %}
+
+{% block content %}
+{% if kiosk_ui and kiosk_ui.sections.entrees %}
+<h2 class="kiosk-page-title">{{ kiosk_ui.sections.entrees }} for your {{ meal_name }}</h2>
+{% else %}
+<h2 class="kiosk-page-title">Select entrees for your {{ meal_name }}</h2>
+{% endif %}
+{% if error %}
+<p class="error">{{ error }}</p>
+{% endif %}
+<style>
+    .entree-header {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 0.5rem;
+    }
+    .entree-total-count {
+        font-size: 0.8rem;
+        letter-spacing: 0.15em;
+    }
+    .kiosk-subtitle__hint {
+        font-size: 0.65rem;
+        color: var(--panda-muted);
+        margin-left: 0.5rem;
+    }
+    .pulse {
+        animation: badge-pulse 0.35s ease;
+    }
+    @keyframes badge-pulse {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.15); }
+        100% { transform: scale(1); }
+    }
+    .entree-img-wrapper {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 120px;
+        height: 100px;
+    }
+    .entree-img-wrapper img {
+        max-width: 80%;
+        max-height: 70%;
+    }
+    .img-qty-btn {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        border: none;
+        background: rgba(255, 255, 255, 0.85);
+        color: #222;
+        font-weight: 700;
+        line-height: 1;
+    }
+    .img-qty-btn[data-action="decrement"] {
+        left: -12px;
+    }
+    .img-qty-btn[data-action="increment"] {
+        right: -12px;
+    }
+</style>
+<style>
+    .entree-qty-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        padding: 0.25rem 0;
+    }
+    .entree-qty-label {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+    .entree-qty-controls {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    .qty-btn {
+        width: 32px;
+        height: 32px;
+        border-radius: 999px;
+        border: none;
+        background: rgba(255, 255, 255, 0.25);
+        color: #fff;
+        font-weight: 700;
+    }
+    .entree-qty {
+        width: 56px;
+        text-align: center;
+        border-radius: 999px;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        background: rgba(0, 0, 0, 0.25);
+        color: #fff;
+    }
+</style>
+<form method="post" class="kiosk-combo-form" data-required-entrees="{{ required }}">
+    {% csrf_token %}
+    <div id="kiosk-warning" class="kiosk-warning-banner" aria-live="polite"></div>
+    <div class="entree-header">
+        <div>
+            {% if kiosk_ui and kiosk_ui.sections.entrees %}
+            <h3 class="section-title">{{ kiosk_ui.sections.entrees }}</h3>
+            {% else %}
+            <h3 class="section-title">Entrees</h3>
+            {% endif %}
+            <p class="kiosk-subtitle">Choose {{ required }} entrée{% if required > 1 %}s{% endif %}
+                {% if kiosk_ui and kiosk_ui.labels.qty_hint %}
+                <span class="kiosk-subtitle__hint">{{ kiosk_ui.labels.qty_hint }}</span>
+                {% else %}
+                <span class="kiosk-subtitle__hint">Use +/− to adjust quantity</span>
+                {% endif %}
+            </p>
+        </div>
+        {% if kiosk_ui and kiosk_ui.labels.selected %}
+        <span class="entree-total-count">{{ kiosk_ui.labels.selected }} <strong id="chosen-count">0</strong>/{{ required }}</span>
+        {% else %}
+        <span class="entree-total-count">Selected: <strong id="chosen-count">0</strong>/{{ required }}</span>
+        {% endif %}
+    </div>
+    <ul class="options-list options-list--grid options-list--compact options-list--entrees entree-options">
+        {% for entree in entrees %}
+        <li class="entree-qty-row">
+            <div class="entree-qty-label">
+                <div class="entree-img-wrapper">
+                    <button type="button" class="img-qty-btn" data-action="decrement">−</button>
+                    {% if entree.image %}
+                        <img src="{% static entree.image %}" alt="{{ entree.translated_name|default:entree.name|default:entree }}" class="option-tile__image" loading="lazy">
+                        {% endif %}
+                    <button type="button" class="img-qty-btn" data-action="increment">+</button>
+                </div>
+                    <span class="option-tile__text">{{ entree.translated_name|default:entree.name|default:entree }}</span>
+            </div>
+            <div class="entree-qty-controls">
+                <input type="number" name="entree_qty_{{ forloop.counter0 }}" min="0" value="{{ selected_entrees.get(entree.name, 0) }}" class="entree-qty" />
+            </div>
+        </li>
+        {% endfor %}
+    </ul>
+    <button type="submit" class="button">{% if is_editing %}{% if kiosk_ui and kiosk_ui.labels.save_changes %}{{ kiosk_ui.labels.save_changes }}{% else %}Save Changes{% endif %}{% else %}{% if kiosk_ui and kiosk_ui.labels.review_order %}{{ kiosk_ui.labels.review_order }}{% else %}Review Order{% endif %}{% endif %}</button>
+</form>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    const warning = document.getElementById("kiosk-warning");
+    const qtyInputs = document.querySelectorAll(".entree-qty");
+    const qtyButtons = document.querySelectorAll(".img-qty-btn");
+    const form = document.querySelector(".kiosk-combo-form");
+    const totalRequired = Number(form?.dataset.requiredEntrees || 0);
+    const chosenCount = document.getElementById("chosen-count");
+
+    const updateWarning = (total) => {
+        if (!warning) return;
+        if (total !== totalRequired) {
+            warning.textContent = `Please select exactly ${totalRequired} entrée${totalRequired > 1 ? "s" : ""}.`;
+            warning.classList.add("show");
+        } else {
+            warning.textContent = "";
+            warning.classList.remove("show");
+        }
+    };
+
+    const getTotalQty = () => Array.from(qtyInputs).reduce((sum, input) => sum + Number(input.value || 0), 0);
+
+    const updateChosenCount = (total) => {
+        if (chosenCount) {
+            chosenCount.textContent = total;
+        }
+    };
+
+    const pulseInput = (input) => {
+        input.classList.add("pulse");
+        const removePulse = () => {
+            input.classList.remove("pulse");
+            input.removeEventListener("animationend", removePulse);
+        };
+        input.addEventListener("animationend", removePulse);
+    };
+
+    const handleQtyChange = () => {
+        const total = getTotalQty();
+        updateWarning(total);
+        updateChosenCount(total);
+    };
+
+    qtyInputs.forEach(input => {
+        input.addEventListener("change", () => {
+            input.value = Math.max(0, Number(input.value) || 0);
+            handleQtyChange();
+            pulseInput(input);
+        });
+    });
+
+    qtyButtons.forEach(btn => {
+        btn.addEventListener("click", () => {
+            const input = btn.closest(".entree-qty-controls").querySelector(".entree-qty");
+            const step = btn.dataset.action === "increment" ? 1 : -1;
+            let value = (Number(input.value) || 0) + step;
+            if (value < 0) value = 0;
+            input.value = value;
+            handleQtyChange();
+            pulseInput(input);
+        });
+    });
+
+    form?.addEventListener("submit", (e) => {
+        if (getTotalQty() !== totalRequired) {
+            e.preventDefault();
+            handleQtyChange();
+        }
+    });
+
+    handleQtyChange();
+});
+</script>
+{% endblock %}
+{% endblock %}

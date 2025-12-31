@@ -1,0 +1,134 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panda Express Menu Board</title>
+    <meta http-equiv="refresh" content="600">
+    <link rel="stylesheet" href="{% static 'css/theme_dark.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <!-- Weather Top Bar -->
+    <div class="weather-bar">
+        {% if weather.icon %}
+        <img src="https://openweathermap.org/img/wn/{{ weather.icon }}@2x.png"
+             alt="Weather Icon"
+             class="weather-icon">
+        {% endif %}
+        <div class="weather-details">
+            <div class="weather-city">{{ weather.city }}</div>
+            <div class="weather-desc">{{ weather.weather_description|title }}</div>
+            <div class="weather-temp">{{ weather.temperature }}°F</div>
+        </div>
+        <div class="menu-bar-title">
+            <h1><a href="{% url 'home' %}">Panda</a> Express Menu</h1>
+        </div>
+        <div class="menu-bar-logo">
+            <a href="?lang=next">
+                <img src="{% static 'img/panda-favicon.png' %}" alt="Panda Express Logo">
+            </a>
+        </div>
+    </div>
+
+    <div class="menu-container">
+
+        <!-- LEFT SIDE: meal options -->
+        <aside class="meal-options card">
+            <h2>{{ menu_labels.meal_options }}</h2>
+
+            <div class="option">
+                <strong>{{ menu_labels.bowl }}</strong>
+                <p>{{ menu_labels.bowl_desc }}</p>
+            </div>
+
+            <div class="option">
+                <strong>{{ menu_labels.plate }}</strong>
+                <p>{{ menu_labels.plate_desc }}</p>
+            </div>
+
+            <div class="option">
+                <strong>{{ menu_labels.bigger_plate }}</strong>
+                <p>{{ menu_labels.bigger_plate_desc }}</p>
+            </div>
+
+            <div class="option">
+                <strong>{{ menu_labels.panda_cub }}</strong>
+                <p>{{ menu_labels.panda_cub_desc }}</p>
+            </div>
+
+            <div class="option">
+                <strong>{{ menu_labels.family_meal }}</strong>
+                <p>{{ menu_labels.family_meal_desc }}</p>
+            </div>
+        </aside>
+
+        <!-- RIGHT SIDE CONTENT -->
+        <main class="menu-sections">
+
+            <!-- ENTREES -->
+            <section class="section-card">
+                <h2>{{ category_names.Entree }}</h2>
+                <ul>
+                    {% for item in menu.Entree %}
+                    <li>{{ item.translated_name }}</li>
+                    {% empty %}
+                    <li>{{ menu_labels.no_entrees }}</li>
+                    {% endfor %}
+                </ul>
+            </section>
+
+            <!-- SIDES + APPETIZERS -->
+            <section class="section-card">
+                <h2>{{ category_names.Side }}</h2>
+                <ul>
+                    {% for item in menu.Side %}
+                    <li>{{ item.translated_name }}</li>
+                    {% empty %}
+                    <li>{{ menu_labels.no_sides }}</li>
+                    {% endfor %}
+                </ul>
+
+                <h2>{{ category_names.Appetizer }}</h2>
+                <ul>
+                    {% for item in menu.Appetizer %}
+                    <li>
+                        <span>{{ item.translated_name }}</span>
+                        <span class="price">${{ item.price|floatformat:2 }}</span>
+                    </li>
+                    {% empty %}
+                    <li>{{ menu_labels.no_appetizers }}</li>
+                    {% endfor %}
+                </ul>
+
+                <h2>{{ menu_labels.a_la_carte }}</h2>
+                <p><strong>{{ menu_labels.entree }}</strong></p>
+                <p>{{ menu_labels.small }} $5.40 | {{ menu_labels.medium }} $8.70 | {{ menu_labels.large }} $11.40</p>
+                <p class="premium-note">{{ menu_labels.premium_note }}</p>
+
+                <p><strong>{{ menu_labels.side }}</strong></p>
+                <p>{{ menu_labels.medium }} $4.60 | {{ menu_labels.large }} $5.60</p>
+            </section>
+
+            <!-- DRINKS -->
+            <section class="section-card">
+                <h2>{{ category_names.Drink }}</h2>
+                <ul>
+                    {% for item in menu.Drink %}
+                    <li>
+                        <span>{{ item.translated_name }}</span>
+                        <span class="price">${{ item.price|floatformat:2 }}</span>
+                    </li>
+                    {% empty %}
+                    <li>{{ menu_labels.no_drinks }}</li>
+                    {% endfor %}
+                </ul>
+            </section>
+
+        </main>
+    </div>
+
+</body>
+</html>

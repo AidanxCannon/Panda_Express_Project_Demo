@@ -1,0 +1,205 @@
+{% load static %}
+
+<div class="manager-page">
+    <div class="employee-header">
+        <h1>Inventory Management</h1>
+        <p>Add, update, or remove inventory items</p>
+    </div>
+
+    <!-- Search Bar -->
+    <div class="employee-search-container">
+        <label>Search:</label>
+        <input type="text" id="inventory-search" class="employee-search-input large-input" placeholder="Search by ingredient...">
+    </div>
+
+    <div class="employee-scroll">
+        <!-- Input panel ABOVE table -->
+        <div class="employee-details-card" style="margin-bottom: 0.9rem;">
+            <div class="employee-fields-grid">
+                <div class="form-group">
+                    <label>Ingredient</label>
+                    <input class="large-input" type="text" id="ingredient-name" placeholder="Enter ingredient name">
+                </div>
+
+                <div class="form-group">
+                    <label>Quantity</label>
+                    <input class="large-input" type="number" id="ingredient-quantity" placeholder="Enter quantity">
+                </div>
+
+                <div class="form-group">
+                    <label>Price</label>
+                    <input class="large-input" type="number" step="0.01" id="ingredient-price" placeholder="Enter price">
+                </div>
+
+                <div class="form-group">
+                    <label>Minimum Stock</label>
+                    <input class="large-input" type="number" id="ingredient-minimum" placeholder="Enter minimum stock">
+                </div>
+            </div>
+
+            <input type="hidden" id="ingredient-id">
+
+            <!-- Action Buttons -->
+            <div class="employee-buttons-row">
+                <button class="action-pill" id="add-item-btn" type="button">Add</button>
+                <button class="action-pill" id="update-item-btn" type="button">Update</button>
+                <button class="action-pill" id="add-quantity-btn" type="button">Add Qty</button>
+                <button class="action-pill" id="delete-item-btn" type="button">Delete</button>
+            </div>
+        </div>
+
+        <div class="employee-main-container">
+            <!-- Inventory Table -->
+            <div class="employee-table-container">
+                <table class="employee-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Ingredient</th>
+                            <th>Quantity</th>
+                            <th>Price</th>
+                            <th>Minimum Stock</th>
+                        </tr>
+                    </thead>
+                    <tbody id="inventory-tbody">
+                        {% for item in ingredients %}
+                        <tr class="employee-row" data-id="{{ item.id }}" data-ingredient="{{ item.ingredient }}"
+                            data-quantity="{{ item.quantity }}" data-price="{{ item.price }}"
+                            data-minimum="{{ item.minimum_stock|default:'' }}">
+                            <td>{{ item.id }}</td>
+                            <td>{{ item.ingredient }}</td>
+                            <td>{{ item.quantity }}</td>
+                            <td>{{ item.price }}</td>
+                            <td>{{ item.minimum_stock|default:'N/A' }}</td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="5" style="padding: 2rem; text-align: center; color: #999;">
+                                No inventory items found.
+                            </td>
+                        </tr>
+                        {% endfor %}
+                        <tr class="employee-blank-row" id="blank-row">
+                            <td colspan="5">Click here to clear selection / start fresh</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hidden Forms -->
+    <form id="add-item-form" action="{% url 'manager:add_inventory_item' %}" method="POST" style="display:none;">
+        {% csrf_token %}
+        <input type="hidden" name="ingredient" id="add-ingredient">
+        <input type="hidden" name="quantity" id="add-quantity">
+        <input type="hidden" name="price" id="add-price">
+        <input type="hidden" name="minimum_stock" id="add-minimum">
+    </form>
+
+    <form id="update-item-form" action="{% url 'manager:edit_inventory_item' %}" method="POST" style="display:none;">
+        {% csrf_token %}
+        <input type="hidden" name="item_id" id="update-id">
+        <input type="hidden" name="ingredient" id="update-ingredient">
+        <input type="hidden" name="quantity" id="update-quantity">
+        <input type="hidden" name="price" id="update-price">
+        <input type="hidden" name="minimum_stock" id="update-minimum">
+    </form>
+
+    <form id="delete-item-form" action="{% url 'manager:delete_inventory_item' %}" method="POST" style="display:none;">
+        {% csrf_token %}
+        <input type="hidden" name="item_id" id="delete-id">
+    </form>
+
+    <form id="add-quantity-form" action="{% url 'manager:add_inventory_quantity' %}" method="POST" style="display:none;">
+        {% csrf_token %}
+        <input type="hidden" name="item_id" id="quantity-id">
+        <input type="hidden" name="quantity_to_add" id="quantity-to-add">
+    </form>
+</div>
+
+<script>
+    const tbody = document.getElementById("inventory-tbody");
+    let rows = document.querySelectorAll(".employee-row");
+    const blankRow = document.getElementById("blank-row");
+
+    function clearSelection() {
+        rows.forEach(r => r.classList.remove("selected"));
+        document.getElementById("ingredient-id").value = "";
+        document.getElementById("ingredient-name").value = "";
+        document.getElementById("ingredient-quantity").value = "";
+        document.getElementById("ingredient-price").value = "";
+        document.getElementById("ingredient-minimum").value = "";
+    }
+
+    function bindRowClick() {
+        rows.forEach(row => {
+            row.addEventListener("click", () => {
+                clearSelection();
+                row.classList.add("selected");
+                document.getElementById("ingredient-id").value = row.dataset.id;
+                document.getElementById("ingredient-name").value = row.dataset.ingredient;
+                document.getElementById("ingredient-quantity").value = row.dataset.quantity;
+                document.getElementById("ingredient-price").value = row.dataset.price;
+                document.getElementById("ingredient-minimum").value = row.dataset.minimum;
+            });
+        });
+    }
+
+    blankRow.addEventListener("click", clearSelection);
+    bindRowClick();
+
+    // ------------------- SEARCH FILTER -------------------
+    document.getElementById("inventory-search").addEventListener("input", function() {
+        const filter = this.value.toLowerCase();
+        rows.forEach(row => {
+            const ingredient = row.dataset.ingredient.toLowerCase();
+            row.style.display = ingredient.includes(filter) ? "" : "none";
+        });
+    });
+
+    // ------------------- ADD ITEM -------------------
+    document.getElementById("add-item-btn").addEventListener("click", function() {
+        document.getElementById("add-ingredient").value = document.getElementById("ingredient-name").value.trim();
+        document.getElementById("add-quantity").value = document.getElementById("ingredient-quantity").value;
+        document.getElementById("add-price").value = document.getElementById("ingredient-price").value;
+        document.getElementById("add-minimum").value = document.getElementById("ingredient-minimum").value;
+        document.getElementById("add-item-form").submit();
+    });
+
+    // ------------------- UPDATE ITEM -------------------
+    document.getElementById("update-item-btn").addEventListener("click", function() {
+        document.getElementById("update-id").value = document.getElementById("ingredient-id").value;
+        document.getElementById("update-ingredient").value = document.getElementById("ingredient-name").value.trim();
+        document.getElementById("update-quantity").value = document.getElementById("ingredient-quantity").value;
+        document.getElementById("update-price").value = document.getElementById("ingredient-price").value;
+        document.getElementById("update-minimum").value = document.getElementById("ingredient-minimum").value;
+        document.getElementById("update-item-form").submit();
+    });
+
+    // ------------------- DELETE ITEM -------------------
+    document.getElementById("delete-item-btn").addEventListener("click", function() {
+        document.getElementById("delete-id").value = document.getElementById("ingredient-id").value;
+        document.getElementById("delete-item-form").submit();
+    });
+
+    // ------------------- ADD QUANTITY -------------------
+    document.getElementById("add-quantity-btn").addEventListener("click", function() {
+        const selectedId = document.getElementById("ingredient-id").value;
+        if (!selectedId) {
+            alert("Please select an inventory item first.");
+            return;
+        }
+
+        const qty = prompt("Enter quantity to add:");
+        if (qty === null) return;
+        if (!qty || isNaN(qty) || parseInt(qty) <= 0) {
+            alert("Please enter a valid positive number.");
+            return;
+        }
+
+        document.getElementById("quantity-id").value = selectedId;
+        document.getElementById("quantity-to-add").value = parseInt(qty);
+        document.getElementById("add-quantity-form").submit();
+    });
+</script>

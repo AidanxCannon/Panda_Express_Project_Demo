@@ -1,0 +1,225 @@
+{% extends 'kiosk/base.html' %}
+{% load static kiosk_extras %}
+
+{% block title %}{% if kiosk_ui %}{{ kiosk_ui.nav.appetizers }}{% else %}Appetizers{% endif %}{% endblock %}
+
+{% block content %}
+    {% if kiosk_ui %}
+    <h2 class="kiosk-page-title">{{ kiosk_ui.nav.appetizers }}</h2>
+    {% else %}
+    <h2 class="kiosk-page-title">Appetizers</h2>
+    {% endif %}
+{% if error %}
+<p class="error">{{ error }}</p>
+{% endif %}
+<div class="kiosk-toast kiosk-toast--success" style="display:none">Added to cart</div>
+<form method="post" class="kiosk-combo-form kiosk-sizing-view" data-cart-endpoint="{% url 'customer_kiosk:api_add_to_cart' %}">
+    {% csrf_token %}
+    {% if editing_index %}
+    <input type="hidden" name="editing_index" value="{{ editing_index }}">
+    {% endif %}
+    <div class="kiosk-combo-stack">
+        <section class="kiosk-single-card">
+            <div class="kiosk-combo-card__header">
+                {% if kiosk_ui and kiosk_ui.sections.items %}
+                <h3 class="section-title">{{ kiosk_ui.sections.items }}</h3>
+                {% else %}
+                <h3 class="section-title">Items</h3>
+                {% endif %}
+                {% if kiosk_ui and kiosk_ui.defaults|get_item:"Select one" %}
+                <p class="kiosk-subtitle">{{ kiosk_ui.defaults|get_item:"Select one" }}</p>
+                {% else %}
+                <p class="kiosk-subtitle">Select one</p>
+                {% endif %}
+            </div>
+            <ul class="options-list options-list--grid options-list--compact options-list--entrees entree-options">
+                {% for item in items %}
+                <li>
+                    <label class="option-tile">
+                        <input type="radio" name="item" value="{{ item.name }}" {% if forloop.first %}required{% endif %} {% if selected_item == item.name %}checked{% endif %}>
+                        <span class="option-tile__text">{{ item.translated_name|default:item.name }}</span>
+                    </label>
+                </li>
+                {% endfor %}
+            </ul>
+        </section>
+
+        <section class="kiosk-size-card">
+            <div class="kiosk-combo-card__header">
+                <h3 class="section-title">{% if kiosk_ui and kiosk_ui.size and kiosk_ui.size.title %}{{ kiosk_ui.size.title }}{% else %}Size{% endif %}</h3>
+                <p class="kiosk-subtitle">{% if kiosk_ui and kiosk_ui.size and kiosk_ui.size.pick_one %}{{ kiosk_ui.size.pick_one }}{% else %}Pick one{% endif %}</p>
+            </div>
+            <div class="kiosk-size-toggle">
+                <label class="kiosk-size-pill">
+                    <input type="radio" name="size" value="S" {% if selected_size == 'S' %}checked{% endif %}>
+                    <span>{% if kiosk_ui and kiosk_ui.size and kiosk_ui.size.sizes.S %}{{ kiosk_ui.size.sizes.S }}{% else %}Small{% endif %}</span>
+                </label>
+                <label class="kiosk-size-pill">
+                    <input type="radio" name="size" value="M" {% if selected_size == 'M' %}checked{% endif %}>
+                    <span>{% if kiosk_ui and kiosk_ui.size and kiosk_ui.size.sizes.M %}{{ kiosk_ui.size.sizes.M }}{% else %}Medium{% endif %}</span>
+                </label>
+                <label class="kiosk-size-pill">
+                    <input type="radio" name="size" value="L" {% if selected_size == 'L' %}checked{% endif %}>
+                    <span>{% if kiosk_ui and kiosk_ui.size and kiosk_ui.size.sizes.L %}{{ kiosk_ui.size.sizes.L }}{% else %}Large{% endif %}</span>
+                </label>
+            </div>
+            <p class="kiosk-subtitle__hint">{% if kiosk_ui and kiosk_ui.size and kiosk_ui.size.price_label %}{{ kiosk_ui.size.price_label }}{% else %}Price:{% endif %} <strong id="kiosk-price-label">--</strong></p>
+        </section>
+    </div>
+
+    <div class="kiosk-actions">
+        <a href="{% url 'customer_kiosk:cart' %}" class="button button-secondary">{% if kiosk_ui and kiosk_ui.view_cart %}{{ kiosk_ui.view_cart }}{% else %}View Cart{% endif %}</a>
+        <button type="button" class="button button-secondary" id="kiosk-clear-appetizer">{% if kiosk_ui and kiosk_ui.labels.clear %}{{ kiosk_ui.labels.clear }}{% else %}Clear{% endif %}</button>
+        <div class="kiosk-actions__center">
+            <div class="entree-pager">
+                <button type="button" class="btn btn-secondary btn-compact" id="entree-prev">Prev</button>
+                <span id="entree-page-label">Page 1</span>
+                <button type="button" class="btn btn-secondary btn-compact" id="entree-next">Next</button>
+            </div>
+        </div>
+        <span class="kiosk-cart-total-pill" id="kiosk-cart-total-pill" data-total="{{ cart_total|default:0 }}">{% if kiosk_ui and kiosk_ui.labels.cart_total %}{{ kiosk_ui.labels.cart_total }}{% else %}Cart Total:{% endif %} ${{ cart_total|default:0|floatformat:2 }}</span>
+        <button type="submit" class="button">{% if is_editing %}{% if kiosk_ui and kiosk_ui.labels.save_changes %}{{ kiosk_ui.labels.save_changes }}{% else %}Save Changes{% endif %}{% else %}{% if kiosk_ui and kiosk_ui.labels.add_to_cart %}{{ kiosk_ui.labels.add_to_cart }}{% else %}Add to Cart{% endif %}{% endif %}</button>
+    </div>
+</form>
+{{ price_map|json_script:"kiosk-price-map" }}
+{% endblock %}
+
+{% block extra_scripts %}
+<style>
+.kiosk-cart-total-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    background: #111;
+    color: #fff;
+    border: 1px solid rgba(255,255,255,0.15);
+    padding: 0.45rem 0.85rem;
+    border-radius: 999px;
+    font-weight: 700;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+}
+</style>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    const entreeList = Array.from(document.querySelectorAll(".entree-options li"));
+    const pageLabel = document.getElementById("entree-page-label");
+    const prevBtn = document.getElementById("entree-prev");
+    const nextBtn = document.getElementById("entree-next");
+    const pageSize = 8;
+
+    if (!entreeList.length || !pageLabel || !prevBtn || !nextBtn) return;
+
+    let page = 0;
+    const totalPages = Math.max(1, Math.ceil(entreeList.length / pageSize));
+
+    function render() {
+        entreeList.forEach((el, idx) => {
+            const pageIndex = Math.floor(idx / pageSize);
+            el.style.display = pageIndex === page ? "" : "none";
+        });
+        pageLabel.textContent = `Page ${page + 1} of ${totalPages}`;
+        prevBtn.disabled = page === 0;
+        nextBtn.disabled = page >= totalPages - 1;
+    }
+
+    prevBtn.addEventListener("click", () => {
+        if (page > 0) { page -= 1; render(); }
+    });
+    nextBtn.addEventListener("click", () => {
+        if (page < totalPages - 1) { page += 1; render(); }
+    });
+
+    render();
+});
+</script>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    const mapEl = document.getElementById("kiosk-price-map");
+    if (!mapEl) return;
+    const priceMap = JSON.parse(mapEl.textContent || "{}");
+    const priceLabel = document.getElementById("kiosk-price-label");
+    const form = document.querySelector(".kiosk-combo-form");
+    if (!form || !priceLabel) return;
+
+    function updatePrice() {
+        const item = form.querySelector('input[name="item"]:checked');
+        const size = form.querySelector('input[name="size"]:checked');
+        const itemKey = item ? item.value : null;
+        const sizeKey = size ? size.value : null;
+        const price = itemKey && sizeKey && priceMap[itemKey] ? priceMap[itemKey][sizeKey] : null;
+        priceLabel.textContent = price ? `$${parseFloat(price).toFixed(2)}` : "--";
+    }
+
+    form.addEventListener("change", updatePrice);
+    updatePrice();
+
+    const clearBtn = document.getElementById("kiosk-clear-appetizer");
+    if (clearBtn) {
+        clearBtn.addEventListener("click", () => {
+            form.querySelectorAll('input[name="item"]').forEach(el => { el.checked = false; });
+            form.querySelectorAll('input[name="size"]').forEach(el => { el.checked = false; });
+            priceLabel.textContent = "--";
+        });
+    }
+});
+</script>
+<script>
+// Async add-to-cart for appetizers
+document.addEventListener("DOMContentLoaded", () => {
+    const form = document.querySelector(".kiosk-combo-form");
+    const endpoint = form?.dataset.cartEndpoint;
+    const toast = document.querySelector(".kiosk-toast");
+    const totalPill = document.getElementById("kiosk-cart-total-pill");
+    const setTotal = (val) => {
+        if (!totalPill) return;
+        const num = Number(val);
+        const formatted = Number.isFinite(num) ? num.toFixed(2) : "--";
+        totalPill.textContent = `Cart Total: $${formatted}`;
+    };
+    if (totalPill?.dataset.total) {
+        setTotal(totalPill.dataset.total);
+    }
+    if (!form || !endpoint) return;
+
+    form.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const item = form.querySelector('input[name="item"]:checked');
+        const size = form.querySelector('input[name="size"]:checked');
+        if (!item || !size) {
+            form.submit();
+            return;
+        }
+        const csrf = form.querySelector('input[name="csrfmiddlewaretoken"]')?.value;
+        const data = new FormData();
+        data.append("category", "appetizer");
+        data.append("item", item.value);
+        data.append("size", size.value);
+
+        fetch(endpoint, {
+            method: "POST",
+            headers: {
+                "X-CSRFToken": csrf || "",
+                "Accept": "application/json",
+            },
+            body: data,
+        }).then(resp => resp.json()).then(payload => {
+            if (payload.status === "ok") {
+                if (payload.cart_total !== undefined) {
+                    setTotal(payload.cart_total);
+                }
+                if (toast) {
+                    toast.style.display = "block";
+                    toast.classList.add("kiosk-toast--show");
+                    setTimeout(() => {
+                        toast.classList.remove("kiosk-toast--show");
+                        toast.style.display = "none";
+                    }, 2200);
+                }
+            } else {
+                form.submit();
+            }
+        }).catch(() => form.submit());
+    });
+});
+</script>
+{% endblock %}

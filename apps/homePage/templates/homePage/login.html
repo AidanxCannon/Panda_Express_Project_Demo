@@ -1,0 +1,69 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Login</title>
+    <link rel="stylesheet" href="{% static 'css/theme_dark.css' %}">
+    <link rel="icon" type="image/png" href="{% static 'img/panda-favicon.png' %}">
+    <style>
+        /* Floating language toggle logo */
+        .floating-lang-btn {
+            position: fixed;
+            bottom: 18px;
+            right: 18px;
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background: #fff;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+            display: grid;
+            place-items: center;
+            z-index: 999;
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
+        }
+        .floating-lang-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 14px 34px rgba(0,0,0,0.4);
+        }
+        .floating-lang-btn img {
+            width: 70%;
+            height: 70%;
+            object-fit: contain;
+            border-radius: 50%;
+        }
+    </style>
+</head>
+<body class="login-shell interface-shell--framed">
+    <div class="interface-frame">
+        <div class="login-shell__inner">
+            <div class="card card-sm">
+            <header class="panel-header">
+                <h1 class="section-title">Employee Login</h1>
+                <p class="section-subtitle">Team Access</p>
+            </header>
+            <form method="post" action="{% url 'login' %}" class="stack">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label class="form-label" for="name">Name</label>
+                    <input class="form-control" type="text" id="name" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="password">Password</label>
+                    <input class="form-control" type="password" id="password" name="password" required>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-accent btn-full">Login</button>
+                </div>
+            </form>
+        </div>
+        </div>
+    </div>
+
+    <!-- Floating Panda logo for language toggle -->
+    <a class="floating-lang-btn" href="?lang=next" title="Change language">
+        <img src="{% static 'img/panda-favicon.png' %}" alt="Panda Express language toggle">
+    </a>
+</body>
+</html>

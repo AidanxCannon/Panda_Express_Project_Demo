@@ -1,0 +1,49 @@
+# Core Django Dependencies
+Django==4.2
+django-channels==4.3.1
+django-allauth==0.54.0
+djangorestframework==3.14.0
+
+# Database
+psycopg2-binary==2.9.11
+
+# ASGI/WebSocket Support
+daphne==4.2.1
+channels==4.3.1
+asgiref==3.10.0
+
+# Async/Communication
+autobahn==23.6.2
+redis==7.0.1
+
+# Environment & Configuration
+python-decouple==3.8
+python-dotenv
+whitenoise==6.11.0
+
+# External APIs
+google-api-python-client
+
+# Security & Cryptography
+cryptography==46.0.3
+pyOpenSSL==25.3.0
+
+# Network & HTTP
+gunicorn==23.0.0
+Twisted==25.5.0
+
+# Data & Analytics
+matplotlib==3.8.1
+
+# Utilities
+pytz==2025.2
+
+# Development & Documentation (Optional)
+sphinx>=7.0.0
+sphinx-rtd-theme>=2.0.0
+
+# Email & Communication Services
+azure-communication-email==1.1.0
+
+# JWT & Authentication
+jwt

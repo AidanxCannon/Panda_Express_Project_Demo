@@ -1,0 +1,36 @@
+{% extends 'kiosk/base.html' %}
+
+{% block title %}Order Summary{% endblock %}
+
+{% block content %}
+<h2>Your Order Summary</h2>
+<table class="summary-table">
+    <tr><th>Meal Type</th><td>{{ meal_name }}</td></tr>
+    <tr><th>Side{% if side|length > 1 %}s{% endif %}</th>
+        <td>
+            {% if side %}
+                {% if side.__class__.__name__ == 'list' or side.__class__.__name__ == 'tuple' %}
+                    {% for s in side %}
+                        {% if s.translated_name %}{{ s.translated_name }}{% elif s.name %}{{ s.name }}{% else %}{{ s }}{% endif %}{% if not forloop.last %}, {% endif %}
+                    {% endfor %}
+                {% else %}
+                    {% if side.translated_name %}{{ side.translated_name }}{% elif side.name %}{{ side.name }}{% else %}{{ side }}{% endif %}
+                {% endif %}
+            {% else %}
+                -
+            {% endif %}
+        </td>
+    </tr>
+    <tr><th>Entrée{% if entrees|length > 1 %}s{% endif %}</th>
+        <td>
+            <ul>
+                {% for e in entrees %}
+                <li>{% if e.translated_name %}{{ e.translated_name }}{% elif e.name %}{{ e.name }}{% else %}{{ e }}{% endif %}</li>
+                {% endfor %}
+            </ul>
+        </td></tr>
+    <tr><th>Price</th><td>${{ base_price }}</td></tr>
+    <tr><th>Total</th><td><strong>${{ total }}</strong></td></tr>
+</table>
+    <p><a href="{% url 'customer_kiosk:home' %}" class="button">Start Over</a></p>
+{% endblock %}

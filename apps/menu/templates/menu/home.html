@@ -1,0 +1,25 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Menu Board</title>
+    <link rel="stylesheet" href="{% static 'css/theme_dark.css' %}">
+    <link rel="icon" type="image/png" href="{% static 'img/panda-favicon.png' %}">
+</head>
+<body class="menu-shell">
+    <div class="menu-container">
+        <section class="menu-card">
+            <header class="panel-header">
+                <p class="section-subtitle">Menu Control</p>
+                <h1 class="section-title">Menu Board</h1>
+            </header>
+            <p class="text-muted">Configuration coming soon to keep the board in sync with every shift.</p>
+            <div class="kiosk-actions">
+                <a class="btn btn-accent" href="{% url 'menu:menu_board' %}">View Live Board</a>
+                <a class="btn btn-secondary" href="{% url 'home' %}">Back to hub</a>
+            </div>
+        </section>
+    </div>
+</body>
+</html>

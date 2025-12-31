@@ -1,0 +1,94 @@
+{% extends "account/base.html" %}
+{% load i18n account socialaccount %}
+
+{% block head_title %}{% trans "Sign In" %}{% endblock %}
+
+{% block content %}
+<header class="panel-header auth-header">
+    <p class="section-subtitle">{% trans "Welcome back" %}</p>
+    <h1 class="section-title">{% trans "Sign In" %}</h1>
+</header>
+
+<form class="stack auth-form" method="post" action="{% url 'account_login' %}" autocomplete="off">
+    {% csrf_token %}
+    {% for field in form.visible_fields %}
+        {% if field.field.widget.input_type != "checkbox" %}
+        <div class="form-group">
+            <label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+            {% if field.field.widget.input_type == "password" %}
+            <div class="password-wrapper">
+                {{ field }}
+                <button type="button" class="password-toggle" aria-label="Show password">Show</button>
+            </div>
+            {% else %}
+                {{ field }}
+            {% endif %}
+            {% if field.errors %}
+                <p class="error">{{ field.errors|join:", " }}</p>
+            {% endif %}
+        </div>
+        {% endif %}
+    {% endfor %}
+
+    {% if form.non_field_errors %}
+    <div class="form-alert">
+        {% for error in form.non_field_errors %}
+            <p>{{ error }}</p>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    {% if redirect_field_value %}
+    <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}">
+    {% elif request.GET.next %}
+    <input type="hidden" name="{{ redirect_field_name }}" value="{{ request.GET.next }}">
+    {% endif %}
+
+    <div class="stack auth-actions">
+        <button type="submit" class="btn btn-accent btn-full">{% trans "Continue" %}</button>
+        <div class="auth-links">
+            {% with back_target=request.GET.order_return|default:'/kiosk/order-confirmation/' %}
+            <a class="back-link back-link--small" href="{{ back_target }}" aria-label="{% trans "Back" %}">
+                <span class="back-link__arrow" aria-hidden="true">←</span>
+                <span class="sr-only">{% trans "Back" %}</span>
+            </a>
+            {% endwith %}
+            <a href="{% url 'account_reset_password' %}?force_clear=1{% if redirect_field_value %}&{{ redirect_field_name }}={{ redirect_field_value|urlencode }}{% endif %}">{% trans "Forgot password?" %}</a>
+            <span aria-hidden="true">•</span>
+            <a href="{% url 'account_signup' %}?force_clear=1{% if redirect_field_value %}&{{ redirect_field_name }}={{ redirect_field_value|urlencode }}{% endif %}">{% trans "Create account" %}</a>
+        </div>
+    </div>
+</form>
+{% if request.GET.force_clear %}
+<script>
+// Force-clear any autofilled values and disable autocomplete when coming from kiosk email receipt flow.
+document.addEventListener('DOMContentLoaded', function() {
+    const inputs = document.querySelectorAll('input[type="email"], input[type="text"], input[type="password"]');
+    inputs.forEach((input) => {
+        input.value = '';
+        input.setAttribute('autocomplete', 'off');
+        input.setAttribute('autocapitalize', 'none');
+        input.setAttribute('autocorrect', 'off');
+    });
+});
+</script>
+{% endif %}
+<script>
+// Password show/hide toggle
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.password-wrapper').forEach(function(wrapper) {
+        const input = wrapper.querySelector('input[type="password"], input[type="text"]');
+        const toggle = wrapper.querySelector('.password-toggle');
+        if (!input || !toggle) return;
+        toggle.addEventListener('click', function() {
+            const isPassword = input.getAttribute('type') === 'password';
+            input.setAttribute('type', isPassword ? 'text' : 'password');
+            toggle.textContent = isPassword ? 'Hide' : 'Show';
+            // Preserve white background when toggled
+            input.style.background = '#fff';
+            input.style.color = '#222';
+        });
+    });
+});
+</script>
+{% endblock %}

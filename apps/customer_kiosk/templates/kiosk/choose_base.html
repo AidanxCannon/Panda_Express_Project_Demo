@@ -1,0 +1,76 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Choose Your Meal</title>
+    <link rel="stylesheet" href="{% static 'css/theme_dark.css' %}">
+    <link rel="icon" type="image/png" href="{% static 'img/panda-favicon.png' %}">
+</head>
+
+<body class="kiosk-shell kiosk-choice-shell">
+
+    <main class="kiosk-frame">
+
+        {% if back_url %}
+        <a href="{{ back_url }}" class="kiosk-back-btn">← Back</a>
+        {% endif %}
+
+        <section class="kiosk-panel">
+            <h3 class="kiosk-subtitle">{{ subtitle }}</h3>
+            <h1 class="kiosk-title">{{ title }}</h1>
+
+            <form method="post" action="{{ submit_url }}" class="kiosk-option-form">
+                {% csrf_token %}
+
+                <div class="kiosk-grid">
+                    {% for option in options %}
+                    <label class="kiosk-option">
+                        <input type="{{ input_type }}"
+                               name="selection"
+                               value="{{ option.id }}"
+                               {% if forloop.first and input_type == 'radio' %}checked{% endif %}>
+                        
+                        <span class="kiosk-option-body">
+                            <span class="kiosk-option-title">{{ option.name }}</span>
+                            {% if option.price %}
+                            <span class="kiosk-option-meta">Price: ${{ option.price }}</span>
+                            {% endif %}
+                        </span>
+                    </label>
+                    {% endfor %}
+                </div>
+
+                <button type="submit" class="kiosk-btn-primary">Continue</button>
+            </form>
+        </section>
+
+    </main>
+
+    <footer class="footer-panel">
+        © 2025 Panda Express Ordering Demo
+    </footer>
+
+    <script>
+        document.querySelectorAll('.kiosk-option input').forEach(input => {
+            input.addEventListener('change', () => {
+                const option = input.closest('.kiosk-option');
+                if (input.type === 'radio') {
+                    document.querySelectorAll('.kiosk-option').forEach(el => el.classList.remove('selected'));
+                    if (input.checked && option) {
+                        option.classList.add('selected');
+                    }
+                } else {
+                    option?.classList.toggle('selected', input.checked);
+                }
+            });
+        });
+        document.querySelectorAll('.kiosk-option input[type="radio"]:checked').forEach(input => {
+            const option = input.closest('.kiosk-option');
+            option?.classList.add('selected');
+        });
+    </script>
+
+</body>
+</html>

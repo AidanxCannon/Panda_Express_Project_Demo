@@ -1,0 +1,68 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Kitchen View</title>
+  {% load static %}
+  <link rel="stylesheet" href="{% static 'css/theme_dark.css' %}">
+  <link rel="icon" type="image/png" href="{% static 'img/panda-favicon.png' %}">
+  <style>
+    /* Shared floating language toggle */
+    .floating-lang-btn {
+      position: fixed;
+      bottom: 18px;
+      right: 18px;
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: #fff;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+      display: grid;
+      place-items: center;
+      z-index: 100;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+    .floating-lang-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 14px 34px rgba(0,0,0,0.4);
+    }
+    .floating-lang-btn img {
+      width: 70%;
+      height: 70%;
+      object-fit: contain;
+      border-radius: 50%;
+    }
+  </style>
+</head>
+<body class="page-shell kitchen-shell-page">
+  <main class="kitchen-shell">
+    <div class="kitchen-shell-core">
+      <section class="kitchen-panel">
+        <div class="kitchen-toggle-row">
+          <button class="kitchen-toggle active" data-target="active">Active Orders</button>
+          <button class="kitchen-toggle" data-target="completed">Completed Orders</button>
+        </div>
+      </section>
+      <section class="kitchen-orders-wrap">
+        <div class="kitchen-orders" id="kitchen-orders"></div>
+        <div class="kitchen-pagination" id="kitchen-pagination">
+          <div class="kitchen-page-left">
+            <button class="kitchen-page-btn" id="kitchen-prev" aria-label="Previous orders">&#8592;</button>
+            <span class="kitchen-page-indicator" id="kitchen-page-indicator">Page 1</span>
+            <button class="kitchen-page-btn" id="kitchen-next" aria-label="Next orders">&#8594;</button>
+          </div>
+          <a class="kitchen-return-btn" href="{% url 'home' %}">Return to Interface</a>
+        </div>
+      </section>
+    </div>
+  </main>
+  <script id="recent-orders-data" type="application/json">
+    {{ recent_orders|safe }}
+  </script>
+  <script src="{% static 'kitchen/script.js' %}?v=4"></script>
+  <!-- Floating Panda logo for language toggle -->
+  <a class="floating-lang-btn" href="{% url 'menu:set_lang' %}?next={{ request.path }}" title="Change language">
+    <img src="{% static 'img/panda-favicon.png' %}" alt="Panda Express language toggle">
+  </a>
+</body>
+</html>

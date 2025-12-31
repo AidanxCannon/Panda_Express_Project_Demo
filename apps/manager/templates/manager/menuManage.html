@@ -1,0 +1,146 @@
+{% load static %}
+<div class="manager-page">
+    <div class="manager-menu-layout">
+        <aside class="menu-actions-column">
+            <h2 class="menu-actions-title">Menu Actions</h2>
+            <div class="menu-actions-stack">
+                <button class="action-pill menu-action active" id="add-item-btn">Add Item</button>
+                <button class="action-pill menu-action" id="edit-item-btn">Edit Item</button>
+                <button class="action-pill menu-action" id="delete-item-btn">Delete Item</button>
+            </div>
+        </aside>
+
+        <section class="menu-content-column">
+            <h1 class="menu-page-title">Menu Management</h1>
+
+            <!-- ADD ITEM FORM -->
+            <div id="add-item-form" class="menu-form-card" style="display:block;">
+                <h3 class="menu-form-title">Add New Menu Item</h3>
+
+                <div class="form-group">
+                    <label>Name:</label>
+                    <input class="large-input" type="text" name="name" placeholder="Enter recipe name">
+                </div>
+
+                <div class="form-group">
+                    <label>Type:</label>
+                    <select class="large-input" name="type">
+                        <option value="">Select Type</option>
+                        <option>Entree</option>
+                        <option>Drink</option>
+                        <option>Appetizer</option>
+                        <option>Side</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Price:</label>
+                    <input class="large-input" type="number" name="price" step="0.01" placeholder="Enter price">
+                </div>
+
+                <div class="form-group">
+                    <label>Active:</label>
+                    <select name="active" class="large-input">
+                        <option value="true">Yes</option>
+                        <option value="false">No</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Ingredients:</label>
+                    <div class="ingredients-grid">
+                        {% for i in ingredients %}
+                            <label class="ingredient-card">
+                                <input type="checkbox" name="ingredients" value="{{ i.id }}">
+                                <span>{{ i.ingredient }}</span>
+                            </label>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <button type="button" class="action-pill primary" id="submit-add-item">Submit</button>
+            </div>
+
+            <!-- EDIT ITEM FORM -->
+            <div id="edit-item-placeholder" class="menu-form-card" style="display:none;">
+                <h3 class="menu-form-title">Edit Menu Item</h3>
+
+                <div class="form-group">
+                    <label>Select Recipe:</label>
+                    <select id="edit-recipe-select" class="large-input">
+                        <option value="">--Select Recipe--</option>
+                        {% for r in recipes %}
+                            <option value="{{ r.id }}">{{ r.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- All fields visible from start -->
+                <div id="edit-item-form">
+                    <input type="hidden" name="recipe_id" id="edit-recipe-id">
+
+                    <div class="form-group">
+                        <label>Name:</label>
+                        <input class="large-input" type="text" name="name" id="edit-name" placeholder="Recipe name" value="">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Type:</label>
+                        <select class="large-input" name="type" id="edit-type">
+                            <option value="">Select Type</option>
+                            <option>Entree</option>
+                            <option>Drink</option>
+                            <option>Appetizer</option>
+                            <option>Side</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Price:</label>
+                        <input class="large-input" type="number" step="0.01" name="price" id="edit-price" placeholder="Price">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Active:</label>
+                        <select class="large-input" name="active" id="edit-active">
+                            <option value="true">Yes</option>
+                            <option value="false">No</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Ingredients:</label>
+                        <div class="ingredients-grid" id="edit-ingredients">
+                            {% for i in ingredients %}
+                                <label class="ingredient-card">
+                                    <input type="checkbox" name="ingredients" value="{{ i.id }}">
+                                    <span>{{ i.ingredient }}</span>
+                                </label>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <button type="button" class="action-pill primary" id="submit-edit-item" style="margin-top:1rem;">Submit Changes</button>
+                </div>
+            </div>
+
+            <!-- DELETE ITEM FORM -->
+            <div id="delete-item-placeholder" class="menu-form-card" style="display:none;">
+                <h3 class="menu-form-title">Delete Menu Item</h3>
+
+                <div style="margin-top:1rem;">
+                    <div class="form-group">
+                        <label>Select recipe to delete:</label>
+                        <select id="delete-recipe-select" class="large-input">
+                            <option value="">--Select Recipe--</option>
+                            {% for r in recipes %}
+                                <option value="{{ r.id }}">{{ r.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <button type="button" class="action-pill primary" id="submit-delete-item">Delete</button>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>

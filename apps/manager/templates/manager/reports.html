@@ -1,0 +1,263 @@
+{% load static %}
+<style>
+    /* Reports panel styling (scoped to this partial) */
+    #reports-section {
+        display: grid;
+        gap: 0.85rem;
+        background: linear-gradient(180deg, #151515, #0f0f0f);
+        border: 1px solid rgba(255,255,255,0.12);
+        border-radius: 16px;
+        padding: clamp(1rem, 2vw, 1.3rem);
+        box-shadow: inset 0 0 0 1px rgba(255,255,255,0.03), 0 14px 30px rgba(0,0,0,0.35);
+        color: #e9e9e9;
+    }
+    #reports-section h2 {
+        margin: 0;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+    }
+    .report-controls {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+    .report-btn {
+        border: 1px solid rgba(255,255,255,0.24);
+        background: linear-gradient(180deg, #d7d7d7, #bdbdbd);
+        color: #000;
+        font-weight: 800;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        padding: 0.8rem 1rem;
+        border-radius: 12px;
+        cursor: pointer;
+        box-shadow: inset 0 0 0 1px rgba(255,255,255,0.55), 0 10px 22px rgba(0,0,0,0.25);
+        transition: transform 0.12s ease, box-shadow 0.12s ease, background 0.12s ease;
+    }
+    .report-btn.primary {
+        background: linear-gradient(135deg, #e52424, #b91515);
+        color: #000;
+        border-color: transparent;
+        box-shadow: 0 14px 28px rgba(229,36,36,0.35);
+    }
+    .report-btn:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 14px 28px rgba(0,0,0,0.3);
+    }
+    .reports-scroll {
+        display: grid;
+        gap: 1rem;
+    }
+    .report-card {
+        background: rgba(255,255,255,0.02);
+        border: 1px solid rgba(255,255,255,0.1);
+        border-radius: 14px;
+        padding: clamp(0.8rem, 1.5vw, 1.1rem);
+        box-shadow: inset 0 0 0 1px rgba(255,255,255,0.02);
+        display: grid;
+        gap: 0.75rem;
+    }
+    .report-card h3 {
+        margin: 0;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: #f5f5f5;
+    }
+    .report-form-grid {
+        display: grid;
+        gap: 0.65rem;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    }
+    .report-field {
+        display: grid;
+        gap: 0.35rem;
+    }
+    .report-field label {
+        color: #dcdcdc;
+        letter-spacing: 0.06em;
+        font-weight: 600;
+    }
+    .report-input {
+        width: 100%;
+        border-radius: 10px;
+        border: 1px solid rgba(255,255,255,0.15);
+        background: rgba(0,0,0,0.3);
+        color: #f5f5f5;
+        padding: 0.7rem 0.8rem;
+        min-height: 44px;
+        max-width: 420px;
+    }
+    /* Make the native calendar icon visible */
+    .report-input::-webkit-calendar-picker-indicator {
+        filter: invert(1);
+        cursor: pointer;
+    }
+    .report-input::-ms-clear,
+    .report-input::-ms-reveal {
+        display: none;
+    }
+    .report-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 0.75rem;
+        background: rgba(255,255,255,0.02);
+        border: 1px solid rgba(255,255,255,0.1);
+        border-radius: 10px;
+        overflow: hidden;
+    }
+    .report-table th,
+    .report-table td {
+        padding: 0.65rem 0.75rem;
+        text-align: left;
+        border-bottom: 1px solid rgba(255,255,255,0.08);
+        color: #e9e9e9;
+        font-size: 0.95rem;
+    }
+    .report-table th {
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        background: rgba(255,255,255,0.04);
+    }
+    .report-table tr:last-child td {
+        border-bottom: none;
+    }
+    .report-alert {
+        display: none;
+        padding: 0.75rem 0.85rem;
+        border-radius: 10px;
+        border: 1px solid rgba(229, 36, 36, 0.4);
+        background: rgba(229, 36, 36, 0.12);
+        color: #ffb3b3;
+        font-weight: 600;
+    }
+    .report-alert--warn {
+        border-color: rgba(255,193,7,0.6);
+        background: rgba(255,193,7,0.15);
+        color: #ffebc1;
+    }
+</style>
+
+<div id="reports-section">
+    <h2>Reports and Analytics</h2>
+
+    <div class="report-buttons report-controls">
+        <button class="report-btn" id="product-usage-btn">Product Usage</button>
+        <button class="report-btn" id="sales-report-btn">Sales</button>
+        <button class="report-btn" id="x-report-btn">X Report</button>
+        <button class="report-btn" id="z-report-btn">Z Report</button>
+    </div>
+
+    <div class="reports-scroll">
+        <!-- Product Usage -->
+        <div id="product-usage-inputs" class="report-card" style="display:none;">
+            <h3>Product Usage</h3>
+            <div class="report-form-grid">
+                <div class="report-field">
+                    <label for="usage-start">Start Date &amp; Time</label>
+                    <input type="datetime-local" id="usage-start" name="usage-start" class="report-input">
+                </div>
+                <div class="report-field">
+                    <label for="usage-end">End Date &amp; Time</label>
+                    <input type="datetime-local" id="usage-end" name="usage-end" class="report-input">
+                </div>
+            </div>
+            <button class="report-btn primary" id="load-usage-btn">Load Usage Report</button>
+            <table class="report-table" id="usage-table" style="display:none;">
+                <thead>
+                    <tr class="report-table-head">
+                        <th>Ingredient</th>
+                        <th>Used Quantity</th>
+                        <th>Unit Price</th>
+                    </tr>
+                </thead>
+                <tbody id="usage-table-body"></tbody>
+            </table>
+            <div id="usage-no-results" class="report-alert report-alert--warn">No orders found for the selected date range.</div>
+            <div id="usage-error" class="report-alert"></div>
+        </div>
+
+        <!-- Sales -->
+        <div id="sales-report-inputs" class="report-card" style="display:none;">
+            <h3>Sales Report</h3>
+            <div class="report-form-grid">
+                <div class="report-field">
+                    <label for="sales-start">Start Date &amp; Time</label>
+                    <input type="datetime-local" id="sales-start" name="sales-start" class="report-input">
+                </div>
+                <div class="report-field">
+                    <label for="sales-end">End Date &amp; Time</label>
+                    <input type="datetime-local" id="sales-end" name="sales-end" class="report-input">
+                </div>
+            </div>
+            <button class="report-btn primary" id="load-sales-btn">Load Sales Report</button>
+            <table class="report-table" id="sales-table" style="display:none;">
+                <thead>
+                    <tr class="report-table-head">
+                        <th>Recipe ID</th>
+                        <th>Recipe Name</th>
+                        <th>Type</th>
+                        <th>Price</th>
+                        <th>Quantity Sold</th>
+                    </tr>
+                </thead>
+                <tbody id="sales-table-body"></tbody>
+            </table>
+            <div id="sales-no-results" class="report-alert report-alert--warn">No sales found for the selected date range.</div>
+            <div id="sales-error" class="report-alert"></div>
+        </div>
+
+        <!-- X Report -->
+        <div id="x-report-inputs" class="report-card" style="display:none;">
+            <h3>X Report</h3>
+            <button class="report-btn primary" id="load-x-btn" style="margin-bottom: 0.6rem;">Load X Report</button>
+            <div id="x-report-graph" style="margin-top:0.9rem;">
+                <img id="x-graph-img" src="" alt="X Report Graph" style="max-width:100%; height:auto; display:none;">
+                <div id="x-total-sum" style="margin-top:10px; font-weight:bold; display:none;"></div>
+            </div>
+        </div>
+
+        <!-- Z Report -->
+        <div id="z-report-inputs" class="report-card" style="display:none;">
+            <h3>Z Report</h3>
+            <button class="report-btn primary" id="load-z-btn">Load Z Report</button>
+            <div id="z-report-graph" style="margin-top:0.75rem;">
+                <img id="z-graph-img" src="" alt="Z Report Graph" style="max-width:100%; height:auto; display:none;">
+                <div id="z-total-sum" style="margin-top:10px; font-weight:bold; display:none;"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function initReportsJS() {
+    const usageBtn = document.getElementById("product-usage-btn");
+    const salesBtn = document.getElementById("sales-report-btn");
+    const xBtn = document.getElementById("x-report-btn");
+    const zBtn = document.getElementById("z-report-btn");
+
+    const usageInputs = document.getElementById("product-usage-inputs");
+    const salesInputs = document.getElementById("sales-report-inputs");
+    const xInputs = document.getElementById("x-report-inputs");
+    const zInputs = document.getElementById("z-report-inputs");
+
+    const loadUsageBtn = document.getElementById("load-usage-btn");
+    const loadSalesBtn = document.getElementById("load-sales-btn");
+    const loadXBtn = document.getElementById("load-x-btn");
+    const loadZBtn = document.getElementById("load-z-btn");
+
+    function hideAll() {
+        usageInputs.style.display = "none";
+        salesInputs.style.display = "none";
+        xInputs.style.display = "none";
+        zInputs.style.display = "none";
+    }
+
+    if(usageBtn) usageBtn.onclick = () => { hideAll(); usageInputs.style.display = "block"; };
+    if(salesBtn) salesBtn.onclick = () => { hideAll(); salesInputs.style.display = "block"; };
+    if(xBtn) xBtn.onclick = () => { hideAll(); xInputs.style.display = "block"; };
+    if(zBtn) zBtn.onclick = () => { hideAll(); zInputs.style.display = "block"; };
+
+}
+
+initReportsJS();
+</script>

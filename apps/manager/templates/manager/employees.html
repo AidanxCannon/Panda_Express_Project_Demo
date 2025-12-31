@@ -1,0 +1,197 @@
+{% load static %}
+<div class="manager-page">
+    <div class="employee-header">
+        <h1>Employee Management</h1>
+        <p>Add, update, or remove team members</p>
+    </div>
+
+    <!-- Search Bar -->
+    <div class= "employee-search-container">
+        <label>Search:</label>
+        <input type="text" id="employee-search" class="employee-search-input large-input" placeholder="Search by name, role, or ID...">
+    </div>
+    <div class = "employee-scroll">
+    <!-- Table and Form Side by Side -->
+    <div class="employee-main-container">
+        <!-- Employee Table (LEFT) -->
+        <div class="employee-table-container">
+            <table class="employee-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Role</th>
+                        <th>Date of Birth</th>
+                        <th>Date of Hire</th>
+                        <th>Password</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for employee in employees %}
+                    <tr class="employee-row" data-id="{{ employee.id }}" data-name="{{ employee.name }}" 
+                        data-dob="{{ employee.date_of_birth|date:'Y-m-d'|default:'' }}" 
+                        data-role="{{ employee.role|default:'' }}" 
+                        data-doh="{{ employee.date_of_hire|date:'Y-m-d'|default:'' }}"
+                        data-password="{{ employee.password|default:'' }}">
+                        <td>{{ employee.id }}</td>
+                        <td>{{ employee.name }}</td>
+                        <td>{{ employee.role|default:"N/A" }}</td>
+                        <td>{{ employee.date_of_birth|date:"Y-m-d"|default:"N/A" }}</td>
+                        <td>{{ employee.date_of_hire|date:"Y-m-d"|default:"N/A" }}</td>
+                        <td>{{ employee.password|default:"" }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="6" style="padding: 2rem; text-align: center; color: #999;">
+                            No employees found.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Input Fields (RIGHT) -->
+        <div class="employee-details-card">
+            <div class="employee-fields-grid">
+                <div class="form-group">
+                    <label>Name</label>
+                    <input class="large-input" type="text" id="employee-name" placeholder="Enter name">
+                </div>
+
+                <div class="form-group">
+                    <label>Role</label>
+                    <select class="large-input" id="employee-role">
+                        <option value="">Select Role</option>
+                        <option value="Cashier">Cashier</option>
+                        <option value="Manager">Manager</option>
+                        <option value="Cook">Cook</option>
+                        <option value="Deactivated">Deactivated</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Date of Birth (YYYY-MM-DD)</label>
+                    <input class="large-input" type="text" id="employee-dob" placeholder="YYYY-MM-DD">
+                </div>
+
+                <div class="form-group">
+                    <label>Date of Hire (YYYY-MM-DD)</label>
+                    <input class="large-input" type="text" id="employee-doh" placeholder="YYYY-MM-DD">
+                </div>
+                
+
+                <!-- Password field (visible) -->
+                <div class="form-group">
+                    <label>Password</label>
+                    <input class="large-input" type="text" id="employee-password" placeholder="Enter New Password (Max 10)" maxlength="10">
+                </div>
+            </div>
+
+            <input type="hidden" id="employee-id">
+
+            <!-- Action Buttons -->
+            <div class="employee-buttons-row">
+                <button class="action-pill" id="add-employee-btn" type="button">Add</button>
+                <button class="action-pill" id="update-employee-btn" type="button">Update</button>
+                <button class="action-pill" id="reset-password-btn" type="button">Update Pass</button>
+                <button class="action-pill" id="delete-employee-btn" type="button">Delete</button>
+            </div>
+        </div>
+
+    <!-- Hidden forms for submission -->
+    <form id="add-employee-form" action="{% url 'manager:add_employee' %}" method="POST" style="display:none;">
+        {% csrf_token %}
+        <input type="hidden" name="name" id="add-name">
+        <input type="hidden" name="role" id="add-role">
+        <input type="hidden" name="date_of_birth" id="add-dob">
+        <input type="hidden" name="date_of_hire" id="add-doh">
+        <input type="hidden" name="password" id="add-password">
+    </form>
+
+    <form id="update-employee-form" action="{% url 'manager:update_employee' %}" method="POST" style="display:none;">
+        {% csrf_token %}
+        <input type="hidden" name="employee_id" id="update-id">
+        <input type="hidden" name="name" id="update-name">
+        <input type="hidden" name="role" id="update-role">
+        <input type="hidden" name="date_of_birth" id="update-dob">
+        <input type="hidden" name="date_of_hire" id="update-doh">
+        <input type="hidden" name="password" id="update-password">
+    </form>
+
+    <form id="reset-password-form" action="{% url 'manager:reset_password' %}" method="POST" style="display:none;">
+        {% csrf_token %}
+        <input type="hidden" name="employee_id" id="reset-id">
+        <input type="hidden" name="new_password" id="reset-password">
+    </form>
+
+    <form id="delete-employee-form" action="{% url 'manager:delete_employee' %}" method="POST" style="display:none;">
+        {% csrf_token %}
+        <input type="hidden" name="employee_id" id="delete-id">
+    </form>
+</div>
+</div>
+<script>
+    // Table row selection
+    const rows = document.querySelectorAll(".employee-row");
+    const blankRow = document.getElementById("blank-row");
+
+    function clearSelection() {
+        rows.forEach(r => r.classList.remove("selected"));
+        document.getElementById("employee-id").value = "";
+        document.getElementById("employee-name").value = "";
+        document.getElementById("employee-role").value = "";
+        document.getElementById("employee-dob").value = "";
+        document.getElementById("employee-doh").value = "";
+        document.getElementById("employee-password").value = "";
+    }
+
+    rows.forEach(row => {
+        row.addEventListener("click", () => {
+            clearSelection();
+            row.classList.add("selected");
+            document.getElementById("employee-id").value = row.dataset.id;
+            document.getElementById("employee-name").value = row.dataset.name;
+            document.getElementById("employee-role").value = row.dataset.role;
+            document.getElementById("employee-dob").value = row.dataset.dob;
+            document.getElementById("employee-doh").value = row.dataset.doh;
+            document.getElementById("employee-password").value = row.dataset.password;
+        });
+    });
+
+    blankRow.addEventListener("click", clearSelection);
+
+    // ------------------- ADD EMPLOYEE -------------------
+    document.getElementById("add-employee-btn").addEventListener("click", function() {
+        document.getElementById("add-name").value = document.getElementById("employee-name").value.trim();
+        document.getElementById("add-role").value = document.getElementById("employee-role").value;
+        document.getElementById("add-dob").value = document.getElementById("employee-dob").value.trim();
+        document.getElementById("add-doh").value = document.getElementById("employee-doh").value.trim();
+        document.getElementById("add-password").value = document.getElementById("employee-password").value.trim();
+        document.getElementById("add-employee-form").submit();
+    });
+
+    // ------------------- UPDATE EMPLOYEE -------------------
+    document.getElementById("update-employee-btn").addEventListener("click", function() {
+        document.getElementById("update-id").value = document.getElementById("employee-id").value;
+        document.getElementById("update-name").value = document.getElementById("employee-name").value.trim();
+        document.getElementById("update-role").value = document.getElementById("employee-role").value;
+        document.getElementById("update-dob").value = document.getElementById("employee-dob").value.trim();
+        document.getElementById("update-doh").value = document.getElementById("employee-doh").value.trim();
+        document.getElementById("update-password").value = document.getElementById("employee-password").value.trim();
+        document.getElementById("update-employee-form").submit();
+    });
+
+    // ------------------- RESET PASSWORD -------------------
+    document.getElementById("reset-password-btn").addEventListener("click", function() {
+        document.getElementById("reset-id").value = document.getElementById("employee-id").value;
+        document.getElementById("reset-password").value = document.getElementById("employee-password").value.trim();
+        document.getElementById("reset-password-form").submit();
+    });
+
+    // ------------------- DELETE EMPLOYEE -------------------
+    document.getElementById("delete-employee-btn").addEventListener("click", function() {
+        document.getElementById("delete-id").value = document.getElementById("employee-id").value;
+        document.getElementById("delete-employee-form").submit();
+    });
+</script>

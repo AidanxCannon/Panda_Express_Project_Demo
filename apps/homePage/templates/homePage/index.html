@@ -1,0 +1,211 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Choose an Interface</title>
+    <link rel="stylesheet" href="{% static 'css/theme_dark.css' %}">
+    <link rel="icon" type="image/png" href="{% static 'img/panda-favicon.png' %}">
+    <style>
+        /* Shared floating language toggle */
+        .floating-lang-btn {
+            position: fixed;
+            bottom: 18px;
+            right: 18px;
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.42);
+            border: 1px solid rgba(0,0,0,0.04);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.18);
+            display: grid;
+            place-items: center;
+            z-index: 100;
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
+        }
+        .floating-lang-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 14px 34px rgba(0,0,0,0.32);
+        }
+        .floating-lang-btn img {
+            width: 70%;
+            height: 70%;
+            object-fit: contain;
+            border-radius: 50%;
+        }
+        /* Language modal */
+        .lang-modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.55);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 5000;
+            padding: 1.5rem;
+        }
+        .lang-modal.is-open {
+            display: flex;
+        }
+        .lang-dialog {
+            background: #0f0f0f;
+            border-radius: 16px;
+            border: 1px solid rgba(255,255,255,0.12);
+            box-shadow: 0 16px 48px rgba(0,0,0,0.4);
+            width: min(420px, 90vw);
+            padding: 1.5rem;
+            color: #fff;
+        }
+        .lang-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        .lang-header h3 {
+            margin: 0;
+            font-size: 1.25rem;
+            letter-spacing: 0.02em;
+        }
+        .lang-close {
+            background: transparent;
+            color: #fff;
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            font-size: 1.1rem;
+            cursor: pointer;
+        }
+        .lang-options {
+            display: grid;
+            gap: 0.65rem;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            max-height: 60vh;
+            overflow-y: auto;
+        }
+        .lang-option {
+            background: linear-gradient(180deg, #1c1c1c, #202020);
+            color: #fff;
+            border: 1px solid rgba(255,255,255,0.18);
+            border-radius: 12px;
+            padding: 0.75rem 1rem;
+            cursor: pointer;
+            font-weight: 700;
+            transition: transform 120ms ease, box-shadow 120ms ease;
+        }
+        .lang-option:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 22px rgba(0,0,0,0.25);
+        }
+    </style>
+</head>
+<body class="interface-shell interface-shell--framed">
+    <div class="interface-frame">
+        <section class="interface-card card">
+            <header class="panel-header">
+                <p class="section-subtitle">Terminal Selector</p>
+                <h1 class="section-title interface-title--sm">Choose an Interface</h1>
+            </header>
+            <div class="interface-grid">
+                <a class="interface-button" href="{% url 'kiosk:home' %}">Customer Kiosk</a>
+                <a class="interface-button" href="{% url 'cashier:home' %}">Cashier Terminal</a>
+                <a class="interface-button" href="{% url 'kitchen:home' %}">Kitchen Display</a>
+                <a class="interface-button" href="{% url 'manager:home' %}">Manager Console</a>
+                <a class="interface-button" href="{% url 'menu:home' %}">Menu Board</a>
+            </div>
+            <div class="logout-row">
+                <button class="btn btn-accent logout-btn" type="button" id="logoutBtn">
+                    Log out
+                </button>
+            </div>
+        </section>
+    </div>
+    <div id="logoutModal" class="pe-modal" aria-hidden="true">
+        <div class="pe-modal__content">
+            <h3 class="pe-modal__title">Confirm logout</h3>
+            <p class="pe-modal__body">Are you sure you want to return to the login screen?</p>
+            <div class="pe-modal__actions">
+                <button class="pe-modal__button cancel" id="cancelLogout">Cancel</button>
+                <a class="pe-modal__button confirm" href="{% url 'login' %}">Log out</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="lang-modal" id="interface-lang-modal" aria-hidden="true">
+        <div class="lang-dialog" role="dialog" aria-modal="true" aria-labelledby="interface-lang-title">
+            <div class="lang-header">
+                <h3 id="interface-lang-title">Choose Language</h3>
+                <button type="button" class="lang-close" id="interface-lang-close" aria-label="Close">×</button>
+            </div>
+            <div class="lang-options">
+                <button type="button" class="lang-option" data-lang="en">English</button>
+                <button type="button" class="lang-option" data-lang="es">Español</button>
+                <button type="button" class="lang-option" data-lang="fr">Français</button>
+                <button type="button" class="lang-option" data-lang="zh-Hans">中文 (简体)</button>
+            </div>
+        </div>
+    </div>
+
+    <button class="floating-lang-btn" id="interface-lang-trigger" type="button" title="Change language">
+        <img src="{% static 'img/panda-favicon.png' %}" alt="Panda Express language toggle">
+    </button>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            // Logout modal
+            const btn = document.getElementById("logoutBtn");
+            const modal = document.getElementById("logoutModal");
+            const cancel = document.getElementById("cancelLogout");
+
+            const hideModal = () => {
+                modal?.classList.remove("show");
+                modal?.setAttribute("aria-hidden", "true");
+            };
+
+            btn?.addEventListener("click", () => {
+                modal?.classList.add("show");
+                modal?.setAttribute("aria-hidden", "false");
+            });
+
+            cancel?.addEventListener("click", hideModal);
+
+            window.addEventListener("click", (event) => {
+                if (event.target === modal) {
+                    hideModal();
+                }
+            });
+
+            // Language modal
+            const langTrigger = document.getElementById("interface-lang-trigger");
+            const langModal = document.getElementById("interface-lang-modal");
+            const langClose = document.getElementById("interface-lang-close");
+            const langOptions = document.querySelectorAll(".lang-option");
+            const setLangUrl = "{% url 'menu:set_lang' %}";
+            // Preserve any query parameters (e.g., force_select=1) so we stay on the selector
+            const nextPath = encodeURIComponent(window.location.pathname + window.location.search);
+
+            const openLang = () => langModal?.classList.add("is-open");
+            const closeLang = () => langModal?.classList.remove("is-open");
+
+            langTrigger?.addEventListener("click", (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                openLang();
+            });
+            langClose?.addEventListener("click", closeLang);
+            langModal?.addEventListener("click", (e) => {
+                if (e.target === langModal) closeLang();
+            });
+            langOptions.forEach((opt) => {
+                opt.addEventListener("click", () => {
+                    const lang = opt.dataset.lang;
+                    if (!lang) return;
+                    window.location.href = `${setLangUrl}?lang=${lang}&next=${nextPath}`;
+                });
+            });
+        });
+    </script>
+</body>
+</html>

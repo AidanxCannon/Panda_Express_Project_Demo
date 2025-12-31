@@ -1,0 +1,33 @@
+{% load static i18n %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block head_title %}{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/theme_dark.css' %}">
+    <link rel="stylesheet" href="{% static 'css/account_login.css' %}">
+    <link rel="icon" type="image/png" href="{% static 'img/panda-favicon.png' %}">
+    {% block extra_head %}{% endblock %}
+</head>
+<body class="login-shell account-login-page">
+    {% block body %}
+    <div class="login-shell__inner">
+        <div class="card card-sm auth-card">
+            {% if not request.GET.force_clear %}
+                {% if messages %}
+                <div class="form-alert" role="alert">
+                    {% for message in messages %}
+                        <p>{{ message }}</p>
+                    {% endfor %}
+                </div>
+                {% endif %}
+            {% endif %}
+            {% block content %}{% endblock %}
+        </div>
+    </div>
+    {% endblock %}
+    {% block extra_body %}{% endblock %}
+</body>
+</html>

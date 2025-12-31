@@ -1,0 +1,17 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Weather for {{ city }}</title>
+    <link rel="icon" type="image/png" href="{% static 'img/panda-favicon.png' %}">
+</head>
+<body>
+    <h1>Weather for {{ city }}</h1>
+    <p>Description: {{ weather_description }}</p>
+    <p>Temperature: {{ temperature }}</p>
+    {% if error %}
+    <p style="color:red;">Error: {{ error }}</p>
+    {% endif %}
+</body>
+</html>

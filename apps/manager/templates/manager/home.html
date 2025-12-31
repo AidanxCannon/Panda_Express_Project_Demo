@@ -1,0 +1,1690 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manager Console</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="{% static 'img/panda-favicon.png' %}">
+    <style>
+        
+        /* Scoped styling for the manager console to match kiosk/cashier look */
+        :root {
+            --mgr-red: #e52424;
+            --mgr-red-dark: #b91515;
+            --mgr-panel: #0f0f0f;
+            --mgr-panel-alt: #151515;
+            --mgr-border: rgba(255, 255, 255, 0.12);
+            --mgr-text: #f5f5f5;
+            --mgr-muted: #9aa0a6;
+        }
+        body.manager-shell-page {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: radial-gradient(circle at 30% 30%, rgba(255, 105, 105, 0.3), transparent 45%),
+                        radial-gradient(circle at 80% 20%, rgba(255, 85, 85, 0.2), transparent 40%),
+                        linear-gradient(135deg, #cf2626 0%, #a61212 50%, #7c0b0b 100%);
+            font-family: 'Poppins', 'Inter', sans-serif;
+            color: var(--mgr-text);
+        }
+        .manager-shell-core {
+            width: 95vw;
+            min-height: 92vh;
+            margin: 2vh auto;
+            background: linear-gradient(180deg, #ffffff, #f4f4f4);
+            border-radius: 32px;
+            box-shadow: 0 26px 60px rgba(0, 0, 0, 0.32);
+            padding: clamp(1rem, 2vw, 1.75rem);
+            display: flex;
+        }
+        .manager-grid {
+            display: grid;
+            grid-template-columns: 260px 1fr;
+            gap: clamp(1rem, 2vw, 1.5rem);
+            width: 100%;
+        }
+        .manager-sidebar {
+            background: var(--mgr-panel);
+            border: 1px solid var(--mgr-border);
+            border-radius: 22px;
+            padding: 1.2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
+        }
+        .manager-sidebar__brand h2 {
+            margin: 0;
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
+            font-size: 1.3rem;
+        }
+        .manager-sidebar__brand p {
+            margin: 0.2rem 0 0;
+            color: var(--mgr-muted);
+            letter-spacing: 0.2em;
+            font-size: 0.8rem;
+        }
+        .manager-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 0.9rem;
+            margin-top: 0.5rem;
+            width: 100%;
+        }
+        .manager-nav .tab-link {
+            display: block;
+            padding: 1rem 1.05rem;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.28);
+            background: linear-gradient(180deg, #d7d7d7, #bdbdbd);
+            color: #000;
+            font-weight: 800;
+            letter-spacing: 0.12em;
+            text-decoration: none;
+            text-transform: uppercase;
+            box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.55), 0 12px 24px rgba(0, 0, 0, 0.25);
+            transition: transform 0.12s ease, box-shadow 0.12s ease, background 0.12s ease;
+            width: 100%;
+            text-align: center;
+            font-size: 0.95rem;
+            min-height: 64px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .manager-nav .tab-link:hover {
+            transform: translateY(-1px);
+            background: linear-gradient(180deg, #e4e4e4, #cfcfcf);
+            box-shadow: 0 16px 32px rgba(0, 0, 0, 0.3);
+        }
+        .manager-nav .tab-link.active {
+            background: linear-gradient(135deg, var(--mgr-red), var(--mgr-red-dark));
+            color: #000;
+            border-color: transparent;
+            box-shadow: 0 16px 34px rgba(229, 36, 36, 0.35);
+        }
+        .manager-content {
+            background: var(--mgr-panel);
+            border-radius: 22px;
+            border: 1px solid var(--mgr-border);
+            box-shadow: 0 18px 40px rgba(0, 0, 0, 0.32);
+            display: flex;
+            flex-direction: column;
+            padding: clamp(1rem, 2vw, 1.35rem);
+            gap: 0.85rem;
+        }
+        .manager-topbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.75rem;
+        }
+        .manager-topbar h1 {
+            margin: 0;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+        }
+        .manager-search {
+            min-width: 220px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            background: rgba(255, 255, 255, 0.06);
+            color: var(--mgr-text);
+            padding: 0.65rem 0.8rem;
+            font-size: 0.95rem;
+        }
+        .manager-card {
+            background: var(--mgr-panel-alt);
+            border-radius: 18px;
+            border: 1px solid var(--mgr-border);
+            padding: clamp(1rem, 2vw, 1.4rem);
+            box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.03);
+            flex: 1 1 auto;
+            overflow: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        .manager-card h2 {
+            margin-top: 0;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+        }
+        .manager-card p {
+            color: var(--mgr-muted);
+            line-height: 1.4;
+        }
+        /* Panel content */
+        .manager-menu-layout {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 0.85rem;
+        }
+        .menu-actions-row {
+            background: linear-gradient(180deg, #1c1c1c, #121212);
+            border-radius: 14px;
+            border: 1px solid var(--mgr-border);
+            padding: 0.75rem 1rem;
+            box-shadow: inset 0 0 0 1px rgba(255,255,255,0.03);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+        .menu-actions-row .menu-actions-title {
+            margin: 0;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            font-size: 1rem;
+            color: #e8e8e8;
+        }
+        .menu-actions-row .menu-actions-stack {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+        .action-pill {
+            width: auto;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            background: linear-gradient(135deg, #d7d7d7, #bdbdbd);
+            color: #111;
+            padding: 0.85rem 1rem;
+            letter-spacing: 0.12em;
+            font-weight: 800;
+            text-transform: uppercase;
+            cursor: pointer;
+            box-shadow: inset 0 0 0 1px rgba(255,255,255,0.55), 0 12px 24px rgba(0,0,0,0.25);
+            transition: transform 0.12s ease, box-shadow 0.12s ease, filter 0.12s ease;
+        }
+        .action-pill:hover { transform: translateY(-1px); }
+        .action-pill.primary,
+        .action-pill.active {
+            background: linear-gradient(135deg, var(--mgr-red), var(--mgr-red-dark));
+            color: #fff;
+            border-color: transparent;
+            box-shadow: 0 14px 28px rgba(229,36,36,0.35);
+        }
+        .menu-content-column {
+            background: linear-gradient(180deg, #151515, #0f0f0f);
+            border: 1px solid var(--mgr-border);
+            border-radius: 16px;
+            padding: clamp(1rem, 1.8vw, 1.4rem);
+            box-shadow: inset 0 0 0 1px rgba(255,255,255,0.03);
+            display: grid;
+            gap: 0.75rem;
+            align-content: start;
+        }
+        .menu-page-title {
+            margin: 0;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            font-size: 1.55rem;
+        }
+        .menu-form-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--mgr-border);
+            border-radius: 14px;
+            padding: clamp(0.9rem, 1.5vw, 1.2rem);
+            box-shadow: inset 0 0 0 1px rgba(255,255,255,0.02), 0 10px 24px rgba(0,0,0,0.25);
+            display: grid;
+            gap: 0.75rem;
+        }
+        .menu-form-title {
+            margin: 0;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+        .form-group {
+            display: grid;
+            gap: 0.35rem;
+        }
+        .form-group label {
+            color: #e4e4e4;
+            letter-spacing: 0.08em;
+            font-weight: 600;
+        }
+        .large-input {
+            width: 100%;
+            border-radius: 10px;
+            border: 1px solid rgba(255,255,255,0.12);
+            background: rgba(0,0,0,0.25);
+            color: #f9f9f9;
+            padding: 0.75rem 0.85rem;
+        }
+        .large-input::placeholder { color: rgba(255,255,255,0.5); }
+        .ingredients-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 0.35rem 0.9rem;
+            align-items: start;
+        }
+        .ingredient-card {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.8rem 0.95rem;
+            border-radius: 10px;
+            border: 1px solid rgba(255,255,255,0.24);
+            background: linear-gradient(180deg, #2a2a2a, #1c1c1c);
+            color: #f5f5f5;
+            font-size: 0.95rem;
+            letter-spacing: 0.02em;
+            cursor: pointer;
+            transition: border-color 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+        }
+        .ingredient-card input {
+            position: absolute;
+            opacity: 0;
+            pointer-events: none;
+        }
+        .ingredient-card span {
+            pointer-events: none;
+            text-align: center;
+            width: 100%;
+            line-height: 1.2;
+            max-height: 2.4em; /* cap to two lines */
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+        }
+        .ingredient-card:hover {
+            border-color: rgba(255,255,255,0.38);
+            background: linear-gradient(180deg, #323232, #222);
+        }
+        .ingredient-card:has(input:checked) {
+            border: 3px solid var(--mgr-red);
+            box-shadow: 0 0 0 3px rgba(229,36,36,0.35), 0 10px 24px rgba(0,0,0,0.28);
+            background: linear-gradient(180deg, #f0f0f0, #cfcfcf);
+            color: #111;
+            font-weight: 700;
+        }
+        .ingredient-card:has(input:checked) span {
+            color: #000;
+        }
+        .form-alert {
+            background: rgba(229, 36, 36, 0.12);
+            border: 1px solid rgba(229,36,36,0.4);
+            border-radius: 10px;
+            padding: 0.65rem 0.8rem;
+            color: #ffb3b3;
+        }
+        .manager-card button[type="submit"] {
+            justify-self: start;
+            min-width: 180px;
+        }
+        .manager-return-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.85rem 1.4rem;
+            border-radius: 12px;
+            border: none;
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--mgr-red), var(--mgr-red-dark));
+            color: #fff;
+            box-shadow: 0 14px 30px rgba(229, 36, 36, 0.35);
+        }
+        .manager-home-actions {
+            margin-top: 1rem;
+        }
+        .notifier .message {
+            padding: 0.75rem 1rem;
+            border-radius: 10px;
+            margin-bottom: 0.5rem;
+        }
+        /* Home fun panel */
+        .fun-panel {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1rem;
+            margin-top: 0.5rem;
+        }
+        .fun-card {
+            background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(0,0,0,0.25));
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 16px;
+            padding: 1.1rem 1.2rem;
+            box-shadow: inset 0 0 0 1px rgba(255,255,255,0.03), 0 10px 24px rgba(0,0,0,0.3);
+            display: grid;
+            gap: 0.35rem;
+            color: #e9e9e9;
+            min-height: 240px;
+        }
+        .fun-card h3 {
+            margin: 0;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            font-size: 1rem;
+        }
+        .fun-metric {
+            font-size: 1.75rem;
+            font-weight: 800;
+            color: #fff;
+        }
+        .fun-sub {
+            color: #b8b8b8;
+            font-size: 0.95rem;
+        }
+        .fun-chip-row {
+            display: flex;
+            gap: 0.35rem;
+            flex-wrap: wrap;
+        }
+        .fun-chip {
+            padding: 0.35rem 0.6rem;
+            border-radius: 999px;
+            background: rgba(229,36,36,0.15);
+            border: 1px solid rgba(229,36,36,0.35);
+            color: #fff;
+            font-size: 0.85rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+        .fun-progress {
+            width: 100%;
+            height: 10px;
+            border-radius: 999px;
+            background: rgba(255,255,255,0.06);
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.08);
+        }
+        .fun-progress span {
+            display: block;
+            height: 100%;
+            background: linear-gradient(135deg, #e52424, #b91515);
+        }
+        .fun-list {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+            display: grid;
+            gap: 0.25rem;
+        }
+        .fun-list li {
+            display: flex;
+            justify-content: space-between;
+            color: #dcdcdc;
+            font-size: 0.95rem;
+        }
+    </style>
+    <style>
+        /* Shared floating language toggle */
+        .floating-lang-btn {
+            position: fixed;
+            bottom: 18px;
+            right: 18px;
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background: #fff;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+            display: grid;
+            place-items: center;
+            z-index: 100; /* beneath toasts */
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
+        }
+        .floating-lang-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 14px 34px rgba(0,0,0,0.4);
+        }
+        .floating-lang-btn img {
+            width: 70%;
+            height: 70%;
+            object-fit: contain;
+            border-radius: 50%;
+        }
+    </style>
+</head>
+<body class="manager-shell-page">
+<div class="manager-shell-core">
+    <div class="manager-grid">
+        <aside class="manager-sidebar">
+            <div class="manager-sidebar__brand">
+                <h2>Panda Express</h2>
+                <p>Manager Console</p>
+            </div>
+            <nav class="manager-nav">
+                <a href="#" class="tab-link active" data-view="home">Home</a>
+                <a href="#" class="tab-link" data-view="menuManage">Menu Management</a>
+                <a href="#" class="tab-link" data-view="reports">Reports &amp; Analytics</a>
+                <a href="#" class="tab-link" data-view="employees">Employees</a>
+                <a href="#" class="tab-link" data-view="inventory">Inventory</a>
+            </nav>
+            <div class="manager-home-actions" style="margin-top: 1rem;">
+                <a class="manager-return-btn" href="{% url 'home' %}" style="width:100%; text-align:center;">Return to Interface</a>
+            </div>
+        </aside>
+        <section class="manager-content">
+            <div class="manager-card" id="dynamic-content" data-return-url="{% url 'home' %}">
+                <div class="manager-menu-layout">
+                    <div class="menu-actions-row" id="menu-actions-bar" style="display:none;">
+                        <h3 class="menu-actions-title">Menu Actions</h3>
+                        <div class="menu-actions-stack">
+                            <button class="action-pill menu-action active" id="add-item-btn">Add Item</button>
+                            <button class="action-pill menu-action" id="edit-item-btn">Edit Item</button>
+                            <button class="action-pill menu-action" id="delete-item-btn">Delete Item</button>
+                        </div>
+                    </div>
+                    <div class="menu-content-column">
+                        <h1 class="menu-page-title">Menu Management</h1>
+                        {% if messages %}
+                            <div class="notifier" id="notifier">
+                                {% for message in messages %}
+                                    <div class="message {{ message.tags }}">{{ message }}</div>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                        <div class="manager-home">
+                            <h2>Today at Panda Express</h2>
+                            <p>A quick vibe check for your store. These are sample highlights to keep the team focused and fired up.</p>
+            <div class="fun-panel">
+                <div class="fun-card">
+                    <h3>Top Sellers</h3>
+                    <ul class="fun-list">
+                        {% if top_sellers %}
+                            {% for item in top_sellers %}
+                                <li><span>{{ item.name }}</span><span>{{ item.count }}</span></li>
+                            {% endfor %}
+                        {% else %}
+                            <li><span>No orders yet</span><span>0</span></li>
+                        {% endif %}
+                    </ul>
+                </div>
+                <div class="fun-card">
+                    <h3>Low Stock Watch</h3>
+                    <div class="fun-sub">Items at or below minimum</div>
+                    <ul class="fun-list">
+                        {% if low_stock %}
+                            {% for item in low_stock %}
+                                <li><span>{{ item.ingredient }}</span><span>Min {{ item.minimum }} • Current {{ item.quantity }}</span></li>
+                            {% endfor %}
+                        {% else %}
+                            <li><span>Stock healthy</span><span>—</span></li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+</div>
+</div>
+
+<script>
+const tabs = document.querySelectorAll('.tab-link');
+const content = document.getElementById('dynamic-content');
+
+// ------------------ Menu Management  ------------------
+function initMenuManageJS() {
+    const addBtn = document.getElementById("add-item-btn");
+    const editBtn = document.getElementById("edit-item-btn");
+    const deleteBtn = document.getElementById("delete-item-btn");
+
+    const addForm = document.getElementById("add-item-form");
+    const editPlaceholder = document.getElementById("edit-item-placeholder");
+    const deletePlaceholder = document.getElementById("delete-item-placeholder");
+
+    if(!addBtn) return;
+
+    const pills = [addBtn, editBtn, deleteBtn];
+
+    function clearActive() { pills.forEach(p => p.classList.remove("active")); }
+
+    addBtn.onclick = () => {
+        addForm.style.display = "block";
+        editPlaceholder.style.display = "none";
+        deletePlaceholder.style.display = "none";
+        clearActive(); addBtn.classList.add("active");
+    };
+    editBtn.onclick = () => {
+        addForm.style.display = "none";
+        editPlaceholder.style.display = "block";
+        deletePlaceholder.style.display = "none";
+        clearActive(); editBtn.classList.add("active");
+    };
+    deleteBtn.onclick = () => {
+        addForm.style.display = "none";
+        editPlaceholder.style.display = "none";
+        deletePlaceholder.style.display = "block";
+        clearActive(); deleteBtn.classList.add("active");
+    };
+
+    // ------------------- ADD ITEM  -------------------
+    const submitAddBtn = document.getElementById("submit-add-item");
+    if (submitAddBtn) {
+        submitAddBtn.onclick = async function(e) {
+            e.preventDefault();
+            
+            const name = document.querySelector("#add-item-form input[name='name']").value.trim();
+            const type = document.querySelector("#add-item-form select[name='type']").value.trim();
+            const price = document.querySelector("#add-item-form input[name='price']").value.trim();
+            const active = document.querySelector("#add-item-form select[name='active']").value;
+            const ingredients = document.querySelectorAll("#add-item-form input[name='ingredients']:checked");
+
+            if (!name || !type || !price || ingredients.length === 0) {
+                alert("All fields are required and at least one ingredient must be selected.");
+                return;
+            }
+
+            try {
+                const formData = new FormData();
+                formData.append("name", name);
+                formData.append("type", type);
+                formData.append("price", price);
+                formData.append("active", active);
+                
+                ingredients.forEach(ing => {
+                    formData.append("ingredients", ing.value);
+                });
+
+                const response = await fetch("/manager/add_item/", {
+                    method: "POST",
+                    body: formData
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    alert(data.message);
+                    
+                    // Clear the form
+                    document.querySelector("#add-item-form input[name='name']").value = "";
+                    document.querySelector("#add-item-form select[name='type']").value = "";
+                    document.querySelector("#add-item-form input[name='price']").value = "";
+                    document.querySelector("#add-item-form select[name='active']").value = "true";
+                    document.querySelectorAll("#add-item-form input[name='ingredients']:checked").forEach(cb => {
+                        cb.checked = false;
+                    });
+
+                    // Add new option to edit and delete dropdowns
+                    const editSelect = document.getElementById("edit-recipe-select");
+                    const deleteSelect = document.getElementById("delete-recipe-select");
+                    
+                    if (editSelect) {
+                        const option = document.createElement("option");
+                        option.value = data.recipe.id;
+                        option.textContent = data.recipe.name;
+                        editSelect.appendChild(option);
+                    }
+                    
+                    if (deleteSelect) {
+                        const option = document.createElement("option");
+                        option.value = data.recipe.id;
+                        option.textContent = data.recipe.name;
+                        deleteSelect.appendChild(option);
+                    }
+                } else {
+                    if (data.errors) {
+                        alert("Errors:\n" + data.errors.join("\n"));
+                    } else {
+                        alert("Error: " + (data.error || "Unknown error"));
+                    }
+                }
+            } catch (error) {
+                console.error("Error:", error);
+                alert("Failed to add item. Please try again.");
+            }
+        };
+    }
+
+    // ------------------- EDIT ITEM  -------------------
+    const editSelect = document.getElementById("edit-recipe-select");
+    const editForm = document.getElementById("edit-item-form");
+    const submitEditBtn = document.getElementById("submit-edit-item");
+
+    if (editSelect) {
+        editSelect.addEventListener("change", () => {
+            const recipeId = editSelect.value;
+            if(!recipeId) {
+                document.getElementById("edit-recipe-id").value = "";
+                document.getElementById("edit-name").value = "";
+                document.getElementById("edit-type").value = "";
+                document.getElementById("edit-price").value = "";
+                document.getElementById("edit-active").value = "true";
+                document.querySelectorAll("#edit-ingredients input[type='checkbox']").forEach(cb => cb.checked = false);
+                return;
+            }
+
+            fetch(`/manager/get_recipe/${recipeId}/`)
+                .then(res => res.json())
+                .then(data => {
+                    document.getElementById("edit-recipe-id").value = data.id;
+                    document.getElementById("edit-name").value = data.name;
+                    document.getElementById("edit-type").value = data.type;
+                    document.getElementById("edit-price").value = data.price;
+                    document.getElementById("edit-active").value = data.active ? "true" : "false";
+                    document.querySelectorAll("#edit-ingredients input[type='checkbox']").forEach(cb => {
+                        cb.checked = data.ingredient_ids.includes(cb.value);
+                    });
+                })
+                .catch(err => console.error(err));
+        });
+    }
+
+    if (submitEditBtn) {
+        submitEditBtn.onclick = async function(e) {
+            e.preventDefault();
+            
+            const recipeId = document.getElementById("edit-recipe-id").value;
+            const name = document.getElementById("edit-name").value.trim();
+            const type = document.getElementById("edit-type").value.trim();
+            const price = document.getElementById("edit-price").value.trim();
+            const active = document.getElementById("edit-active").value;
+            const ingredients = document.querySelectorAll("#edit-ingredients input[type='checkbox']:checked");
+
+            if (!recipeId) {
+                alert("Please select a recipe to edit.");
+                return;
+            }
+
+            if (!name || !type || !price || ingredients.length === 0) {
+                alert("All fields are required and at least one ingredient must be selected.");
+                return;
+            }
+
+            try {
+                const formData = new FormData();
+                formData.append("recipe_id", recipeId);
+                formData.append("name", name);
+                formData.append("type", type);
+                formData.append("price", price);
+                formData.append("active", active);
+                
+                ingredients.forEach(ing => {
+                    formData.append("ingredients", ing.value);
+                });
+
+                const response = await fetch("/manager/edit_item/", {
+                    method: "POST",
+                    body: formData
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    alert(data.message);
+                    
+                    // Update the dropdown option text if name changed
+                    const selectedOption = editSelect.querySelector(`option[value="${recipeId}"]`);
+                    if (selectedOption) {
+                        selectedOption.textContent = data.recipe.name;
+                    }
+                    
+                    // Also update in delete dropdown
+                    const deleteSelect = document.getElementById("delete-recipe-select");
+                    const deleteOption = deleteSelect?.querySelector(`option[value="${recipeId}"]`);
+                    if (deleteOption) {
+                        deleteOption.textContent = data.recipe.name;
+                    }
+                } else {
+                    if (data.errors) {
+                        alert("Errors:\n" + data.errors.join("\n"));
+                    } else {
+                        alert("Error: " + (data.error || "Unknown error"));
+                    }
+                }
+            } catch (error) {
+                console.error("Error:", error);
+                alert("Failed to update item. Please try again.");
+            }
+        };
+    }
+
+    // ------------------- DELETE ITEM  -------------------
+    const deleteSelect = document.getElementById("delete-recipe-select");
+    const submitDeleteBtn = document.getElementById("submit-delete-item");
+
+    if (submitDeleteBtn) {
+        submitDeleteBtn.onclick = async function(e) {
+            e.preventDefault();
+            
+            const recipeId = deleteSelect?.value;
+            
+            if (!recipeId) {
+                alert("Please select a recipe to delete.");
+                return;
+            }
+
+            const recipeName = deleteSelect.options[deleteSelect.selectedIndex].text;
+            
+            if (!confirm(`Are you sure you want to delete "${recipeName}"?`)) {
+                return;
+            }
+
+            try {
+                const formData = new FormData();
+                formData.append("recipe_id", recipeId);
+
+                const response = await fetch("/manager/delete_item/", {
+                    method: "POST",
+                    body: formData
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    alert(data.message);
+                    
+                    // Remove from both dropdowns
+                    const editOption = document.querySelector(`#edit-recipe-select option[value="${recipeId}"]`);
+                    if (editOption) {
+                        editOption.remove();
+                    }
+                    
+                    const deleteOption = document.querySelector(`#delete-recipe-select option[value="${recipeId}"]`);
+                    if (deleteOption) {
+                        deleteOption.remove();
+                    }
+                    
+                    // Reset delete dropdown
+                    if (deleteSelect) {
+                        deleteSelect.value = "";
+                    }
+                } else {
+                    alert("Error: " + (data.error || "Unknown error"));
+                }
+            } catch (error) {
+                console.error("Error:", error);
+                alert("Failed to delete item. Please try again.");
+            }
+        };
+    }
+}
+
+// ------------------ Employee Management JS  ------------------
+function initEmployeesJS() {
+    const addBtn = document.getElementById("add-employee-btn");
+    const updateBtn = document.getElementById("update-employee-btn");
+    const resetBtn = document.getElementById("reset-password-btn");
+    const deleteBtn = document.getElementById("delete-employee-btn");
+
+    const nameInput = document.getElementById("employee-name");
+    const roleInput = document.getElementById("employee-role");
+    const dobInput = document.getElementById("employee-dob");
+    const dohInput = document.getElementById("employee-doh");
+    const passwordInput = document.getElementById("employee-password");
+    const idInput = document.getElementById("employee-id");
+    
+    const tbody = document.querySelector(".employee-table tbody");
+
+    if(!addBtn) return;
+
+    let employeeRows = document.querySelectorAll(".employee-row");
+
+    function clearFields() { 
+        nameInput.value=""; 
+        roleInput.value=""; 
+        dobInput.value=""; 
+        dohInput.value=""; 
+        passwordInput.value=""; 
+        idInput.value=""; 
+    }
+
+    function clearSelection() {
+        employeeRows.forEach(r => r.classList.remove("selected"));
+        clearFields();
+    }
+
+    function bindRowClick() {
+        employeeRows.forEach(row => {
+            row.onclick = () => {
+                clearSelection();
+                row.classList.add("selected");
+                idInput.value = row.dataset.id;
+                nameInput.value = row.dataset.name;
+                roleInput.value = row.dataset.role;
+                dobInput.value = row.dataset.dob || "";
+                dohInput.value = row.dataset.doh || "";
+                passwordInput.value = row.dataset.password || "";
+            };
+        });
+    }
+
+    bindRowClick();
+
+    // ------------------- ADD EMPLOYEE  -------------------
+    addBtn.onclick = async () => {
+        if(!nameInput.value.trim() || !roleInput.value.trim()) { 
+            alert("Name and Role are required."); 
+            return; 
+        }
+
+        try {
+            const formData = new FormData();
+            formData.append("name", nameInput.value.trim());
+            formData.append("role", roleInput.value.trim());
+            formData.append("date_of_birth", dobInput.value);
+            formData.append("date_of_hire", dohInput.value);
+            formData.append("password", passwordInput.value);
+
+            const response = await fetch("/manager/employees/add/", {
+                method: "POST",
+                body: formData
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                // Add new row to table
+                const newRow = document.createElement("tr");
+                newRow.className = "employee-row";
+                newRow.dataset.id = data.employee.id;
+                newRow.dataset.name = data.employee.name;
+                newRow.dataset.role = data.employee.role;
+                newRow.dataset.dob = data.employee.date_of_birth || "";
+                newRow.dataset.doh = data.employee.date_of_hire || "";
+                newRow.dataset.password = passwordInput.value || "";
+
+                newRow.innerHTML = `
+                    <td>${data.employee.id}</td>
+                    <td>${data.employee.name}</td>
+                    <td>${data.employee.role || 'N/A'}</td>
+                    <td>${data.employee.date_of_birth || 'N/A'}</td>
+                    <td>${data.employee.date_of_hire || 'N/A'}</td>
+                    <td>${passwordInput.value || ''}</td>
+                `;
+
+                tbody.appendChild(newRow);
+
+                // Clear form and refresh rows
+                clearSelection();
+                employeeRows = document.querySelectorAll(".employee-row");
+                bindRowClick();
+
+                alert(data.message);
+            } else {
+                if (data.errors) {
+                    alert("Errors:\n" + data.errors.join("\n"));
+                } else {
+                    alert("Error: " + (data.error || "Unknown error"));
+                }
+            }
+        } catch (error) {
+            console.error("Error:", error);
+            alert("Failed to add employee. Please try again.");
+        }
+    };
+
+    // ------------------- UPDATE EMPLOYEE  -------------------
+    updateBtn.onclick = async () => {
+        if(!idInput.value) { 
+            alert("Please select an employee first."); 
+            return; 
+        }
+
+        try {
+            const formData = new FormData();
+            formData.append("employee_id", idInput.value);
+            formData.append("name", nameInput.value.trim());
+            formData.append("role", roleInput.value.trim());
+            formData.append("date_of_birth", dobInput.value);
+            formData.append("date_of_hire", dohInput.value);
+
+            const response = await fetch("/manager/employees/update/", {
+                method: "POST",
+                body: formData
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                // Update the row in the table
+                const row = document.querySelector(`tr.employee-row[data-id="${idInput.value}"]`);
+                if (row) {
+                    row.dataset.name = data.employee.name;
+                    row.dataset.role = data.employee.role;
+                    row.dataset.dob = data.employee.date_of_birth || "";
+                    row.dataset.doh = data.employee.date_of_hire || "";
+
+                    // Update all 6 cells: ID, Name, Role, DOB, DOH, Password
+                    const cells = row.querySelectorAll("td");
+                    if (cells.length >= 6) {
+                        // cells[0] is ID - don't change
+                        cells[1].textContent = data.employee.name;
+                        cells[2].textContent = data.employee.role || 'N/A';
+                        cells[3].textContent = data.employee.date_of_birth || 'N/A';
+                        cells[4].textContent = data.employee.date_of_hire || 'N/A';
+                        // cells[5] is password - don't change unless explicitly updated
+                    }
+                }
+
+                // Update form fields to show new values
+                nameInput.value = data.employee.name;
+                roleInput.value = data.employee.role;
+                dobInput.value = data.employee.date_of_birth || "";
+                dohInput.value = data.employee.date_of_hire || "";
+
+                alert(data.message);
+            } else {
+                if (data.errors) {
+                    alert("Errors:\n" + data.errors.join("\n"));
+                } else {
+                    alert("Error: " + data.error);
+                }
+            }
+        } catch (error) {
+            console.error("Error:", error);
+            alert("Failed to update employee. Please try again.");
+        }
+    };
+
+    // ------------------- RESET PASSWORD  -------------------
+    resetBtn.onclick = async () => {
+        if(!idInput.value || !passwordInput.value.trim()) { 
+            alert("Please select employee and enter password."); 
+            return; 
+        }
+
+        try {
+            const formData = new FormData();
+            formData.append("employee_id", idInput.value);
+            formData.append("new_password", passwordInput.value.trim());
+
+            const response = await fetch("/manager/employees/reset_password/", {
+                method: "POST",
+                body: formData
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                // Update password in the table row
+                const row = document.querySelector(`tr.employee-row[data-id="${idInput.value}"]`);
+                if (row) {
+                    row.dataset.password = passwordInput.value.trim();
+                    const cells = row.querySelectorAll("td");
+                    if (cells.length >= 6) {
+                        cells[5].textContent = passwordInput.value.trim();
+                    }
+                }
+
+                alert(data.message);
+            } else {
+                alert("Error: " + data.error);
+            }
+        } catch (error) {
+            console.error("Error:", error);
+            alert("Failed to reset password. Please try again.");
+        }
+    };
+
+    // ------------------- DELETE EMPLOYEE  -------------------
+    deleteBtn.onclick = async () => {
+        if(!idInput.value) { 
+            alert("Please select an employee first."); 
+            return; 
+        }
+
+        if(!confirm(`Are you sure you want to delete ${nameInput.value}?`)) {
+            return;
+        }
+
+        try {
+            const formData = new FormData();
+            formData.append("employee_id", idInput.value);
+
+            const response = await fetch("/manager/employees/delete/", {
+                method: "POST",
+                body: formData
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                // Remove the row from the table
+                const row = document.querySelector(`tr.employee-row[data-id="${idInput.value}"]`);
+                if (row) {
+                    row.remove();
+                }
+
+                // Clear the form
+                clearSelection();
+
+                // Update the rows variable
+                employeeRows = document.querySelectorAll(".employee-row");
+                bindRowClick();
+
+                alert(data.message);
+            } else {
+                alert("Error: " + data.error);
+            }
+        } catch (error) {
+            console.error("Error:", error);
+            alert("Failed to delete employee. Please try again.");
+        }
+    };
+
+    // ------------------- SEARCH FILTER -------------------
+    const searchInput = document.getElementById("employee-search");
+    if(searchInput) {
+        searchInput.addEventListener("input", function() {
+            const filter = this.value.toLowerCase();
+            employeeRows.forEach(row => {
+                const name = row.dataset.name.toLowerCase();
+                const role = row.dataset.role.toLowerCase();
+                const id = row.dataset.id;
+                if (name.includes(filter) || role.includes(filter) || id.includes(filter)) {
+                    row.style.display = "";
+                } else {
+                    row.style.display = "none";
+                }
+            });
+        });
+    }
+}
+
+// ------------------- Reports ------------------
+function initReportsJS() {
+    const usageBtn = document.getElementById("product-usage-btn");
+    const salesBtn = document.getElementById("sales-report-btn");
+    const xBtn = document.getElementById("x-report-btn");
+    const zBtn = document.getElementById("z-report-btn");
+
+    const usageInputs = document.getElementById("product-usage-inputs");
+    const salesInputs = document.getElementById("sales-report-inputs");
+    const xInputs = document.getElementById("x-report-inputs");
+    const zInputs = document.getElementById("z-report-inputs");
+
+    const loadUsageBtn = document.getElementById("load-usage-btn");
+    const loadSalesBtn = document.getElementById("load-sales-btn");
+    const loadXBtn = document.getElementById("load-x-btn");
+    const loadZBtn = document.getElementById("load-z-btn");
+
+    function hideAll() {
+        usageInputs.style.display = "none";
+        salesInputs.style.display = "none";
+        xInputs.style.display = "none";
+        zInputs.style.display = "none";
+    }
+
+    if(usageBtn) usageBtn.onclick = () => { hideAll(); usageInputs.style.display = "block"; };
+    if(salesBtn) salesBtn.onclick = () => { hideAll(); salesInputs.style.display = "block"; };
+    if(xBtn) xBtn.onclick = () => { hideAll(); xInputs.style.display = "block"; };
+    if(zBtn) zBtn.onclick = () => { hideAll(); zInputs.style.display = "block"; };
+
+    if(loadUsageBtn) {
+        loadUsageBtn.onclick = async () => {
+            const start = document.getElementById("usage-start").value;
+            const end = document.getElementById("usage-end").value;
+
+            const usageTable = document.getElementById("usage-table");
+            const usageTableBody = document.getElementById("usage-table-body");
+            const noResults = document.getElementById("usage-no-results");
+            const errorDiv = document.getElementById("usage-error");
+
+            usageTable.style.display = "none";
+            noResults.style.display = "none";
+            errorDiv.style.display = "none";
+
+            if (!start || !end) {
+                errorDiv.textContent = "Please select both start and end date/time.";
+                errorDiv.style.display = "block";
+                return;
+            }
+
+            if (start > end) {
+                errorDiv.textContent = "Start date/time must be before end date/time.";
+                errorDiv.style.display = "block";
+                return;
+            }
+
+            try {
+                const response = await fetch(`/manager/product_usage/?start_date=${encodeURIComponent(start)}&end_date=${encodeURIComponent(end)}`);
+                
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    errorDiv.textContent = errorData.error || "Error fetching usage data.";
+                    errorDiv.style.display = "block";
+                    return;
+                }
+
+                const data = await response.json();
+
+                if (!Array.isArray(data)) {
+                    errorDiv.textContent = "Invalid data received from server.";
+                    errorDiv.style.display = "block";
+                    return;
+                }
+
+                if (data.length === 0) {
+                    noResults.style.display = "block";
+                    return;
+                }
+
+                usageTableBody.innerHTML = "";
+
+                data.forEach(item => {
+                    const row = document.createElement("tr");
+                    
+                    const nameCell = document.createElement("td");
+                    nameCell.style.cssText = "border: 1px solid #ddd; padding: 10px;";
+                    nameCell.textContent = item.name;
+                    
+                    const quantityCell = document.createElement("td");
+                    quantityCell.style.cssText = "border: 1px solid #ddd; padding: 10px; text-align: center;";
+                    quantityCell.textContent = item.used_quantity;
+                    
+                    const priceCell = document.createElement("td");
+                    priceCell.style.cssText = "border: 1px solid #ddd; padding: 10px; text-align: right;";
+                    priceCell.textContent = "$" + parseFloat(item.price).toFixed(2);
+                    
+                    row.appendChild(nameCell);
+                    row.appendChild(quantityCell);
+                    row.appendChild(priceCell);
+                    
+                    usageTableBody.appendChild(row);
+                });
+
+                usageTable.style.display = "table";
+
+            } catch (err) {
+                errorDiv.textContent = "Error fetching usage data. Check console for details.";
+                errorDiv.style.display = "block";
+            }
+        };
+    }
+
+    if(loadSalesBtn) {
+        loadSalesBtn.onclick = async () => {
+            const start = document.getElementById("sales-start").value;
+            const end = document.getElementById("sales-end").value;
+
+            const salesTable = document.getElementById("sales-table");
+            const salesTableBody = document.getElementById("sales-table-body");
+            const noResults = document.getElementById("sales-no-results");
+            const errorDiv = document.getElementById("sales-error");
+
+            salesTable.style.display = "none";
+            noResults.style.display = "none";
+            errorDiv.style.display = "none";
+
+            if (!start || !end) {
+                errorDiv.textContent = "Please select both start and end date/time.";
+                errorDiv.style.display = "block";
+                return;
+            }
+
+            if (start > end) {
+                errorDiv.textContent = "Start date/time must be before end date/time.";
+                errorDiv.style.display = "block";
+                return;
+            }
+
+            try {
+                const response = await fetch(`/manager/sales_report/?start_date=${encodeURIComponent(start)}&end_date=${encodeURIComponent(end)}`);
+                
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    errorDiv.textContent = errorData.error || "Error fetching sales data.";
+                    errorDiv.style.display = "block";
+                    return;
+                }
+
+                const data = await response.json();
+
+                if (!Array.isArray(data)) {
+                    errorDiv.textContent = "Invalid data received from server.";
+                    errorDiv.style.display = "block";
+                    return;
+                }
+
+                if (data.length === 0) {
+                    noResults.style.display = "block";
+                    return;
+                }
+
+                salesTableBody.innerHTML = "";
+
+                data.forEach(item => {
+                    const row = document.createElement("tr");
+                    
+                    const idCell = document.createElement("td");
+                    idCell.style.cssText = "border: 1px solid #ddd; padding: 10px;";
+                    idCell.textContent = item.id;
+                    
+                    const nameCell = document.createElement("td");
+                    nameCell.style.cssText = "border: 1px solid #ddd; padding: 10px;";
+                    nameCell.textContent = item.name;
+                    
+                    const typeCell = document.createElement("td");
+                    typeCell.style.cssText = "border: 1px solid #ddd; padding: 10px;";
+                    typeCell.textContent = item.type;
+                    
+                    const priceCell = document.createElement("td");
+                    priceCell.style.cssText = "border: 1px solid #ddd; padding: 10px; text-align: right;";
+                    priceCell.textContent = "$" + parseFloat(item.price).toFixed(2);
+                    
+                    const quantityCell = document.createElement("td");
+                    quantityCell.style.cssText = "border: 1px solid #ddd; padding: 10px; text-align: center;";
+                    quantityCell.textContent = item.quantity_sold;
+                    
+                    row.appendChild(idCell);
+                    row.appendChild(nameCell);
+                    row.appendChild(typeCell);
+                    row.appendChild(priceCell);
+                    row.appendChild(quantityCell);
+                    
+                    salesTableBody.appendChild(row);
+                });
+
+                salesTable.style.display = "table";
+
+            } catch (err) {
+                errorDiv.textContent = "Error fetching sales data. Check console for details.";
+                errorDiv.style.display = "block";
+            }
+        };
+    }
+
+    if(loadXBtn) {
+        loadXBtn.onclick = async () => {
+            const imgTag = document.getElementById("x-graph-img");
+            const totalDiv = document.getElementById("x-total-sum");
+            imgTag.style.display = "none";
+            totalDiv.style.display = "none";
+
+            try {
+                const response = await fetch(`/manager/x_report/`);
+                if (!response.ok) throw new Error("Error fetching X report");
+
+                const data = await response.json();
+                if (data.graph) {
+                    imgTag.src = "data:image/png;base64," + data.graph;
+                    imgTag.style.display = "block";
+                }
+                if (data.total_sum !== undefined) {
+                    totalDiv.textContent = `Total Sales: $${data.total_sum}`;
+                    totalDiv.style.display = "block";
+                }
+            } catch (err) {
+                console.error(err);
+                alert("Failed to load X Report graph.");
+            }
+        };
+    }
+
+    if(loadZBtn) {
+        loadZBtn.onclick = async () => {
+            const imgTag = document.getElementById("z-graph-img");
+            const totalDiv = document.getElementById("z-total-sum");
+            imgTag.style.display = "none";
+            totalDiv.style.display = "none";
+
+            try {
+                const response = await fetch(`/manager/z_report/`);
+                if (!response.ok) throw new Error("Error fetching Z report");
+
+                const data = await response.json();
+                if (data.graph) {
+                    imgTag.src = "data:image/png;base64," + data.graph;
+                    imgTag.style.display = "block";
+                }
+                if (data.total_sum !== undefined) {
+                    totalDiv.innerText = `Total Sum: $${data.total_sum}`;
+                    totalDiv.style.display = "block";
+                }
+            } catch (err) {
+                console.error(err);
+                alert("Failed to load Z Report graph.");
+            }
+        };
+    }
+}
+
+// ------------------- Inventory Management JS ------------------
+function initInventoryJS() {
+    const tbody = document.getElementById("inventory-tbody");
+    let rows = document.querySelectorAll(".employee-row");
+    const blankRow = document.getElementById("blank-row");
+
+    if(!blankRow) return;
+
+    function clearSelection() {
+        rows.forEach(r => r.classList.remove("selected"));
+        document.getElementById("ingredient-id").value = "";
+        document.getElementById("ingredient-name").value = "";
+        document.getElementById("ingredient-quantity").value = "";
+        document.getElementById("ingredient-price").value = "";
+        document.getElementById("ingredient-minimum").value = "";
+    }
+
+    function bindRowClick() {
+        rows.forEach(row => {
+            row.addEventListener("click", () => {
+                clearSelection();
+                row.classList.add("selected");
+                document.getElementById("ingredient-id").value = row.dataset.id;
+                document.getElementById("ingredient-name").value = row.dataset.ingredient;
+                document.getElementById("ingredient-quantity").value = row.dataset.quantity;
+                document.getElementById("ingredient-price").value = row.dataset.price;
+                document.getElementById("ingredient-minimum").value = row.dataset.minimum;
+            });
+        });
+    }
+
+    blankRow.addEventListener("click", clearSelection);
+    bindRowClick();
+
+    // ------------------- SEARCH FILTER -------------------
+    const searchInput = document.getElementById("inventory-search");
+    if(searchInput) {
+        searchInput.addEventListener("input", function() {
+            const filter = this.value.toLowerCase();
+            rows.forEach(row => {
+                const ingredient = row.dataset.ingredient.toLowerCase();
+                row.style.display = ingredient.includes(filter) ? "" : "none";
+            });
+        });
+    }
+
+    // ------------------- ADD ITEM  -------------------
+    document.getElementById("add-item-btn").addEventListener("click", async function() {
+        const name = document.getElementById("ingredient-name").value.trim();
+        const quantity = document.getElementById("ingredient-quantity").value;
+        const price = document.getElementById("ingredient-price").value;
+        const minimum = document.getElementById("ingredient-minimum").value;
+
+        if (!name) {
+            alert("Ingredient name is required.");
+            return;
+        }
+
+        try {
+            const formData = new FormData();
+            formData.append("ingredient", name);
+            formData.append("quantity", quantity);
+            formData.append("price", price);
+            formData.append("minimum_stock", minimum);
+
+            const response = await fetch("/manager/inventory/add/", {
+                method: "POST",
+                body: formData
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                // Add new row to table
+                const newRow = document.createElement("tr");
+                newRow.className = "employee-row";
+                newRow.dataset.id = data.item.id;
+                newRow.dataset.ingredient = data.item.ingredient;
+                newRow.dataset.quantity = data.item.quantity;
+                newRow.dataset.price = data.item.price;
+                newRow.dataset.minimum = data.item.minimum_stock;
+
+                newRow.innerHTML = `
+                    <td>${data.item.ingredient}</td>
+                    <td>${data.item.quantity}</td>
+                    <td>$${parseFloat(data.item.price).toFixed(2)}</td>
+                    <td>${data.item.minimum_stock}</td>
+                `;
+
+                tbody.appendChild(newRow);
+
+                // Clear form and refresh rows
+                clearSelection();
+                rows = document.querySelectorAll(".employee-row");
+                bindRowClick();
+
+                alert(data.message);
+            } else {
+                alert("Errors:\n" + data.errors.join("\n"));
+            }
+        } catch (error) {
+            console.error("Error:", error);
+            alert("Failed to add item. Please try again.");
+        }
+    });
+
+    // ------------------- UPDATE ITEM  -------------------
+    document.getElementById("update-item-btn").addEventListener("click", async function() {
+        const itemId = document.getElementById("ingredient-id").value;
+
+        if (!itemId) {
+            alert("Please select an item first.");
+            return;
+        }
+
+        const name = document.getElementById("ingredient-name").value.trim();
+        const quantity = document.getElementById("ingredient-quantity").value;
+        const price = document.getElementById("ingredient-price").value;
+        const minimum = document.getElementById("ingredient-minimum").value;
+
+        try {
+            const formData = new FormData();
+            formData.append("item_id", itemId);
+            formData.append("ingredient", name);
+            formData.append("quantity", quantity);
+            formData.append("price", price);
+            formData.append("minimum_stock", minimum);
+
+            const response = await fetch("/manager/inventory/edit/", {
+                method: "POST",
+                body: formData
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                // Update the row in the table
+                const row = document.querySelector(`tr[data-id="${itemId}"]`);
+                if (row) {
+                    row.dataset.ingredient = data.item.ingredient;
+                    row.dataset.quantity = data.item.quantity;
+                    row.dataset.price = data.item.price;
+                    row.dataset.minimum = data.item.minimum_stock;
+
+                    row.innerHTML = `
+                        <td>${data.item.ingredient}</td>
+                        <td>${data.item.quantity}</td>
+                        <td>$${parseFloat(data.item.price).toFixed(2)}</td>
+                        <td>${data.item.minimum_stock}</td>
+                    `;
+                }
+
+                // Update form fields to show new values
+                document.getElementById("ingredient-name").value = data.item.ingredient;
+                document.getElementById("ingredient-quantity").value = data.item.quantity;
+                document.getElementById("ingredient-price").value = data.item.price;
+                document.getElementById("ingredient-minimum").value = data.item.minimum_stock;
+
+                alert(data.message);
+            } else {
+                if (data.errors) {
+                    alert("Errors:\n" + data.errors.join("\n"));
+                } else {
+                    alert("Error: " + data.error);
+                }
+            }
+        } catch (error) {
+            console.error("Error:", error);
+            alert("Failed to update item. Please try again.");
+        }
+    });
+
+    // ------------------- DELETE ITEM  -------------------
+    document.getElementById("delete-item-btn").addEventListener("click", async function() {
+        const itemId = document.getElementById("ingredient-id").value;
+
+        if (!itemId) {
+            alert("Please select an item first.");
+            return;
+        }
+
+        if (!confirm("Are you sure you want to delete this item?")) {
+            return;
+        }
+
+        try {
+            const formData = new FormData();
+            formData.append("item_id", itemId);
+
+            const response = await fetch("/manager/inventory/delete/", {
+                method: "POST",
+                body: formData
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                // Remove the row from the table
+                const row = document.querySelector(`tr[data-id="${itemId}"]`);
+                if (row) {
+                    row.remove();
+                }
+
+                // Clear the form
+                clearSelection();
+
+                // Update the rows variable
+                rows = document.querySelectorAll(".employee-row");
+                bindRowClick();
+
+                alert(data.message);
+            } else {
+                alert("Error: " + data.error);
+            }
+        } catch (error) {
+            console.error("Error:", error);
+            alert("Failed to delete item. Please try again.");
+        }
+    });
+
+    // ------------------- ADD QUANTITY  -------------------
+    document.getElementById("add-quantity-btn").addEventListener("click", async function() {
+        const selectedId = document.getElementById("ingredient-id").value;
+        if (!selectedId) {
+            alert("Please select an inventory item first.");
+            return;
+        }
+
+        const qty = prompt("Enter quantity to add:");
+        if (qty === null) return;
+        if (!qty || isNaN(qty) || parseFloat(qty) <= 0) {
+            alert("Please enter a valid positive number.");
+            return;
+        }
+
+        try {
+            const formData = new FormData();
+            formData.append("item_id", selectedId);
+            formData.append("quantity_to_add", parseFloat(qty));
+
+            const response = await fetch("/manager/inventory/add_quantity/", {
+                method: "POST",
+                body: formData
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                // Update the row in the table
+                const row = document.querySelector(`tr[data-id="${selectedId}"]`);
+                if (row) {
+                    row.dataset.quantity = data.new_quantity;
+                    const cells = row.querySelectorAll("td");
+                    if (cells[1]) {
+                        cells[1].textContent = data.new_quantity;
+                    }
+                }
+
+                // Update the form field
+                document.getElementById("ingredient-quantity").value = data.new_quantity;
+
+                alert(data.message);
+            } else {
+                alert("Error: " + data.error);
+            }
+        } catch (error) {
+            console.error("Error:", error);
+            alert("Failed to add quantity. Please try again.");
+        }
+    });
+}
+
+// ------------------- Tab Handling ------------------
+tabs.forEach(tab => {
+    tab.addEventListener('click', e => {
+        e.preventDefault();
+        tabs.forEach(t=>t.classList.remove('active'));
+        tab.classList.add('active');
+
+        const view = tab.dataset.view;
+        if(view==='home') {
+            content.innerHTML = `
+                <div class="manager-home">
+                    <h2>Manager Console Interface Summary</h2>
+                    <p>This console is your Panda Express command center. Use the tabs above to manage menu items, view reports, manage employees, or check inventory.</p>
+                    <div class="manager-home-actions">
+                        <a class="manager-return-btn" href="${content.dataset.returnUrl}">Return to Interface</a>
+                    </div>
+                </div>
+            `;
+            return;
+        }
+
+        fetch(`/manager/view/${view}/`)
+            .then(r=>r.text())
+            .then(html=>{
+                content.innerHTML=html;
+                content.classList.remove('loading');
+                if(view==='menuManage') initMenuManageJS();
+                if(view==='employees') initEmployeesJS();
+                if(view==='reports') initReportsJS();
+                if(view==='inventory') initInventoryJS();
+            })
+            .catch(err=>{ console.error(err); content.innerHTML='<p>Error loading content. Please try again.</p>'; });
+    });
+});
+
+// Auto-hide notifier after 4 seconds
+document.addEventListener("DOMContentLoaded", () => {
+    const notifier = document.getElementById("notifier");
+    if (notifier) {
+        setTimeout(() => {
+            notifier.style.opacity = "0";
+            notifier.style.transform = "translateY(20px)";
+            setTimeout(() => notifier.remove(), 500);
+        }, 4000);
+    }
+});
+
+// Auto-activate tab from URL parameter on page load
+document.addEventListener('DOMContentLoaded', function() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const activeTab = urlParams.get('tab');
+    
+    if (activeTab && activeTab !== 'home') {
+        const tabLink = document.querySelector(`[data-view="${activeTab}"]`);
+        if (tabLink) {
+            tabLink.click();  // <-- Direct click, no delay
+        }
+    }
+});
+
+
+</script>
+
+<!-- Floating Panda logo for language toggle -->
+<a class="floating-lang-btn" href="{% url 'menu:set_lang' %}?next={{ request.path }}" title="Change language">
+    <img src="{% static 'img/panda-favicon.png' %}" alt="Panda Express language toggle">
+</a>
+</body>
+</html>

@@ -1,0 +1,73 @@
+{% extends 'kiosk/base.html' %}
+{% load static %}
+
+{% block title %}{% if kiosk_ui %}{{ kiosk_ui.home.title }}{% else %}Choose Your Meal{% endif %}{% endblock %}
+
+{% block content %}
+{% if kiosk_ui %}
+<h2>{{ kiosk_ui.home.title }}</h2>
+{% else %}
+<h2>Choose a meal type</h2>
+{% endif %}
+<style>
+    /* Scoped to the kiosk home view */
+    .meal-options.meal-options--home {
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        grid-auto-rows: minmax(360px, 1fr);
+        gap: 1rem;
+        align-items: stretch;
+        width: 100%;
+    }
+    .meal-options--home .meal-option {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 0.65rem;
+        padding: 1rem;
+        background: linear-gradient(180deg, #ededed, #d2d2d2);
+        border: 4px solid #e52424;
+        border-radius: 18px;
+        box-shadow: 0 10px 24px rgba(0,0,0,0.25);
+    }
+    .meal-options--home .meal-option__image {
+        flex: 1 1 auto;
+        min-height: 0;
+        display: grid;
+        place-items: center;
+        padding: 0.35rem;
+    }
+    .meal-options--home .meal-option__image img {
+        height: 100%;
+        width: 100%;
+        object-fit: contain;
+        border: 3px solid #000;
+        border-radius: 12px;
+        background: #fff;
+        padding: 0.35rem;
+    }
+    .meal-options--home .meal-option__info h3 {
+        font-size: 1.1rem;
+        letter-spacing: 0.08em;
+    }
+    .meal-options--home .meal-option__info {
+        margin-top: auto;
+    }
+</style>
+<div class="meal-options meal-options--home">
+{% for opt in meal_options %}
+    <a class="meal-option" href="{% url 'customer_kiosk:choose_side' opt.slug %}">
+        <div class="meal-option__image">
+            <img src="{% static opt.image %}" alt="{{ opt.name }}">
+        </div>
+        <div class="meal-option__info">
+            <h3>{{ opt.translated_name|default:opt.name }}</h3>
+            {% if kiosk_ui %}
+            <p class="meal-option__hint">{{ kiosk_ui.home.hint }}</p>
+            {% else %}
+            <p class="meal-option__hint">Tap to customize your meal</p>
+            {% endif %}
+        </div>
+    </a>
+{% endfor %}
+</div>
+{% endblock %}

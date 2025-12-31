@@ -1,0 +1,3 @@
+"""
+Inventory namespace placeholder.
+"""
