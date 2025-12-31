@@ -1,214 +1,163 @@
-# 🐼 Panda Express Point-of-Sale System
+# 🐼 Panda Express Point-of-Sale System — Demo Repository
 
-A comprehensive **Django-based Point-of-Sale (POS) system** that simulates the complete restaurant ecosystem of Panda Express. This full-stack web application demonstrates modern software engineering practices with real-time updates, multiple user interfaces, and integrated business workflows.
+**Academic Capstone Project**  
+**Role:** Project Manager & Full-Stack Developer  
+**Purpose:** Portfolio demonstration of system design, UI/UX, and real-time architecture
 
-## ✨ Key Features
+## Overview
 
-### 🏠 **Multi-Interface System**
-- **Customer Kiosk** - Self-service ordering with intuitive touch interface
-- **Cashier Terminal** - Staff order entry with cart management and receipt printing
-- **Kitchen Display** - Real-time order queue with live updates via WebSockets
-- **Manager Dashboard** - Analytics, inventory management, and staff oversight
-- **Menu Board** - Dynamic display with weather integration and multilingual support
+This repository is a curated, public-facing demo snapshot of a full-scale Django-based Point-of-Sale (POS) system designed to simulate the operational ecosystem of a Panda Express restaurant.
 
-### 🔧 **Technical Highlights**
-- **Real-time Communication**: WebSocket integration using Django Channels
-- **Database Management**: PostgreSQL with complex relational models
-- **Authentication**: Google OAuth integration with Django Allauth
-- **Internationalization**: Multi-language support with Azure Translation API
-- **Responsive Design**: Mobile-first CSS with dark/light themes
-- **API Integration**: Weather data and translation services
-- **Production Ready**: Docker support and deployment configurations
+Developed as a team-based capstone project, this system showcases modern software engineering practices including agile development, version control workflows, and collaborative coding standards. The application handles complex business workflows from order placement through kitchen fulfillment, demonstrating enterprise-level system design principles.
 
-### 📊 **Business Intelligence**
-- Live sales analytics and top-selling items tracking
-- Inventory management with low-stock alerts
-- Employee management and scheduling
-- Order history and receipt generation
-- Sales reporting and trend analysis
+The project demonstrates real-time order synchronization, multi-role interfaces, and production-oriented system architecture, while intentionally omitting proprietary logic, credentials, and deployment secrets.
 
-## 🚀 Quick Start
+⚠️ **Note:** This repository is not intended to run locally. It exists to showcase engineering decisions, interface design, and system structure for recruiters and reviewers.
 
-### Prerequisites
-- Python 3.11+
-- PostgreSQL database
-- Git
+## System Interfaces
 
-### Installation
+### 🧑‍🍜 Customer Kiosk
+- Touch-first self-service ordering flow with intuitive category navigation
+- Dynamic meal customization with pricing calculations
+- Cart persistence and order modification capabilities
+- Multi-language support with session-based preferences
+- Optimized for tablet and kiosk displays with accessibility considerations
 
-1. **Clone the repository**
-```bash
-git clone https://github.com/AidanxCannon/Panda_Express_Project_Demo.git
-cd Panda_Express_Project_Demo
-```
+### 💳 Cashier Terminal
+- Streamlined assisted order entry for staff efficiency
+- Real-time order summaries with itemized breakdown
+- Integrated pricing, tax calculation, and receipt logic
+- Customer information capture and order tracking
+- Support for payment processing workflows
 
-2. **Set up virtual environment**
-```bash
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-```
+### 🔥 Kitchen Display System
+- Live order queue with real-time status updates
+- WebSocket-driven communication for instant order notifications
+- Clear visual prioritization system for active orders
+- Order completion tracking and kitchen workflow optimization
+- Color-coded order status indicators
 
-3. **Install dependencies**
-```bash
-pip install -r requirements.txt
-```
+### 🧑‍💼 Manager Dashboard
+- Comprehensive inventory management with low-stock alerts
+- Menu item activation/deactivation with real-time updates
+- Employee management and scheduling tools
+- Sales analytics with trend analysis and reporting
+- Performance tracking and business intelligence features
 
-4. **Configure environment variables**
-```bash
-cp .env.example .env
-# Edit .env with your database credentials and API keys
-```
+### 📺 Digital Menu Board
+- Dynamic menu display with automatic updates
+- Language-aware labels and pricing localization
+- External data integration (weather, promotional content)
+- Responsive design for various display sizes
+- Centralized content management system
 
-5. **Run database migrations**
-```bash
-python manage.py migrate
-```
+## Technical Highlights
 
-6. **Start the development server**
-```bash
-python manage.py runserver
-```
+- **Backend Framework:** Django 5.2 with modular app architecture
+- **Real-Time Communication:** WebSockets via Django Channels with Redis backing
+- **Database:** PostgreSQL with complex relational modeling
+- **Frontend Technologies:** Modern HTML5, CSS3 Grid/Flexbox, Vanilla JavaScript
+- **Authentication System:** Google OAuth2 integration with Django Allauth
+- **Internationalization:** Multi-language support with Azure Translation API
+- **Cloud Infrastructure:** Containerized deployment ready for cloud platforms
+- **Development Practices:** Git workflow, code review, and documentation standards
 
-7. **Access the application**
-Open your browser to `http://127.0.0.1:8000/`
-
-## 🗄️ Database Setup
-
-### Option 1: SQLite (Quick Demo)
-For a quick demonstration, modify `settings.py` to use SQLite:
-```python
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'demo_db.sqlite3',
-    }
-}
-```
-
-### Option 2: PostgreSQL (Recommended)
-1. Create a PostgreSQL database
-2. Update your `.env` file with database credentials
-3. Run migrations: `python manage.py migrate`
-
-## 🎯 Demo Scenarios
-
-### For Interviewers & Evaluators
-
-1. **Customer Experience**
-   - Navigate to `/kiosk/` to experience the self-service ordering
-   - Add items to cart, customize orders, and complete checkout
-
-2. **Staff Operations**
-   - Visit `/cashier/` for the employee order entry interface
-   - Process orders with cart management and receipt options
-
-3. **Kitchen Workflow**
-   - Open `/kitchen/` to see real-time order display
-   - Watch orders update live as they're placed from other interfaces
-
-4. **Management Features**
-   - Access `/manager/` for comprehensive business analytics
-   - View sales reports, manage inventory, and track performance
-
-5. **Digital Menu Board**
-   - Check `/menu/` for the customer-facing menu display
-   - See weather integration and language switching capabilities
-
-## 🏗️ Architecture Overview
+## Architecture Overview
 
 ```
-├── apps/                    # Django applications
-│   ├── cashier/            # Staff order entry interface
-│   ├── customer_kiosk/     # Self-service kiosk
-│   ├── kitchen/            # Kitchen display system
-│   ├── manager/            # Management dashboard
-│   ├── menu/               # Digital menu board
-│   ├── inventory/          # Inventory management
-│   └── orders/             # Order processing logic
-├── core/                   # Shared models and utilities
-│   └── models/             # Database models
-├── panda_config/           # Django project settings
-├── static/                 # Static files (CSS, JS, images)
-└── requirements.txt        # Python dependencies
+├── apps/
+│   ├── kiosk/          # Customer self-service UI
+│   ├── cashier/        # Staff order entry
+│   ├── kitchen/        # Real-time kitchen display
+│   ├── manager/        # Management dashboard
+│   └── menu_board/     # Digital menu display
+│
+├── architecture/       # System and data-flow documentation
+├── sample_code/        # Redacted, annotated backend excerpts
+├── static/             # CSS, JS, UI assets
+└── screenshots/        # Interface previews
 ```
 
-## 💡 Technical Innovations
+*Additional architectural explanations are provided in `/architecture`.*
 
-- **Channel Layers**: Real-time WebSocket communication for kitchen updates
-- **Model Relationships**: Complex many-to-many relationships for recipes and ingredients
-- **Session Management**: Persistent cart state across user sessions
-- **API Integrations**: External weather and translation services
-- **Responsive Design**: CSS Grid and Flexbox for modern layouts
-- **Security**: CSRF protection, SQL injection prevention, and secure authentication
+## Real-Time System Design
 
-## 🌟 Professional Development Showcase
+The application implements a sophisticated real-time communication system using WebSocket technology:
 
-This project demonstrates proficiency in:
-- **Full-Stack Development**: Frontend and backend integration
-- **Database Design**: Normalized schema with proper relationships
-- **Real-Time Systems**: WebSocket implementation
-- **API Development**: RESTful endpoints and external API integration
-- **DevOps**: Environment configuration and deployment readiness
-- **Testing**: Unit tests and integration testing frameworks
-- **Documentation**: Comprehensive code documentation and README
+- **Centralized Order State Management:** Single source of truth for order data
+- **Cross-Interface Broadcasting:** WebSocket events synchronized across all interfaces:
+  - Customer kiosk order updates
+  - Cashier terminal notifications
+  - Kitchen display queue management
+  - Manager dashboard analytics refresh
+- **Role-Based Access Control:** Interface-specific permissions and data filtering
+- **Event-Driven Architecture:** Asynchronous updates without page refresh
+- **Session Persistence:** Stateful connections with automatic reconnection handling
 
-## 🔧 Environment Variables
+The system ensures data consistency across all interfaces while maintaining responsive user experiences and efficient resource utilization.
 
-Required variables for full functionality:
+*Annotated WebSocket and permission examples can be found in `/sample_code`.*
 
-```bash
-# Database
-DB_NAME=your_database_name
-DB_USER=your_database_user
-DB_PASSWORD=your_database_password
-DB_HOST=localhost
-DB_PORT=5432
+## My Contributions
 
-# External APIs (Optional)
-API_KEY_EXTERNAL_SERVICE=weather_api_key
-AZURE_TRANSLATION_KEY=translation_key
-AZURE_TRANSLATION_REGION=region
-AZURE_TRANSLATION_ENDPOINT=endpoint
+As Project Manager and Lead Developer on this team-based capstone project:
 
-# Authentication (Optional)
-GOOGLE_OAUTH_CLIENT_ID=oauth_client_id
-GOOGLE_OAUTH_CLIENT_SECRET=oauth_secret
+**Project Leadership:**
+- Served as **Scrum Master** coordinating 6-person development team
+- Implemented agile methodologies with sprint planning and retrospectives
+- Managed project timeline, deliverables, and stakeholder communication
 
-# Security
-DJANGO_SECRET_KEY=your-secret-key
-DEBUG=True
-```
+**Technical Implementation:**
+- **Architected real-time WebSocket system** for cross-interface communication
+- **Led comprehensive UI/UX redesign** across all five system interfaces
+- **Integrated disparate team modules** into cohesive, unified system
+- **Developed responsive design framework** ensuring consistency across interfaces
 
-## 📱 Mobile Responsiveness
+**Code Quality & Integration:**
+- Established code review processes and Git workflow standards
+- **Refactored legacy kiosk and manager interfaces** for improved usability
+- Implemented comprehensive error handling and input validation
+- Created documentation and deployment guides for team knowledge transfer
 
-The application is fully responsive and optimized for:
-- 📱 Mobile devices (customer kiosk simulation)
-- 💻 Desktop browsers (cashier and management interfaces)
-- 📺 Large displays (kitchen screens and menu boards)
+## What This Repository Includes
 
-## 🚀 Deployment Ready
+✅ **Complete UI Templates & Assets:** All interface designs and styling  
+✅ **Static Resources:** Images, CSS frameworks, and JavaScript components  
+✅ **System Architecture Documentation:** Design decisions and data flow diagrams  
+✅ **Code Structure Examples:** Annotated Django views, models, and WebSocket handlers  
+✅ **Interface Mockups:** Visual representations of all five system interfaces  
+✅ **Project Documentation:** Development process, team workflows, and technical specifications
 
-- **Docker**: Containerization support with docker-compose
-- **Environment Configuration**: Production/development settings
-- **Static File Handling**: WhiteNoise for static file serving
-- **Database Migration**: Automated database setup
-- **CI/CD Ready**: GitHub Actions compatible
+## What This Repository Excludes
 
-## 🤝 Contributing
+❌ **Production Database Schemas:** Sensitive data models and migration files  
+❌ **Business Logic Implementation:** Complete backend processing and algorithms  
+❌ **Authentication Credentials:** API keys, OAuth secrets, and security tokens  
+❌ **Deployment Configurations:** Server settings, environment variables, and infrastructure code  
+❌ **Third-Party Integrations:** Complete payment processing and external service implementations  
 
-This is a demonstration project showcasing software engineering capabilities. The codebase follows Django best practices and is structured for maintainability and scalability.
+## Intended Audience
 
-## 📄 License
+This demonstration repository is specifically designed for:
 
-MIT License - See LICENSE file for details.
+**Technical Recruiters:** Showcase of full-stack development capabilities and project management experience  
+**Hiring Managers:** Evidence of collaborative leadership and system design thinking  
+**Software Engineers:** Code quality, architecture decisions, and technical implementation approach  
+**Product Managers:** Understanding of user experience design and cross-functional coordination
 
-## 👨‍💻 Developer
+**Use Cases:**
+- Technical portfolio review and discussion
+- System design interview preparation and walkthrough
+- Code quality assessment and architectural decision analysis
+- Project management and team leadership demonstration
 
-**Aidan Hester**  
-*Full-Stack Developer & Software Engineer*
+This repository is designed to support technical walkthroughs, system design discussions, and portfolio review — **not local execution**.
 
-This project showcases enterprise-level web development skills with modern frameworks, real-time communication, and scalable architecture design.
+## License
 
----
+This project is shared for educational and portfolio demonstration purposes only.
 
-*Built with Django, PostgreSQL, WebSockets, and modern web technologies*
+## Developer
+
+**Aidan Cannon**  
+*Full-Stack Developer · Software Engineer*
